@@ -1,0 +1,28 @@
+.sidebar {
+    background-color: #F5F5F5;
+    // max-width: 5% !important;
+    width: 70px;
+    height: 93.8vh;
+    box-shadow: 1px 0px 5px rgb(131, 131, 131);
+
+    .sidebarItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebarItem > img {
+        height: 23px;
+        margin: 5px;
+    }
+
+    .sidebarItem > svg {
+        height: 23px;
+        margin: 5px;
+    }
+
+    .sidebarItem > p {
+        font-size: 10px;
+    }
+}
