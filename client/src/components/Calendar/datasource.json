@@ -1,0 +1,10 @@
+{
+    "scheduleData": [{
+        "Id": 1,
+        "Subject": "Explosion of Betelgeuse Star",
+        "Location": "Space Centre USA",
+        "StartTime": "2021-06-06T04:00:00.000Z",
+        "EndTime": "2021-06-06T05:30:00.000Z",
+        "CategoryColor": "#1aaa55"
+    }]
+}

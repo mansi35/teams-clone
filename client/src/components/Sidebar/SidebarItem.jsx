@@ -6,9 +6,9 @@ function SidebarItem({ icon, text, hoverIcon }) {
         <div className="sidebarItem">
             <img
                 src={img}
+                alt=""
                 onMouseEnter={() => (setImg(hoverIcon))}
                 onMouseOut={() => (setImg(icon))}
-                alt=""
             />
             <p>{text}</p>
         </div>

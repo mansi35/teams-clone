@@ -1,16 +1,18 @@
 import React from 'react'
 import Calendar from '../../components/Calendar/Calendar'
-import Header from '../../components/Header/Header'
 import Sidebar from '../../components/Sidebar/Sidebar'
+import ScheduleVideoCall from '../../components/ScheduleVideoCall/ScheduleVideoCall'
 import './ScheduleMeeting.scss'
 
 function ScheduleMeeting() {
     return (
         <div className="scheduleMeeting">
-            <Header />
             <div className="schedule__content">
                 <Sidebar />
-                <Calendar />
+                <div className="schedule__calendar">
+                    <ScheduleVideoCall />
+                    <Calendar />
+                </div>
             </div>
         </div>
     )

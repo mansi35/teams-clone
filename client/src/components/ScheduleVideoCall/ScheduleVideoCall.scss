@@ -1,0 +1,75 @@
+.videocall {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F5F5F5;
+
+    .videocall__logo {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .videocall__logo > svg > g > g {
+        fill: #ffffff;
+    }
+
+    .videocall__logo > svg {
+        background-color: #6264A7;
+        height: 30px;
+        width: 30px;
+        margin: 15px 20px;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .videocall__logo > h5 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .videocall__options {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: #ffffff;
+        justify-content: center;
+    }
+
+    .videocall__options .videocall__meetNow {
+        font-size: 14px;
+        border: 1px solid #aaaaac;
+        border-radius: 5px;
+        margin: 10px;
+        margin-right: 5px;
+        background-color: #ffffff;
+    }
+
+    .videocall__options .videocall__meetNow > img {
+        height: 18px;
+        margin: 5px;
+    }
+
+    .videocall__options .videocall__newMeeting {
+        margin-right: 30px;
+    }
+
+    .videocall__options .videocall__newMeeting .videocall__new {
+        font-size: 14px;
+        border: 1px solid #aaaaac;
+        border-radius: 5px 2px 2px 5px;
+        padding: 3px;
+        background-color: #6264A7;
+        color: #ffffff;
+    }
+
+    .videocall__options .videocall__newMeeting .videocall__more {
+        font-size: 14px;
+        border: 1px solid #aaaaac;
+        border-radius: 2px 5px 5px 2px;
+        padding: 3px;
+        background-color: #6264A7;
+        color: #ffffff;
+    }
+}

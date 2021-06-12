@@ -1,0 +1,12 @@
+.e-schedule .e-vertical-view .e-day-wrapper .e-appointment {
+    background: #E2E2F6;
+    border-radius: 2px;
+    border-left: 4px solid #6264A7 !important;
+    color: #000;
+    overflow: hidden;
+    position: absolute;
+}
+
+.e-schedule .e-vertical-view .e-day-wrapper .e-appointment .e-time {
+    display: none;
+}
