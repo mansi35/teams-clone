@@ -13,7 +13,7 @@ const ScheduleVideoCall = () => {
             </div>
             <div className="videocall__options">
                 <button className="videocall__meetNow">
-                    <img src="https://img.icons8.com/fluent-systems-regular/48/000000/video-call.png"/>
+                    <img src="https://img.icons8.com/fluent-systems-regular/48/000000/video-call.png" alt="" />
                     <b>Meet Now</b>
                 </button>
                 <div className="videocall__newMeeting">

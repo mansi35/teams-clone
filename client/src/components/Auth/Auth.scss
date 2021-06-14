@@ -1,0 +1,50 @@
+.auth {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    .auth__form {
+        width: 400px;
+        border: 1px solid #aaaaac;
+        padding: 10px;
+        box-shadow: 1px 0px 5px rgb(131, 131, 131);
+        border-radius: 5px;
+    }
+
+    h3 {
+        text-align: center;
+    }
+
+    img {
+        width: 100%;
+    }
+
+    .auth__name {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .auth__name > .MuiGrid-root.MuiGrid-item {
+        margin: 0 0.5px;
+        margin-top: 5px;
+    }
+
+    .microsoft__login {
+        background-color: #F5F5F5;
+    }
+
+    .microsoft__login > span > img {
+        height: 20px;
+        width: 20px;
+        margin-right: 10px;
+    }
+    
+    Button {
+        margin: 5px 0;
+    }
+
+    .MuiGrid-root.MuiGrid-item {
+        margin: 5px 0;
+    }
+}

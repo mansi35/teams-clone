@@ -57,7 +57,7 @@
 
     .videocall__options .videocall__newMeeting .videocall__new {
         font-size: 14px;
-        border: 1px solid #aaaaac;
+        border: none;
         border-radius: 5px 2px 2px 5px;
         padding: 3px;
         background-color: #6264A7;
@@ -66,10 +66,11 @@
 
     .videocall__options .videocall__newMeeting .videocall__more {
         font-size: 14px;
-        border: 1px solid #aaaaac;
+        border: none;
         border-radius: 2px 5px 5px 2px;
         padding: 3px;
         background-color: #6264A7;
         color: #ffffff;
+        margin-left: 1px;
     }
 }
