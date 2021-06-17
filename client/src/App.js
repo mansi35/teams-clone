@@ -6,11 +6,10 @@ import ScheduleMeeting from './pages/ScheduleMeeting/ScheduleMeeting';
 import Auth from "./components/Auth/Auth.jsx";
 
 function App() {
-  const currentUser = JSON.parse(localStorage.getItem('profile'));
   return (
     <div className="App">
       <Router>
-          {currentUser ? <Header />: null}
+          <Header />
           <Switch>
             {/*<PrivateRoute path="/requests" component={Requests} />*/}
             <PrivateRoute path="/calendar" exact component={ScheduleMeeting} />

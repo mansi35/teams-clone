@@ -10,3 +10,43 @@
 .e-schedule .e-vertical-view .e-day-wrapper .e-appointment .e-time {
     display: none;
 }
+
+.e-quick-popup-wrapper .e-event-popup .e-popup-header .e-subject-wrap .e-subject {
+    color: #000000;
+}
+
+.e-quick-popup-wrapper .e-event-popup .e-popup-header {
+    background-color: #ffffff;
+}
+
+.e-quick-popup-wrapper .e-event-popup .e-popup-header .e-header-icon-wrapper .e-edit, .e-quick-popup-wrapper .e-event-popup .e-popup-header .e-header-icon-wrapper .e-delete, .e-quick-popup-wrapper .e-event-popup .e-popup-header .e-header-icon-wrapper > button {
+    color: #000000 !important;
+}
+
+.quickpopup__dateTime {
+    font-size: 16px;
+    padding-bottom: 10px;
+    margin-top: -10px;
+}
+
+.quickpopup__join {
+    width: 100px;
+}
+
+.quickpopup__description {
+    font-size: 13px;
+    margin-top: 25px
+}
+
+.quickpopup__meetingId {
+    margin-top: 10px;
+}
+
+.quickpopup__meetingId > p {
+    margin: 0 10px;
+    display: inline;
+}
+
+.quickpopup__meetingId > svg {
+    font-size: 15px;
+}

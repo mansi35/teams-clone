@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Resize, DragAndDrop, Inject, ViewsDirective, ViewDirective } from "@syncfusion/ej2-react-schedule";
-import { loginRequest } from "../../authConfig";
-import { useMsal } from "@azure/msal-react";
 import { callMsGraphCalendar, callMsGraphCreateEvent, callMsGraphDeleteEvent, callMsGraphUpdateEvent } from "../../graph";
 import moment from 'moment';
 import './Calendar.scss'
+import { useLocation } from "react-router-dom";
+import { Button } from '@material-ui/core';
+import LinkIcon from '@material-ui/icons/Link';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import { isNullOrUndefined } from "@syncfusion/ej2-base";
 
 function Calendar() {
-  const { instance, accounts } = useMsal();
   const [data, setData] = useState([]);
-  const request = {
-    ...loginRequest,
-    account: accounts[0]
-  };
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const location = useLocation();
+  
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('profile')));
+  }, [location]);
 
   useEffect(() => {
     RequestCalendarData();
@@ -20,40 +24,21 @@ function Calendar() {
   }, []);
 
   function RequestCalendarData() {
-    // Silently acquires an access token which is then attached to a request for Microsoft Graph data
-    instance.acquireTokenSilent(request).then((response) => {
-        callMsGraphCalendar(response.accessToken).then(response => {
-          response.value.forEach(event => {
-            setData(prevData => [ ...prevData, {
-              Id: event.id,
-              Subject: event.subject,
-              IsAllDay: event.isAllDay,
-              StartTime: moment.utc(event.start.dateTime).toDate(),
-              EndTime: moment.utc(event.end.dateTime).toDate(),
-              RecurrenceRule: event.recurrence,
-              Description: event.body.content,
-            } ]);
-          });
-          console.log(response);
-        });
-    }).catch((e) => {
-        instance.acquireTokenPopup(request).then((response) => {
-            callMsGraphCalendar(response.accessToken).then(response => {
-              response.value.forEach(event => {
-                setData(prevData => [ ...prevData, {
-                  Id: event.id,
-                  Subject: event.subject,
-                  IsAllDay: event.isAllDay,
-                  StartTime: moment.utc(event.start.dateTime).toDate(),
-                  EndTime: moment.utc(event.end.dateTime).toDate(),
-                  RecurrenceRule: event.recurrence,
-                  Description: event.body.content,
-                } ]);
-              });
-              console.log(response);
-            });
-        });
-    });
+    callMsGraphCalendar(user.tokenId).then(response => {
+      response.value.forEach(event => {
+        setData(prevData => [ ...prevData, {
+          Id: event.id,
+          Subject: event.subject,
+          IsAllDay: event.isAllDay,
+          StartTime: moment.utc(event.start.dateTime).toDate(),
+          EndTime: moment.utc(event.end.dateTime).toDate(),
+          RecurrenceRule: event.recurrence,
+          Description: event.body.content,
+          MeetingId: event.onlineMeeting ? event.onlineMeeting.joinUrl : "" ,
+        } ]);
+      });
+      console.log(response);
+    })
     setData([]);
   }
 
@@ -74,22 +59,18 @@ function Calendar() {
             timeZone: 'UTC'
           },
           location: {
-              displayName: args.data[0].Location ? args.data[0].Location: ""
+            displayName: args.data[0].Location ? args.data[0].Location: ""
           },
         };
-        instance.acquireTokenSilent(request).then((response) => {
-          const eventData = callMsGraphCreateEvent(response.accessToken, event).then((t) => console.log(t));
-          console.log(eventData);
-        });
+        const eventData = callMsGraphCreateEvent(user.tokenId, event).then((t) => console.log(t));
+        console.log(eventData);
       }
       if (args.requestType === "eventRemove") { 
-        instance.acquireTokenSilent(request).then((response) => {
-          const eventData = callMsGraphDeleteEvent(response.accessToken, args.data[0].Id).then((t) => console.log(t));
-          console.log(eventData);
-        });
+        const eventData = callMsGraphDeleteEvent(user.tokenId, args.data[0].Id).then((t) => console.log(t));
+        console.log(eventData);
       }
-      if (args.requestType === "eventChange") { 
-        console.log('updated event', args);
+      if (args.requestType === "eventChange") {
+        console.log(args.data);
         const event = {
           subject: args.data.Subject,
           body: {
@@ -108,12 +89,48 @@ function Calendar() {
               displayName: args.data.Location ? args.data.Location: ""
           },
         };
-        console.log('updated event', args);
-        instance.acquireTokenSilent(request).then((response) => {
-          const eventData = callMsGraphUpdateEvent(response.accessToken, event, args.data.Id).then((t) => console.log(t));
-          console.log(eventData);
-        });
+        const eventData = callMsGraphUpdateEvent(user.tokenId, event, args.data.Id).then((t) => console.log(t));
+        console.log(eventData);
       }
+  }
+
+  function content(props) {
+    return (
+      <div>
+        {props.elementType === "cell" ? (
+          <div className="e-cell-content e-template">
+            <form className="e-schedule-form">
+              <div>
+                <input className="subject e-field e-input" type="text" name="Subject" placeholder="Title"/>
+              </div>
+            </form>
+          </div>) : (
+          <div>
+            <div className="quickpopup__dateTime">
+              {props.StartTime.toLocaleDateString('en-GB', {
+                day: 'numeric', month: 'short', year: 'numeric'
+              })}
+              {" "}
+              {props.StartTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false })}
+              {" - "}
+              {props.EndTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false })}
+            </div>
+            {props.MeetingId !== "" && !isNullOrUndefined(props.MeetingId) ?
+            <div>
+              <Button href={props.MeetingId} variant="contained" color="primary" className="quickpopup__join">Join</Button>
+              <div className="quickpopup__meetingId">
+                <LinkIcon />
+                <p><a href={props.MeetingId}>{props.MeetingId.slice(0, 40)}{"..."}</a></p>
+                <FileCopyOutlinedIcon />
+              </div>
+            </div>: null}
+            <div className="quickpopup__description">
+              {props.Description ? props.Description.includes('>') ? props.Description.substr(0, props.Description.indexOf('<https')) : props.Description: ""}
+            </div>
+          </div>
+        )}
+      </div>
+    );
   }
 
   return (
@@ -122,9 +139,9 @@ function Calendar() {
       height="85.7vh"
       selectedDate={new Date()}
       enablePersistence={true}
-      timeFormat="HH"
       actionBegin={onActionBegin}
       eventSettings={{dataSource: data}}
+      quickInfoTemplates={{ content: content }}
     >
       <ViewsDirective>
         <ViewDirective option="Day" />

@@ -12,7 +12,7 @@ const Header = () => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const dispatch = useDispatch();
     const history = useHistory();
-    const clientId="fd3b6574-30a9-47e5-8890-024c28e95c00";
+    const clientId="a7c1752f-adb0-437f-a95a-0bb44ae8ef58";
     const [msalInstance, onMsalInstanceChange] = useState();
     const location = useLocation();
 
@@ -49,17 +49,21 @@ const Header = () => {
                 <Apps />
                 <h5 className="d-none d-md-block">Microsoft Teams</h5>
             </div>
-            <div className="header__search">
-                <SearchIcon />
-                <input type="text" placeholder="Search" />
-            </div>
+            {user ?
+                <div className="header__search">
+                    <SearchIcon />
+                    <input type="text" placeholder="Search" />
+                </div>
+            : null}
             <div className="header__options">
                 <MoreHorizIcon />
                 {user && msalInstance ? (
                     <>
                     <h6>{user.data.displayName}</h6>
                     <div className="header__profile">
+                    {user.data.displayName ?
                         <Avatar src={user.data.photoUrl} alt={user.data.displayName} onClick={logoutHandler}>{user.data.displayName.charAt(0)}</Avatar>
+                    : null}
                     </div>
                     </>
                 ) : (

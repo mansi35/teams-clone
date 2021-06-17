@@ -10,7 +10,7 @@ import './Auth.scss';
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
 const Auth = () => {
-    const clientId="fd3b6574-30a9-47e5-8890-024c28e95c00";
+    const clientId="a7c1752f-adb0-437f-a95a-0bb44ae8ef58";
     const [msalInstance, onMsalInstanceChange] = useState();
     const dispatch = useDispatch();
     const history = useHistory();
