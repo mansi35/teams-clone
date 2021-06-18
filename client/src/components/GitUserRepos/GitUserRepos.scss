@@ -1,0 +1,15 @@
+.userRepos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 20px;
+    .userRepos__options {
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid #c5c4c4;
+    }
+
+    .userRepos__options > h5 {
+        padding: 10px;
+    }
+}

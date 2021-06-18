@@ -1,0 +1,28 @@
+.userRepo {
+    margin: 20px;
+    margin-left: 0;
+    .userRepo_stats {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .userRepo_stats > h6 {
+        margin: 0 10px 0 0;
+        padding: 4px;
+        border-radius: 5px;
+        color: #ffffff;
+        font-size: 12px;
+    }
+
+    .userRepo_stats :nth-child(1) {
+        background-color: #2b1818;
+    }
+
+    .userRepo_stats :nth-child(2) {
+        background-color: #0097e9;
+    }
+
+    .userRepo_stats :nth-child(3) {
+        background-color: #00a716;
+    }
+}

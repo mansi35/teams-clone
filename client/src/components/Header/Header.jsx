@@ -21,7 +21,7 @@ const Header = () => {
     }, [location]);
 
     const loginHandler = (err, data, msal) => {
-        if (!err && data) {
+        if (!err && data && !msalInstance) {
             onMsalInstanceChange(msal);
             const tokenId = data.accessToken;
             try {

@@ -1,0 +1,27 @@
+.github__search {
+    margin: 10px auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .search__field {
+        padding: 5px;
+        outline: none;
+        background-color: white;
+        vertical-align: middle;
+        border-radius: 3px 0 0 3px;
+        border: 1px solid #e0e0e5;
+        width: 30%;
+        height: 40px;
+    }
+    .search__button {
+        border: none;
+        border-radius: 2px 5px 5px 2px;
+        padding: 5px;
+        background-color: #47bfff;
+        vertical-align: middle;
+        color: #ffffff;
+        margin-left: 1px;
+        height: 40px;
+    }
+}

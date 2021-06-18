@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {ReactComponent as Calendar} from '../../assets/calendar.svg'
 import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import './ScheduleVideoCall.scss'
+import { v1 as uuid } from "uuid";
+import { Link } from 'react-router-dom';
 
 const ScheduleVideoCall = () => {
+    const [id, setId] = useState('');
+    function create() {
+        setId(uuid());
+    }
     return (
         <div className="videocall">
             <div className="videocall__logo">
@@ -17,10 +23,12 @@ const ScheduleVideoCall = () => {
                     <b>Meet Now</b>
                 </button>
                 <div className="videocall__newMeeting">
-                    <button className="videocall__new">
-                        <AddIcon />
-                        <b>New Meeting</b>
-                    </button>
+                    <Link to={`/room/${id}`} target="_blank">
+                        <button className="videocall__new" onClick={create}>
+                            <AddIcon />
+                            <b>New Meeting</b>
+                        </button>
+                    </Link>
                     <button className="videocall__more">
                         <ExpandMoreIcon />
                     </button>
