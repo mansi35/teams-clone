@@ -9,6 +9,7 @@ import teams from '../../assets/teams.svg';
 import calls from '../../assets/calls.svg';
 import files from '../../assets/files.svg';
 import assignments from '../../assets/assignments.svg';
+import { Link } from 'react-router-dom';
 
 function Sidebar() {
     return (
@@ -28,11 +29,13 @@ function Sidebar() {
                 text="Teams"
                 hoverIcon={teams}
             />
-            <SidebarItem 
-                icon="https://img.icons8.com/ios/50/000000/backpack.png"
-                text="Assignments"
-                hoverIcon={assignments}
-            />
+            <Link to="/git">
+                <SidebarItem 
+                    icon="https://img.icons8.com/ios/50/000000/backpack.png"
+                    text="Assignments"
+                    hoverIcon={assignments}
+                />
+            </Link>
             <SidebarItem 
                 icon="https://img.icons8.com/fluent-systems-regular/48/000000/calendar--v1.png"
                 text="Calendar"

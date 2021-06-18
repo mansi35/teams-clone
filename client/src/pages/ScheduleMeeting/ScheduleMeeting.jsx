@@ -4,7 +4,7 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 import ScheduleVideoCall from '../../components/ScheduleVideoCall/ScheduleVideoCall'
 import './ScheduleMeeting.scss'
 
-function ScheduleMeeting() {
+const ScheduleMeeting = () => {
     return (
         <div className="scheduleMeeting">
             <div className="schedule__content">
