@@ -1,6 +1,21 @@
 .userRepo {
     margin: 20px;
     margin-left: 0;
+
+    .userRepo__name > button {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 0;
+    }
+
+    .userRepo__name > button > h5 {
+        color: #47bfff;
+        text-align: left;
+        padding: 0;
+        margin: 0;
+    }
+
     .userRepo_stats {
         display: flex;
         flex-direction: row;
@@ -24,5 +39,35 @@
 
     .userRepo_stats :nth-child(3) {
         background-color: #00a716;
+    }
+
+    .userRepo__forkedFrom {
+        font-size: 12px;
+        color: #707070;
+    }
+}
+
+.userRepoContent {
+    .userRepoContent__name {
+        padding: 10px;
+    }
+
+    .userRepoContent__name > button {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 0;
+    }
+
+    .userRepoContent__name > button > h6 {
+        color: #47bfff;
+    }
+
+    .userRepoContent__name > button > h6:hover {
+        color: #0097e9;
+    }
+
+    .userRepoContent__name > svg {
+        margin-right: 7px;
     }
 }

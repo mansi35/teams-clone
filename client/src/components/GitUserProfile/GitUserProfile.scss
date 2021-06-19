@@ -2,10 +2,9 @@
     display: flex;
     flex-direction: column;
     border: 1px solid #47bfff;
-    width: fit-content;
     padding: 10px;
-    margin: 10px;
     border-radius: 7px;
+    height: fit-content;
 
     .username {
         padding: 5px;
@@ -15,6 +14,8 @@
     .userStats {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        justify-content: center;
     }
 
     .userStats > h6 {
@@ -50,11 +51,11 @@
 
     .userPhotoUrl > img {
         height: 200px;
-        border-radius: 999px;
     }
 
     .userProfileInfo {
         margin-top: 20px;
+        width: 100%;
     }
 
     .userProfileInfo > h6 {

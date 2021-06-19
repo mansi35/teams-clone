@@ -24,7 +24,7 @@ export async function getForkedFrom(i, username){
 }
 
 export async function getRepos(username) {
-    const url =  "https://api.github.com/users/" + username + "/repos?sort=created";
+    const url =  "https://api.github.com/users/" + username + "/repos?sort=updated&per_page=1000";
     return fetch(url, options)
         .then(response => response.json())
         .catch(error => console.log(error));
@@ -39,6 +39,13 @@ export async function getRepoContent (username, reponame) {
 
 export async function getActivity(username) {
     const url = "https://api.github.com/users/" + username + "/events?per_page=1000";
+    return fetch(url, options)
+        .then(response => response.json())
+        .catch(error => console.log(error));
+}
+
+export async function getFileContent(username, reponame, filefolderName) {
+    const url = "https://api.github.com/repos/"+ username + "/" + reponame + "/contents/" + filefolderName;
     return fetch(url, options)
         .then(response => response.json())
         .catch(error => console.log(error));
