@@ -48,6 +48,29 @@
 }
 
 .userRepoContent {
+    .userRepo__options {
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid #c5c4c4;
+    }
+
+    .userRepo__options .active {
+        padding-bottom: 10px;
+        margin-bottom: 0;
+        border-bottom: 2px solid #000000;
+    }
+
+    .userRepo__options > button {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 0;
+    }
+
+    .userRepo__options > button > h6 {
+        padding: 10px;
+    }
+
     .userRepoContent__name {
         padding: 10px;
     }
@@ -69,5 +92,34 @@
 
     .userRepoContent__name > svg {
         margin-right: 7px;
+    }
+}
+
+.repoPdf {
+    .userRepo__options {
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid #c5c4c4;
+    }
+
+    .userRepo__options .active {
+        padding-bottom: 10px;
+        margin-bottom: 0;
+        border-bottom: 2px solid #000000;
+    }
+
+    .userRepo__options > button {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 0;
+    }
+
+    .userRepo__options > button > h6 {
+        padding: 10px;
+    }
+
+    .userRepo__options > h6 {
+        padding: 10px;
     }
 }

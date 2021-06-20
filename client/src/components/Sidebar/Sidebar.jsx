@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import './Sidebar.scss';
 import SidebarItem from './SidebarItem';
@@ -9,9 +9,25 @@ import teams from '../../assets/teams.svg';
 import calls from '../../assets/calls.svg';
 import files from '../../assets/files.svg';
 import assignments from '../../assets/assignments.svg';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { getAccessToken } from '../../github';
+import LoginGithub from 'react-login-github';
 
 function Sidebar() {
+    const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('git_oauth')));
+    const location = useLocation();
+  
+    useEffect(() => {
+        setAuth(JSON.parse(localStorage.getItem('git_oauth')));
+    }, [location]);
+
+    const onSuccess = async(response) => {
+        const result = await getAccessToken(response.code);
+        console.log(result);
+        localStorage.setItem('git_oauth', JSON.stringify(result));
+    }
+    const onFailure = response => console.error(response);
+
     return (
         <div className="sidebar">
             <SidebarItem 
@@ -29,13 +45,29 @@ function Sidebar() {
                 text="Teams"
                 hoverIcon={teams}
             />
-            <Link to="/git">
-                <SidebarItem 
-                    icon="https://img.icons8.com/ios/50/000000/backpack.png"
-                    text="Assignments"
-                    hoverIcon={assignments}
-                />
-            </Link>
+            {auth ?
+                <Link to="/git">
+                    <SidebarItem 
+                        icon="https://img.icons8.com/ios/50/000000/backpack.png"
+                        text="Assignments"
+                        hoverIcon={assignments}
+                    />
+                </Link>
+            :
+                <LoginGithub clientId="f6099a354e555e602bcb"
+                    onSuccess={onSuccess}
+                    onFailure={onFailure}
+                    scope="admin:org repo user"
+                >
+                    <Link to="/git">
+                        <SidebarItem 
+                            icon="https://img.icons8.com/ios/50/000000/backpack.png"
+                            text="Assignments"
+                            hoverIcon={assignments}
+                        />
+                    </Link>
+                </LoginGithub>
+            }
             <SidebarItem 
                 icon="https://img.icons8.com/fluent-systems-regular/48/000000/calendar--v1.png"
                 text="Calendar"

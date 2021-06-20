@@ -18,7 +18,7 @@ function App() {
                 <Route path="/auth" exact component={Auth} />
                 <Route path="/" exact component={CreateRoom} />
                 <Route path="/room/:roomID" component={Room} />
-                <Route path="/git" exact component={Github} />
+                <PrivateRoute path="/git" exact component={Github} />
             </Switch>
         </Router>
         </div>

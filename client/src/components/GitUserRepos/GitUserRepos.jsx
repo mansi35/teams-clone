@@ -14,9 +14,11 @@ function GitUserRepos({ user }) {
     async function fetchRepos() {
         const result = await getRepos(user);
         setRepos(result);
+        console.log(result);
     }
 
     useEffect(() => {
+        setRepos(null);
         if (user) {
             fetchRepos();
         }
@@ -40,7 +42,7 @@ function GitUserRepos({ user }) {
     if (repos) {
         return (
             <div className="userRepos">
-                <div className="userRepos__options">
+                <div className="userRepos__options" id="repos__options">
                     <h5 className="active">Repos</h5>
                     <h5>Activity</h5>
                 </div>

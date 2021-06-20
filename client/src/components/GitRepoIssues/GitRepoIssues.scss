@@ -1,0 +1,52 @@
+.repo__issues {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .issue__info {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .issue__title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .issue__title > h6 {
+        margin: 0;
+    }
+
+    .issue__assignees {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .issue__activity {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .issue__activity > p {
+        margin: 0;
+    }
+
+    .issue__labels {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .user__info > p {
+        font-size: 12px;
+    }
+}
