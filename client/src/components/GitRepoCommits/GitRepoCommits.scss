@@ -1,12 +1,12 @@
 .repo__commit {
-    border: 1px solid #c7ccd1;
+    border-bottom: 1px solid #c7ccd1;
+    border-left: 1px solid #c7ccd1;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    padding: 5px;
-    margin: 5px 0;
+    padding: 10px;
 
     h6 {
         margin: 0;

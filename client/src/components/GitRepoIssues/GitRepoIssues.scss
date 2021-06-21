@@ -1,7 +1,10 @@
-.repo__issues {
+.repo__issue {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border-bottom: 1px solid #c5c4c4;
+    border-left: 1px solid #c5c4c4;
+    padding: 7px;
 
     .issue__info {
         display: flex;
@@ -18,7 +21,13 @@
     }
 
     .issue__title > h6 {
-        margin: 0;
+        margin: 7px;
+        font-size: 17px;
+    }
+
+    .issue__title .MuiSvgIcon-root {
+        height: 20px;
+        fill: #22863A;
     }
 
     .issue__assignees {
@@ -26,6 +35,12 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        margin: 20px;
+    }
+
+    .issue__assignees .MuiAvatar-root {
+        height: 25px;
+        width: 25px;
     }
 
     .issue__activity {
@@ -35,8 +50,24 @@
         align-items: center;
     }
 
-    .issue__activity > p {
-        margin: 0;
+    .issue__activity > .issue__comments > p {
+        margin: 5px;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #777676;
+    }
+
+    .issue__activity > .issue__comments > .MuiSvgIcon-root {
+        padding: 3px;
+        fill: #777676;
+    }
+
+    .issue__comments {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .issue__labels {
@@ -46,7 +77,19 @@
         align-items: center;
     }
 
+    .issue__labels > p {
+        font-size: 14px;
+        padding: 3px 7px;
+        margin: 3px ;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
     .user__info > p {
         font-size: 12px;
     }
+}
+
+.repo__issue:hover {
+    background-color: #F6F8FA;
 }

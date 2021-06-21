@@ -13,8 +13,7 @@ function GitUserRepos({ user }) {
 
     async function fetchRepos() {
         const result = await getRepos(user);
-        setRepos(result);
-        console.log(result);
+        setRepos(result.items);
     }
 
     useEffect(() => {
@@ -61,9 +60,9 @@ function GitUserRepos({ user }) {
                         {fileName}
                     </div>
                 : null}
-                {repos.map((repo) => {
+                {repos?.map((repo, i) => {
                     return (
-                        <GitUserRepo key={repo.id} user={user} repo={repo} setPath={setPath} allrepos={allrepos} pathChanged={pathChanged} path={path} setFileName={setFileName} />
+                        <GitUserRepo key={i} user={user} repo={repo} setPath={setPath} allrepos={allrepos} pathChanged={pathChanged} path={path} setFileName={setFileName} />
                     )
                 })}
             </div>

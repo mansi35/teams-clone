@@ -2,7 +2,7 @@
 const git_oauth = JSON.parse(localStorage.getItem('git_oauth'));
 
 const headers = new Headers();
-const accessToken = git_oauth?.accessToken;
+const accessToken = git_oauth?.access_token;
 const basic = `Basic ${btoa(accessToken)}`;
 
 headers.append("Authorization", basic);
@@ -43,8 +43,8 @@ export async function getForkedFrom(i, username){
 }
 
 export async function getRepos(username) {
-    const url =  `https://api.github.com/users/${username}/repos?sort=updated&per_page=1000`;
-    // const url = `https://api.github.com/search/repositories?q=user:${username}&sort=updated`;
+    // const url =  `https://api.github.com/users/${username}/repos?sort=updated&per_page=1000&type=all`;
+    const url = `https://api.github.com/search/repositories?q=user:${username}&sort=updated`;
     const repoOptions = {
         method: "GET",
         headers: {
@@ -105,3 +105,21 @@ export async function GetRepoIssues(username, reponame) {
         .then(response => response.json())
         .catch(error => console.log(error));
 }
+
+export async function createIssues(username, repo, payLoad) {
+    const url = `https://api.github.com/repos/${username}/${repo}/issues`;
+
+    const createIssueOptions = {
+        method: "POST",
+        headers: {
+            "Content-Type":'application/json',
+            "Authorization": `Basic ${btoa('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')}`
+        },
+        body: JSON.stringify(payLoad)
+    };
+
+    return fetch(url, createIssueOptions)
+        .then(response => response.json())
+        .catch(error => console.log(error));
+}
+

@@ -6,8 +6,29 @@ import { Avatar } from '@material-ui/core';
 import moment from 'moment';
 
 function GitRepoIssues({ issue }) {
+    const lightOrDark = (color) => {
+        color = +("0x" + color.slice(1).replace( 
+        color.length < 5 && /./g, '$&$&'));
+
+        const r = color >> 16;
+        const g = (color >> 8) & 255;
+        const b = color & 255;
+        
+        const hsp = Math.sqrt(
+            0.299 * (r * r) +
+            0.587 * (g * g) +
+            0.114 * (b * b)
+        );
+        if (hsp > 127.5) {
+            return 'light';
+        } 
+        else {
+            return 'dark';
+        }
+    }
+
     return (
-        <div className="repo__issues">
+        <div className="repo__issue">
             <div className="issue__info">
                 <div className="issue__title">
                     <AdjustIcon />
@@ -23,14 +44,18 @@ function GitRepoIssues({ issue }) {
                         })}
                         </div>
                     : null}
-                    <ChatBubbleOutlineIcon />
-                    <p>{issue.comments}</p>
+                    {issue.comments > 0 ?
+                        <div className="issue__comments">
+                            <ChatBubbleOutlineIcon />
+                            <p>{issue.comments}</p>
+                        </div>
+                    : null}
                 </div>
             </div>
             <div className="issue__labels">
                 {issue.labels?.map((label, i) => {
                     return (
-                        <p style={{ backgroundColor: `#${label.color}` }}>{label.name}</p>
+                        <p style={{ backgroundColor: `#${label.color}`, color: lightOrDark('#' + label.color) === 'dark' ? "#ffffff" : "#000000" }}>{label.name}</p>
                     )
                 })}
             </div>

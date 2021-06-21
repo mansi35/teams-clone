@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { getFileContent, getForkedFrom, GetRepoCommits, getRepoContent, GetRepoIssues } from '../../github';
 import GitRepoCommits from '../GitRepoCommits/GitRepoCommits';
 import GitRepoIssues from '../GitRepoIssues/GitRepoIssues';
+import CreateIssue from '../CreateIssue/CreateIssue';
 import FolderIcon from '@material-ui/icons/Folder';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import { Button } from '@material-ui/core';
 import './GitUserRepo.scss';
 
 function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFileName }) {
@@ -15,6 +17,7 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
     const [commits, setCommits] = useState(false);
     const [allCommits, setAllCommits] = useState([]);
     const [allIssues, setAllIssues] = useState([]);
+    const [creatingIssue, setCreatingIssue] = useState(false);
 
     useEffect(() => {
         const fetchForkedFrom = async() => {
@@ -127,6 +130,18 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
         setCommits(false);
     }
 
+    const createIssue = () => {
+        setCreatingIssue(true);
+    }
+
+    const CancelIssue = () => {
+        setCreatingIssue(false);
+    }
+
+    const DoneIssue = () => {
+        setCreatingIssue(false);
+    }
+
     if (!repoContent) {
         return (
             <div className="userRepo">
@@ -190,11 +205,21 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
                             <button onClick={showCommits}><h6 className="repo__commits">Commits</h6></button>
                             <button onClick={showIssues}><h6 className="repo__issues active">Issues</h6></button>
                         </div>
-                        {allIssues.map((issue, i) => {
-                            return (
-                                <GitRepoIssues issue={issue} />
-                            )
-                        })}
+                        <Button fullWidth variant="contained" color="primary" onClick={() => {createIssue()}} className="submit">Create Issue</Button>
+                        {creatingIssue ?
+                            <div>
+                                <CreateIssue user={user} repo={repo.name} />
+                                <Button fullWidth variant="contained" color="primary" onClick={() => {CancelIssue()}} className="submit">Cancel</Button>
+                            </div>
+                        :
+                            <div>
+                                {allIssues.map((issue, i) => {
+                                    return (
+                                        <GitRepoIssues issue={issue} />
+                                    )
+                                })}
+                            </div>
+                        }
                     </div>)
             ]}
             </div>
@@ -241,11 +266,21 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
                         <button onClick={showCommits}><h6 className="repo__commits">Commits</h6></button>
                         <button onClick={showIssues}><h6 className="repo__issues active">Issues</h6></button>
                     </div>
-                    {allIssues.map((issue, i) => {
-                        return (
-                            <GitRepoIssues issue={issue} />
-                        )
-                    })}
+                    <Button fullWidth variant="contained" color="primary" onClick={() => {createIssue()}} className="submit">Create Issue</Button>
+                    {creatingIssue ?
+                        <div>
+                            <CreateIssue user={user} repo={repo.name} />
+                            <Button fullWidth variant="contained" color="primary" onClick={() => {CancelIssue()}} className="submit">Cancel</Button>
+                        </div>
+                    :
+                        <div>
+                            {allIssues.map((issue, i) => {
+                                return (
+                                    <GitRepoIssues issue={issue} />
+                                )
+                            })}
+                        </div>
+                    }
                 </div>)
             ]}
             </div>
@@ -293,11 +328,21 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
                             <button onClick={showCommits}><h6 className="repo__commits">Commits</h6></button>
                             <button onClick={showIssues}><h6 className="repo__issues active">Issues</h6></button>
                         </div>
-                        {allIssues.map((issue, i) => {
-                            return (
-                                <GitRepoIssues issue={issue} />
-                            )
-                        })}
+                        <Button fullWidth variant="contained" color="primary" className="submit" onClick={() => {createIssue()}} >Create Issue</Button>
+                        {creatingIssue ?
+                            <div>
+                                <CreateIssue user={user} repo={repo.name} />
+                                <Button fullWidth variant="contained" color="primary" onClick={() => {CancelIssue()}} className="submit">Cancel</Button>
+                            </div>
+                        :
+                            <div>
+                                {allIssues.map((issue, i) => {
+                                    return (
+                                        <GitRepoIssues issue={issue} />
+                                    )
+                                })}
+                            </div>
+                        }
                     </div>)
                 ]}
             </div>
