@@ -5,7 +5,7 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import { Avatar } from '@material-ui/core';
 import moment from 'moment';
 import IssueDescription from './IssueDescription';
-import { GetRepoIssueComments } from '../../github';
+import { GetRepoIssueComments } from '../../api/github';
 
 function GitRepoIssues({ issue, user, repo }) {
     const [description, setDescription] = useState(false);

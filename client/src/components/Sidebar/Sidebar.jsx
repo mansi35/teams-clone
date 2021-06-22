@@ -10,7 +10,7 @@ import calls from '../../assets/calls.svg';
 import files from '../../assets/files.svg';
 import assignments from '../../assets/assignments.svg';
 import { Link, useLocation } from 'react-router-dom';
-import { getAccessToken } from '../../github';
+import { getAccessToken } from '../../api/github';
 import LoginGithub from 'react-login-github';
 
 function Sidebar() {

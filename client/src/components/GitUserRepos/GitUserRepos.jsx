@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
 import GitUserRepo from '../GitUserRepo/GitUserRepo';
-import { getRepos } from '../../github';
+import { getRepos } from '../../api/github';
 import './GitUserRepos.scss';
 
 function GitUserRepos({ user }) {

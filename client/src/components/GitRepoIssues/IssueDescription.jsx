@@ -5,7 +5,7 @@ import moment from 'moment';
 import ReactMarkdown from 'react-markdown';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { createIssueComments } from '../../github';
+import { createIssueComments } from '../../api/github';
 import rehypeRaw from 'rehype-raw'
 
 const initialState = { body: '' };

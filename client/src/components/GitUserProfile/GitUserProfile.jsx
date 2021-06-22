@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getUser } from '../../github';
+import { getUser } from '../../api/github';
 import './GitUserProfile.scss';
 
 function GitUserProfile({ user }) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Resize, DragAndDrop, Inject, ViewsDirective, ViewDirective } from "@syncfusion/ej2-react-schedule";
-import { callMsGraphCalendar, callMsGraphCreateEvent, callMsGraphDeleteEvent, callMsGraphUpdateEvent } from "../../graph";
+import { callMsGraphCalendar, callMsGraphCreateEvent, callMsGraphDeleteEvent, callMsGraphUpdateEvent } from "../../api/graph";
 import moment from 'moment';
 import './Calendar.scss'
 import { useLocation } from "react-router-dom";

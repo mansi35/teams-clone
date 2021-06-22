@@ -40,10 +40,10 @@ const Header = () => {
                 <MoreHorizIcon />
                 {user ? (
                     <>
-                    <h6>{user.data.idToken.name}</h6>
+                    <h6>{user.data.account.name}</h6>
                     <div className="header__profile">
-                    {user.data.idToken.name ?
-                        <Avatar src={user.data.photoUrl} alt={user.data.idToken.name} onClick={() => {logoutHandler()}}>{user.data.idToken.name.charAt(0)}</Avatar>
+                    {user.data.account.name ?
+                        <Avatar src={user.data.photoUrl} alt={user.data.account.name} onClick={() => {logoutHandler()}}>{user.data.account.name.charAt(0)}</Avatar>
                     : null}
                     </div>
                     </>

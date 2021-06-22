@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Input from '../Auth/Input';
 import { Button } from '@material-ui/core';
-import { createIssues } from '../../github';
+import { createIssues } from '../../api/github';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 

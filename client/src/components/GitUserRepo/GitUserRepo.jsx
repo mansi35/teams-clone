@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFileContent, getForkedFrom, GetRepoCommits, getRepoContent, GetRepoIssues } from '../../github';
+import { getFileContent, getForkedFrom, GetRepoCommits, getRepoContent, GetRepoIssues } from '../../api/github';
 import GitRepoCommits from '../GitRepoCommits/GitRepoCommits';
 import GitRepoIssues from '../GitRepoIssues/GitRepoIssues';
 import CreateIssue from '../CreateIssue/CreateIssue';
