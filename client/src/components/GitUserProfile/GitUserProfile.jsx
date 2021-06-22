@@ -15,7 +15,7 @@ function GitUserProfile({ user }) {
         }
     }, [user])
 
-    if (profile) {
+    if (profile && !profile.message) {
     return (
         <div className="userProfile">
             <div className="username">

@@ -5,7 +5,7 @@ import { getRepos } from '../../github';
 import './GitUserRepos.scss';
 
 function GitUserRepos({ user }) {
-    const [repos, setRepos] = useState(null);
+    const [repos, setRepos] = useState([]);
     const [path, setPath] = useState([]);
     const [allrepos, setAllRepos] = useState(false)
     const [pathChanged, setPathChanged] = useState(false);
@@ -17,7 +17,7 @@ function GitUserRepos({ user }) {
     }
 
     useEffect(() => {
-        setRepos(null);
+        setRepos([]);
         if (user) {
             fetchRepos();
         }
@@ -38,7 +38,7 @@ function GitUserRepos({ user }) {
         setPathChanged(!pathChanged);
     }
 
-    if (repos) {
+    if (repos.length !== 0) {
         return (
             <div className="userRepos">
                 <div className="userRepos__options" id="repos__options">

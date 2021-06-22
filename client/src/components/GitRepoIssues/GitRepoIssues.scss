@@ -20,9 +20,23 @@
         align-items: center;
     }
 
-    .issue__title > h6 {
+    .issue__title > button {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 0;
+    }
+
+    .issue__title > button > h6 {
         margin: 7px;
         font-size: 17px;
+        text-align: left;
+        padding: 0;
+        margin: 0;
+    }
+
+    .issue__title > button > h6:hover {
+        color: #0097e9;
     }
 
     .issue__title .MuiSvgIcon-root {
@@ -92,4 +106,143 @@
 
 .repo__issue:hover {
     background-color: #F6F8FA;
+}
+
+.issue__description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .issue__title {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h5 {
+            margin: 20px 0;
+        }
+
+        .issue__state {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .issue__state :first-child {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            background-color: #22863A;
+            color: #ffffff;
+            font-size: 16px;
+            padding: 0 7px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .issue__state > div > p {
+            margin-bottom: 3px;
+            padding-right: 7px;
+        }
+
+        .issue__state > div > .MuiSvgIcon-root {
+            height: 35px;
+            width: 35px;
+        }
+
+        .issue_state > p {
+            margin: 0;
+        }
+    }
+
+    .issue__labels {
+        display: flex;
+        flex-direction: row;
+        margin: 10px 0;
+    }
+
+    .issue__labels > p {
+        margin: 3px;
+    }
+
+    .issue__label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 0 7px;
+    }
+
+    .issue__label > p {
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        padding: 0 7px;
+        border-radius: 20px;
+        font-weight: 600;
+        margin: 3px;
+    }
+
+    .issue__mainBody {
+        border: 1px solid #c5c4c4;
+        border-radius: 10px;
+        margin: 20px 0;
+    }
+
+    .issue__descriptionTitle {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 20px 10px;
+        border-bottom: 1px solid #c5c4c4;
+        background-color: #F6F8FA;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .issue__descriptionTitle > p {
+        margin: 0;
+        padding: 0 10px;
+    }
+
+    .issue__descriptionBody {
+        padding: 20px 10px;
+    }
+
+    .issue__comment {
+        border: 1px solid #c5c4c4;
+        border-radius: 10px;
+        margin: 20px 0;
+    }
+
+    .issue__commentTitle {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 20px 10px;
+        border-bottom: 1px solid #c5c4c4;
+        background-color: #F6F8FA;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .issue__commentTitle > p {
+        margin: 0;
+        padding: 0 10px;
+    }
+
+    .issue__commentBody {
+        padding: 20px 10px;
+    }
+
+    .issue__commentBody > p > img {
+        object-fit: contain;
+    }
+
+
+    .issue__buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
 }

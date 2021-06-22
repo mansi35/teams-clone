@@ -106,14 +106,14 @@ export async function GetRepoIssues(username, reponame) {
         .catch(error => console.log(error));
 }
 
-export async function createIssues(username, repo, payLoad) {
-    const url = `https://api.github.com/repos/${username}/${repo}/issues`;
+export async function createIssues(username, reponame, payLoad) {
+    const url = `https://api.github.com/repos/${username}/${reponame}/issues`;
 
     const createIssueOptions = {
         method: "POST",
         headers: {
             "Content-Type":'application/json',
-            "Authorization": `Basic ${btoa('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')}`
+            "Authorization": `Basic ${btoa(accessToken)}`
         },
         body: JSON.stringify(payLoad)
     };
@@ -123,3 +123,33 @@ export async function createIssues(username, repo, payLoad) {
         .catch(error => console.log(error));
 }
 
+export async function GetRepoIssueComments(username, reponame, thread) {
+    const url = `https://api.github.com/repos/${username}/${reponame}/issues/${thread}/comments?sort=created&per_page=100`;
+    const issueOptions = {
+        method: "GET",
+        headers: {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": `Basic ${btoa(accessToken)}`
+        }
+    };
+    return fetch(url, issueOptions)
+        .then(response => response.json())
+        .catch(error => console.log(error));
+}
+
+export async function createIssueComments(username, repo, thread, payLoad) {
+    const url = `https://api.github.com/repos/${username}/${repo}/issues/${thread}/comments`;
+
+    const createCommentOptions = {
+        method: "POST",
+        headers: {
+            "Content-Type":'application/json',
+            "Authorization": `Basic ${btoa(accessToken)}`
+        },
+        body: JSON.stringify(payLoad)
+    };
+
+    return fetch(url, createCommentOptions)
+        .then(response => response.json())
+        .catch(error => console.log(error));
+}

@@ -144,7 +144,7 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
 
     if (!repoContent) {
         return (
-            <div className="userRepo">
+            <div className="userRepo" key={repo.id}>
                 <div className="userRepo__name">
                     <button onClick={() => {repoFiles(repo.name)}}><h5>{repo.name}</h5></button>
                 </div>
@@ -163,7 +163,7 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
         )
     } else if (fileContent) {
         return (
-            <div>
+            <div key={repo.id}>
             {code ?
             <div className="repoPdf">
                 <div className="userRepo__options">
@@ -208,14 +208,14 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
                         <Button fullWidth variant="contained" color="primary" onClick={() => {createIssue()}} className="submit">Create Issue</Button>
                         {creatingIssue ?
                             <div>
-                                <CreateIssue user={user} repo={repo.name} />
+                                <CreateIssue user={user} repo={repo.name} DoneIssue={DoneIssue} setAllIssues={setAllIssues} allIssues={allIssues} />
                                 <Button fullWidth variant="contained" color="primary" onClick={() => {CancelIssue()}} className="submit">Cancel</Button>
                             </div>
                         :
                             <div>
                                 {allIssues.map((issue, i) => {
                                     return (
-                                        <GitRepoIssues issue={issue} />
+                                        <GitRepoIssues issue={issue} user={user} repo={repo.name} />
                                     )
                                 })}
                             </div>
@@ -226,7 +226,7 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
         )
     } else if (folderContent) {
         return (
-            <div>
+            <div key={repo.id}>
             {code ?
             <div className="userRepoContent">
                 <div className="userRepo__options">
@@ -269,14 +269,14 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
                     <Button fullWidth variant="contained" color="primary" onClick={() => {createIssue()}} className="submit">Create Issue</Button>
                     {creatingIssue ?
                         <div>
-                            <CreateIssue user={user} repo={repo.name} />
+                            <CreateIssue user={user} repo={repo.name} DoneIssue={DoneIssue} setAllIssues={setAllIssues} allIssues={allIssues} />
                             <Button fullWidth variant="contained" color="primary" onClick={() => {CancelIssue()}} className="submit">Cancel</Button>
                         </div>
                     :
                         <div>
                             {allIssues.map((issue, i) => {
                                 return (
-                                    <GitRepoIssues issue={issue} />
+                                    <GitRepoIssues issue={issue} user={user} repo={repo.name} />
                                 )
                             })}
                         </div>
@@ -287,7 +287,7 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
         )
     } else {
         return (
-            <div>
+            <div key={repo.id}>
                 {code ?
                     <div className="userRepoContent">
                         <div className="userRepo__options">
@@ -331,14 +331,14 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
                         <Button fullWidth variant="contained" color="primary" className="submit" onClick={() => {createIssue()}} >Create Issue</Button>
                         {creatingIssue ?
                             <div>
-                                <CreateIssue user={user} repo={repo.name} />
+                                <CreateIssue user={user} repo={repo.name} DoneIssue={DoneIssue} setAllIssues={setAllIssues} allIssues={allIssues} />
                                 <Button fullWidth variant="contained" color="primary" onClick={() => {CancelIssue()}} className="submit">Cancel</Button>
                             </div>
                         :
                             <div>
                                 {allIssues.map((issue, i) => {
                                     return (
-                                        <GitRepoIssues issue={issue} />
+                                        <GitRepoIssues issue={issue} user={user} repo={repo.name} />
                                     )
                                 })}
                             </div>
