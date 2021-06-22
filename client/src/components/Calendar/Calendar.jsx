@@ -8,18 +8,22 @@ import { Button } from '@material-ui/core';
 import LinkIcon from '@material-ui/icons/Link';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { isNullOrUndefined } from "@syncfusion/ej2-base";
+import { useIsAuthenticated } from "@azure/msal-react";
 
 function Calendar() {
   const [data, setData] = useState([]);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const location = useLocation();
-  
+  const isAuthenticated = useIsAuthenticated();
+
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem('profile')));
   }, [location]);
 
   useEffect(() => {
-    RequestCalendarData();
+    if (isAuthenticated) {
+      RequestCalendarData();
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -43,6 +47,7 @@ function Calendar() {
   }
 
   function onActionBegin(args) {
+    if (isAuthenticated) {
       if (args.requestType === "eventCreate") {
         const event = {
           subject: args.data[0].Subject,
@@ -92,6 +97,7 @@ function Calendar() {
         const eventData = callMsGraphUpdateEvent(user.tokenId, event, args.data.Id).then((t) => console.log(t));
         console.log(eventData);
       }
+    }
   }
 
   function content(props) {
@@ -141,7 +147,7 @@ function Calendar() {
       enablePersistence={true}
       actionBegin={onActionBegin}
       eventSettings={{dataSource: data}}
-      quickInfoTemplates={{ content: content }}
+      quickInfoTemplates={isAuthenticated ? { content: content }: {}}
     >
       <ViewsDirective>
         <ViewDirective option="Day" />

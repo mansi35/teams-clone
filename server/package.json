@@ -4,7 +4,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "node index.js",
+        "start": "nodemon index.js",
         "postinstall": "cd ../client && yarn"
     },
     "keywords": [],

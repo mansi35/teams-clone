@@ -3,6 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import eventRoutes from './routes/events.js';
+import userRoutes from './routes/users.js';
 import Server from 'socket.io';
 const app = express();
 dotenv.config();
@@ -12,6 +13,7 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
 app.use('/events', eventRoutes);
+app.use('/user', userRoutes);
 
 const CONNECTION_URL = "mongodb+srv://mansi35:V8NuYq5MCsEGEuz@teams-clone.iaugd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const PORT = process.env.PORT || 5000;
