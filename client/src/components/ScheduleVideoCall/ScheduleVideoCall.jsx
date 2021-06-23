@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 const ScheduleVideoCall = () => {
     const [id, setId] = useState('');
-    function create() {
+    const create = () => {
         setId(uuid());
     }
     return (

@@ -14,10 +14,10 @@ const msalInstance = new PublicClientApplication(msalConfig);
 const store = createStore(reducers, compose(applyMiddleware(thunk)))
 
 ReactDOM.render(
-  <MsalProvider instance={msalInstance}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </MsalProvider>,
-  document.getElementById('root')
+    <MsalProvider instance={msalInstance}>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </MsalProvider>,
+    document.getElementById('root')
 );

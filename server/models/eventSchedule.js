@@ -1,11 +1,18 @@
 import mongoose from 'mongoose';
 
 const eventSchema = mongoose.Schema({
-    result: {
-        type: Array,
-        default: []
+    Subject: String,
+    IsAllDay: Boolean,
+    StartTime: {
+        type: Date,
+        default: new Date()
     },
-    count: Number
+    EndTime: {
+        type: Date,
+        default: new Date()
+    },
+    Description: String,
+    MeetingId: String,
 });
 
 const EventSchedule = mongoose.model('EventSchedule', eventSchema);

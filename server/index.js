@@ -5,6 +5,7 @@ import cors from 'cors';
 import eventRoutes from './routes/events.js';
 import userRoutes from './routes/users.js';
 import Server from 'socket.io';
+
 const app = express();
 dotenv.config();
 
