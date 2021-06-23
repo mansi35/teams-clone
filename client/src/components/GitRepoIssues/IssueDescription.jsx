@@ -44,8 +44,8 @@ function IssueDescription({ issue, setDescription, comments, setComments, user, 
 
     const postComment = async() => {
         const result = await createIssueComments(user, repo, issue.number, form);
-        setComments([...comments, result]);
-        console.log(result);
+        setComments([...comments, result.data]);
+        console.log(result.data);
     }
 
     return (

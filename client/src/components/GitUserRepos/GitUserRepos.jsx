@@ -13,7 +13,7 @@ function GitUserRepos({ user }) {
 
     async function fetchRepos() {
         const result = await getRepos(user);
-        setRepos(result.items);
+        setRepos(result.data.items);
     }
 
     useEffect(() => {

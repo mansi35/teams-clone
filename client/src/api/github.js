@@ -1,155 +1,41 @@
-// const accessToken = "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";
-const git_oauth = JSON.parse(localStorage.getItem('git_oauth'));
+import axios from 'axios';
+const API = axios.create({ baseURL: 'https://api.github.com' });
 
-const headers = new Headers();
-const accessToken = git_oauth?.access_token;
-const basic = `Basic ${btoa(accessToken)}`;
+API.interceptors.request.use((req) => {
+    if (localStorage.getItem('git_oauth')) {
+        req.headers.Authorization = `Basic ${btoa(JSON.parse(localStorage.getItem('git_oauth')).data.access_token)}`;
+    }
+    return req;
+});
 
-headers.append("Authorization", basic);
+export const getAccessToken = (code) => axios.post('https://boiling-caverns-09167.herokuapp.com/https://github.com/login/oauth/access_token', {
+    client_id: 'f6099a354e555e602bcb',
+    client_secret: '8dd4b232c1c24eff144904deca110b4797ff0ac3',
+    code: code,
+}, {
+    headers: {
+        Accept: 'application/json'
+    }
+});
 
-const options = {
-    method: "GET",
-    headers: headers
-};
+export const getUser = (username) => API.get(`/users/${username}`);
 
-export async function getAccessToken(code) {
-    const postOptions = {
-        method: "POST",
-        headers: { 'Accept': 'application/json' },
-        body: {
-            client_id: 'f6099a354e555e602bcb',
-            client_secret: '8dd4b232c1c24eff144904deca110b4797ff0ac3',
-            code: code,
-        },
-    };
-    const url =  `https://boiling-caverns-09167.herokuapp.com/https://github.com/login/oauth/access_token?client_id=f6099a354e555e602bcb&client_secret=8dd4b232c1c24eff144904deca110b4797ff0ac3&code=${code}`;
-    return fetch(url, postOptions)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const getForkedFrom = (repo, username) => API.get(`/repos/${username}/${repo.name}`);
 
-export async function getUser(username) {
-    const url = "https://api.github.com/users/" + username;
-    return fetch(url, options)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const getRepos = (username) => API.get(`/search/repositories?q=user:${username}&sort=updated&type=all`);
 
-export async function getForkedFrom(i, username){
-    const url =  "https://api.github.com/repos/" + username + "/" + i.name;
-    return fetch(url, options)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const getRepoContent = (username, reponame) => API.get(`/repos/${username}/${reponame}/contents`);
 
-export async function getRepos(username) {
-    // const url =  `https://api.github.com/users/${username}/repos?sort=updated&per_page=1000&type=all`;
-    const url = `https://api.github.com/search/repositories?q=user:${username}&sort=updated`;
-    const repoOptions = {
-        method: "GET",
-        headers: {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": `Basic ${btoa(accessToken)}`
-        }
-    };
-    return fetch(url, repoOptions)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const getActivity = (username) => API.get(`/users/${username}/events?per_page=1000`);
 
-export async function getRepoContent (username, reponame) {
-    const url = "https://api.github.com/repos/"+ username + "/" + reponame + "/contents";
-    return fetch(url, options)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const getFileContent = (username, reponame, filefolderName) => API.get(`/repos/${username}/${reponame}/contents/${filefolderName}`);
 
-export async function getActivity(username) {
-    const url = "https://api.github.com/users/" + username + "/events?per_page=1000";
-    return fetch(url, options)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const getRepoCommits = (username, reponame) => API.get(`/repos/${username}/${reponame}/commits?sort=updated&per_page=100`);
 
-export async function getFileContent(username, reponame, filefolderName) {
-    const url = "https://api.github.com/repos/"+ username + "/" + reponame + "/contents/" + filefolderName;
-    return fetch(url, options)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const getRepoIssues = (username, reponame) => API.get(`https://api.github.com/repos/${username}/${reponame}/issues?sort=created&per_page=100`);
 
-export async function GetRepoCommits(username, reponame) {
-    const url = `https://api.github.com/repos/${username}/${reponame}/commits?sort=updated&per_page=100`;
-    const commitOptions = {
-        method: "GET",
-        headers: {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": `Basic ${btoa(accessToken)}`
-        }
-    };
-    return fetch(url, commitOptions)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const getRepoIssueComments = (username, reponame, thread) => API.get(`https://api.github.com/repos/${username}/${reponame}/issues/${thread}/comments?sort=created&per_page=100`);
 
-export async function GetRepoIssues(username, reponame) {
-    const url = `https://api.github.com/repos/${username}/${reponame}/issues?sort=created&per_page=100`;
-    const issueOptions = {
-        method: "GET",
-        headers: {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": `Basic ${btoa(accessToken)}`
-        }
-    };
-    return fetch(url, issueOptions)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const createIssues = (username, reponame, payLoad) => API.post(`https://api.github.com/repos/${username}/${reponame}/issues`, payLoad);
 
-export async function createIssues(username, reponame, payLoad) {
-    const url = `https://api.github.com/repos/${username}/${reponame}/issues`;
-
-    const createIssueOptions = {
-        method: "POST",
-        headers: {
-            "Content-Type":'application/json',
-            "Authorization": `Basic ${btoa(accessToken)}`
-        },
-        body: JSON.stringify(payLoad)
-    };
-
-    return fetch(url, createIssueOptions)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
-
-export async function GetRepoIssueComments(username, reponame, thread) {
-    const url = `https://api.github.com/repos/${username}/${reponame}/issues/${thread}/comments?sort=created&per_page=100`;
-    const issueOptions = {
-        method: "GET",
-        headers: {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": `Basic ${btoa(accessToken)}`
-        }
-    };
-    return fetch(url, issueOptions)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
-
-export async function createIssueComments(username, repo, thread, payLoad) {
-    const url = `https://api.github.com/repos/${username}/${repo}/issues/${thread}/comments`;
-
-    const createCommentOptions = {
-        method: "POST",
-        headers: {
-            "Content-Type":'application/json',
-            "Authorization": `Basic ${btoa(accessToken)}`
-        },
-        body: JSON.stringify(payLoad)
-    };
-
-    return fetch(url, createCommentOptions)
-        .then(response => response.json())
-        .catch(error => console.log(error));
-}
+export const createIssueComments = (username, reponame, thread, payLoad) => API.post(`https://api.github.com/repos/${username}/${reponame}/issues/${thread}/comments`, payLoad);

@@ -8,8 +8,8 @@ function GitUserProfile({ user }) {
         if (user) {
             async function fetchProfile() {
                 const result = await getUser(user);
-                console.log(result);
-                setProfile(result);
+                console.log(result.data);
+                setProfile(result.data);
             }
             fetchProfile();
         }

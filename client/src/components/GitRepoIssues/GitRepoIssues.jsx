@@ -5,7 +5,7 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import { Avatar } from '@material-ui/core';
 import moment from 'moment';
 import IssueDescription from './IssueDescription';
-import { GetRepoIssueComments } from '../../api/github';
+import { getRepoIssueComments } from '../../api/github';
 
 function GitRepoIssues({ issue, user, repo }) {
     const [description, setDescription] = useState(false);
@@ -37,9 +37,9 @@ function GitRepoIssues({ issue, user, repo }) {
         for(var i = 0; i < issues.length; i++) {
             issues[i].classList.add('d-none');
         }
-        const result = await GetRepoIssueComments(user, repo, issue.number);
-        console.log(result);
-        setComments(result);
+        const result = await getRepoIssueComments(user, repo, issue.number);
+        console.log(result.data);
+        setComments(result.data);
     }
 
     return (

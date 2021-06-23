@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFileContent, getForkedFrom, GetRepoCommits, getRepoContent, GetRepoIssues } from '../../api/github';
+import { getFileContent, getForkedFrom, getRepoCommits, getRepoContent, getRepoIssues } from '../../api/github';
 import GitRepoCommits from '../GitRepoCommits/GitRepoCommits';
 import GitRepoIssues from '../GitRepoIssues/GitRepoIssues';
 import CreateIssue from '../CreateIssue/CreateIssue';
@@ -47,13 +47,13 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
     const goBack = async(currentPath, repoName) => {
         if (path.length === 1) {
             const result = await getRepoContent(user, repoName);
-            setRepoContent(result);
+            setRepoContent(result.data);
             setFileContent(null);
             setFolderContent(null);
             setFileName('');
         } else {
             const result = await getFileContent(user, repoName, currentPath);
-            setFolderContent(result);
+            setFolderContent(result.data);
             setFileContent(null);
             setFileName('');
         }
@@ -74,7 +74,7 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
     async function repoFiles(repoName) {
         setPath((prevPath => [...prevPath, repoName]));
         const result = await getRepoContent(user, repoName);
-        setRepoContent(result);
+        setRepoContent(result.data);
         const repos = document.getElementsByClassName('userRepo');
         for(var i = 0; i < repos.length; i++) {
             repos[i].classList.add('d-none');
@@ -87,24 +87,24 @@ function GitUserRepo({ user, repo, setPath, allrepos, pathChanged, path, setFile
     async function getContent(filefolder) {
         if (filefolder.type === "file") {
             const result = await getFileContent(user, repo.name, filefolder.path);
-            setFileContent(result);
+            setFileContent(result.data);
             setFileName(filefolder.name);
         } else {
             setPath((prevPath => [...prevPath, filefolder.name]));
             const result = await getFileContent(user, repo.name, filefolder.path);
-            setFolderContent(result);
+            setFolderContent(result.data);
         }
     }
 
     async function repoCommits() {
-        const result = await GetRepoCommits(user, repo.name);
-        setAllCommits(result);
+        const result = await getRepoCommits(user, repo.name);
+        setAllCommits(result.data);
     }
 
     async function repoIssues() {
-        const result = await GetRepoIssues(user, repo.name);
-        console.log(result);
-        setAllIssues(result);
+        const result = await getRepoIssues(user, repo.name);
+        console.log(result.data);
+        setAllIssues(result.data);
     }
 
     const convertToPdf = (content) => {

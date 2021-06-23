@@ -16,7 +16,7 @@ function CreateIssue({ user, repo, DoneIssue, setAllIssues, allIssues }) {
         if (form.title !== "") {
             const result = await createIssues(user, repo, form);
             DoneIssue();
-            setAllIssues([result, ...allIssues])
+            setAllIssues([result.data, ...allIssues])
         } else {
             document.getElementById("warning").innerHTML = '<p>*Title is mandatory</p>';
         }
