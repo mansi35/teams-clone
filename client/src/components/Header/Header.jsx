@@ -3,12 +3,11 @@ import SearchIcon from '@material-ui/icons/Search';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { Avatar, Button } from '@material-ui/core';
 import { ReactComponent as Apps } from '../../assets/apps.svg'
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useIsAuthenticated, useMsal } from '@azure/msal-react';
-import { loginRequest } from '../../authConfig';
+import decode from 'jwt-decode';
 import './Header.scss'
-import { callMsGraph } from '../../api/graph';
 
 const Header = () => {
     const { instance } = useMsal();
@@ -19,39 +18,34 @@ const Header = () => {
     const location = useLocation();
 
     useEffect(() => {
-        setUser(JSON.parse(localStorage.getItem('profile')));
-    }, [location]);
+        const token = user?.token;
 
-    const handleLogin = async (instance) => {
-        instance.loginPopup(loginRequest)
-        .then((data) => {
-            const tokenId = data.accessToken;
-            callMsGraph(tokenId).then((response) => {
-                console.log(response);
-                try {
-                    dispatch({ type: 'AUTH' , data: { response, tokenId } });
-                    history.push('/calendar');
-                } catch (error) {
-                    console.log('error')
-                }
-            });
-        })
-        .catch(e => {
-            console.error(e);
-        });
-    }
+        if (token) {
+            const decodedToken = decode(token);
+            if (decodedToken.exp * 1000 < new Date().getTime()) {
+                logoutHandler(instance);
+            }
+        }
+        setUser(JSON.parse(localStorage.getItem('profile')));
+    // eslint-disable-next-line
+    }, [location, instance]);
 
     const logoutHandler = (instance) => {
-        instance.logoutPopup()
-        .then(() => {
+        if (isAuthenticated) {
+            instance.logoutPopup()
+            .then(() => {
+                dispatch({ type: 'LOGOUT' });
+                history.push('/auth');
+                setUser(null);
+            })
+            .catch(e => {
+                console.error(e);
+            });
+        } else {
             dispatch({ type: 'LOGOUT' });
             history.push('/auth');
-
             setUser(null);
-        })
-        .catch(e => {
-            console.error(e);
-        });
+        }
     }
 
     return (
@@ -77,12 +71,21 @@ const Header = () => {
                     : null}
                     </div>
                     </>
-                ) : (
-                    <Button className="microsoft__login ml-auto" fullWidth variant="contained" onClick={() => handleLogin(instance)}>
-                        <img src="https://img.icons8.com/color/48/000000/microsoft.png" alt="" />
-                        Sign in
-                    </Button>
-                )}
+                ) : [user ? (
+                    <>
+                        <h6>{user.result.name}</h6>
+                        <div className="header__profile">
+                        {user.result.name ?
+                            <Avatar src={user.result.photoUrl} alt={user.result.name} onClick={() => logoutHandler(instance)}>{user.result.name.charAt(0)}</Avatar>
+                        : null}
+                        </div>
+                    </>
+                ):  <Link to="/auth">
+                        <Button className="microsoft__login ml-auto" fullWidth variant="contained">
+                            Sign in
+                        </Button>
+                    </Link>
+                ]}
             </div>
         </div>
     )

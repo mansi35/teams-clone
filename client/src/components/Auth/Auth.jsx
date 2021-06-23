@@ -25,11 +25,11 @@ const Auth = () => {
     const handleLogin = async (instance) => {
         instance.loginPopup(loginRequest)
         .then((data) => {
-            const tokenId = data.accessToken;
-            callMsGraph(tokenId).then((response) => {
+            const token = data.accessToken;
+            callMsGraph(token).then((response) => {
                 console.log(response);
                 try {
-                    dispatch({ type: 'AUTH' , data: { data: response, tokenId } });
+                    dispatch({ type: 'AUTH' , data: { data: response, token } });
                     history.push('/calendar');
                 } catch (error) {
                     console.log('error')
