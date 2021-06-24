@@ -7,6 +7,7 @@ import { useIsAuthenticated } from '@azure/msal-react';
 import './ScheduleMeeting.scss';
 import { useDispatch } from 'react-redux';
 import { getEvents } from '../../actions/events';
+import { getUsers } from '../../actions/users';
 
 const ScheduleMeeting = () => {
     const isAuthenticated = useIsAuthenticated();
@@ -14,6 +15,7 @@ const ScheduleMeeting = () => {
 
     useEffect(() => {
         dispatch(getEvents());
+        dispatch(getUsers());
     }, [dispatch]);
     
     return (

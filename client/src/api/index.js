@@ -15,3 +15,6 @@ export const fetchEvents = () => API.get('/events');
 export const createEvent = (newEvent) => API.post('/events', newEvent);
 export const updateEvent = (id, event) => API.patch(`/events/${id}`, event);
 export const deleteEvent = (id) => API.delete(`/events/${id}`);
+
+export const getUsers = () => API.get('/users');
+export const getUser = (id) => API.get(`/users/${id}`);

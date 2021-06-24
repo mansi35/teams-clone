@@ -3,7 +3,12 @@ import mongoose from 'mongoose';
 
 export const getEvents = async (req, res) => {
     try {
-        const eventSchedules = await EventSchedule.find({ CreatorId: req.userId });
+        const eventSchedules = await EventSchedule.find({ 
+            $or: [ 
+                { CreatorId: req.userId }, 
+                { Attendees: req.userId }
+            ]     
+        });
         res.status(200).json(eventSchedules);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -36,7 +41,6 @@ export const deleteEvent = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
         return res.status(404).send('No event scheduled with that id.');
     }
-
     await EventSchedule.findByIdAndRemove(_id);
     res.json({ message: 'Post deleted successfully.' });
 }

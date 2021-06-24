@@ -13,6 +13,7 @@ const eventSchema = mongoose.Schema({
     },
     Description: String,
     MeetingId: String,
+    Attendees: [String],
     Creator: String,
     CreatorId: String
 });
