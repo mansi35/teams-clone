@@ -52,3 +52,9 @@
     color: #D8D3FF;
     background-color: #440a67;
 }
+
+.fullscreen {
+    width: 100vw;
+    height: calc(100vh - 80px);
+    background-color: black;
+}

@@ -6,3 +6,5 @@ export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USER = 'FETCH_USER';
+export const CREATE_MESSAGE = 'CREATE_MESSAGE';
+export const FETCH_MESSAGES = 'FETCH_MESSAGES';

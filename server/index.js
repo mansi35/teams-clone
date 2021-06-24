@@ -5,6 +5,7 @@ import cors from 'cors';
 import eventRoutes from './routes/events.js';
 import userRoutes from './routes/user.js';
 import usersRoutes from './routes/users.js';
+import messageRoutes from './routes/messages.js';
 import Server from 'socket.io';
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors());
 app.use('/events', eventRoutes);
 app.use('/user', userRoutes);
 app.use('/users', usersRoutes);
+app.use('/messages', messageRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello to Teams Clone API');

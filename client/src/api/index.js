@@ -18,3 +18,6 @@ export const deleteEvent = (id) => API.delete(`/events/${id}`);
 
 export const getUsers = () => API.get('/users');
 export const getUser = (id) => API.get(`/users/${id}`);
+
+export const getMessages = (id) => API.get(`/users/${id}`);
+export const sendMessage = (message, id) => API.post(`/users/${id}`, message);
