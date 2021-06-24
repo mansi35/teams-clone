@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Resize, DragAndDrop, Inject, ViewsDirective, ViewDirective } from "@syncfusion/ej2-react-schedule";
 import { v1 as uuid } from "uuid";
-import { createEvent } from "../../actions/events";
+import { createEvent, deleteEvent, updateEvent } from "../../actions/events";
 import { isNullOrUndefined } from "@syncfusion/ej2-base";
 import { Button } from '@material-ui/core';
 import LinkIcon from '@material-ui/icons/Link';
@@ -73,10 +73,17 @@ function Calendar() {
                 Description: args.data[0].Description,
                 MeetingId: id
             }));
-        } else if (args.requestType === "eventRemove") {
-            console.log(args.data);
         } else if (args.requestType === "eventChange") {
-            console.log(args.data);
+            dispatch(updateEvent(args.data._id, {
+                Subject: args.data.Subject,
+                IsAllDay: args.data.IsAllDay,
+                StartTime: args.data.StartTime.toISOString(),
+                EndTime: args.data.EndTime.toISOString(),
+                Description: args.data.Description,
+                MeetingId: id
+            }));
+        } else if (args.requestType === "eventRemove") {
+            dispatch(deleteEvent(args.data[0]._id))
         }
     }
 
