@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Resize, DragAndDrop, Inject, ViewsDirective, ViewDirective } from "@syncfusion/ej2-react-schedule";
 import { v1 as uuid } from "uuid";
-import { createEvent, deleteEvent, updateEvent } from "../../actions/events";
+import { createEvent, deleteEvent, getEvents, updateEvent } from "../../actions/events";
 import { isNullOrUndefined } from "@syncfusion/ej2-base";
 import { Button } from '@material-ui/core';
 import LinkIcon from '@material-ui/icons/Link';
@@ -72,7 +72,9 @@ function Calendar() {
                 EndTime: args.data[0].EndTime.toISOString(),
                 Description: args.data[0].Description,
                 MeetingId: id
-            }));
+            })).then(() => {
+                dispatch(getEvents());
+            });
         } else if (args.requestType === "eventChange") {
             dispatch(updateEvent(args.data._id, {
                 Subject: args.data.Subject,

@@ -13,6 +13,8 @@ const eventSchema = mongoose.Schema({
     },
     Description: String,
     MeetingId: String,
+    Creator: String,
+    CreatorId: String
 });
 
 const EventSchedule = mongoose.model('EventSchedule', eventSchema);

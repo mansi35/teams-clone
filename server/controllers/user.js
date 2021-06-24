@@ -13,7 +13,7 @@ export const signin = async (req, res) => {
         if (!isPasswordCorrect)
             return res.status(400).json({ message: "Invalid credentials." });
         
-        const token = jwt.sign({ email: existingUser.email, id: existingUser.id }, 'test', { expiresIn: "1h" });
+        const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, 'test', { expiresIn: "1h" });
         res.status(200).json({ result: existingUser, token: token });
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong." });
@@ -31,7 +31,7 @@ export const signup = async (req, res) => {
             return res.status(400).json({ message: "Passwords don't match." });
         const encryptedPassword = await bcrypt.hash(password, 12);
         const result = await User.create({ email, password: encryptedPassword, name: `${firstName} ${lastName}` });
-        const token = jwt.sign({ email: result.email, id: result.id }, 'test', { expiresIn: "1h" });
+        const token = jwt.sign({ email: result.email, id: result._id }, 'test', { expiresIn: "1h" });
         res.status(200).json({ result: result, token: token });
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong." });

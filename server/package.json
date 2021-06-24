@@ -4,8 +4,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "nodemon index.js",
-        "postinstall": "cd ../client && yarn"
+        "start": "nodemon index.js"
     },
     "keywords": [],
     "author": "",

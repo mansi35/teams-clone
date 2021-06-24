@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 export const getEvents = async (req, res) => {
     try {
-        const eventSchedules = await EventSchedule.find();
+        const eventSchedules = await EventSchedule.find({ CreatorId: req.userId });
         res.status(200).json(eventSchedules);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -12,7 +12,7 @@ export const getEvents = async (req, res) => {
 
 export const createEvent  = async (req, res) => {
     const event = req.body;
-    const newEvent = new EventSchedule(event);
+    const newEvent = new EventSchedule({ ...event, CreatorId: req.userId });
     try {
         await newEvent.save();
         res.status(201).json(newEvent);

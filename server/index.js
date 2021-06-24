@@ -16,7 +16,11 @@ app.use(cors());
 app.use('/events', eventRoutes);
 app.use('/user', userRoutes);
 
-const CONNECTION_URL = "mongodb+srv://mansi35:V8NuYq5MCsEGEuz@teams-clone.iaugd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+app.get('/', (req, res) => {
+    res.send('Hello to Teams Clone API');
+});
+
+const CONNECTION_URL = process.env.CONNECTION_URL;
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
