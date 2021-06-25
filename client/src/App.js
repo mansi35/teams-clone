@@ -4,9 +4,9 @@ import PrivateRoute from './PrivateRoute.js';
 import Header from './components/Header/Header'
 import ScheduleMeeting from './pages/ScheduleMeeting/ScheduleMeeting';
 import Auth from "./components/Auth/Auth.jsx";
-import CreateRoom from './pages/VideoRoom/CreateRoom';
 import Room from './pages/VideoRoom/Room';
 import Github from './pages/Github/Github';
+import Chat from './pages/Chat/Chat';
 
 function App() {
     return (
@@ -16,9 +16,9 @@ function App() {
             <Switch>
                 <PrivateRoute path="/calendar" exact component={ScheduleMeeting} />
                 <Route path="/auth" exact component={Auth} />
-                <PrivateRoute path="/" exact component={CreateRoom} />
-                <Route path="/room/:roomID" component={Room} />
+                <Route path="/room/:roomID" exact component={Room} />
                 <PrivateRoute path="/git" exact component={Github} />
+                <PrivateRoute path="/chat" exact component={Chat} />
             </Switch>
         </Router>
         </div>

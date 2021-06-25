@@ -5,13 +5,12 @@ import { Avatar, Button } from '@material-ui/core';
 import { ReactComponent as Apps } from '../../assets/apps.svg'
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useIsAuthenticated, useMsal } from '@azure/msal-react';
+import { useMsal } from '@azure/msal-react';
 import decode from 'jwt-decode';
 import './Header.scss'
 
 const Header = () => {
     const { instance } = useMsal();
-    const isAuthenticated = useIsAuthenticated();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const dispatch = useDispatch();
     const history = useHistory();
@@ -31,7 +30,7 @@ const Header = () => {
     }, [location, instance]);
 
     const logoutHandler = (instance) => {
-        if (isAuthenticated) {
+        if (instance) {
             instance.logoutPopup()
             .then(() => {
                 dispatch({ type: 'LOGOUT' });
@@ -62,30 +61,23 @@ const Header = () => {
             : null}
             <div className="header__options">
                 <MoreHorizIcon />
-                {user && isAuthenticated ? (
+                {user ? (
                     <>
-                    <h6>{user.data.displayName}</h6>
+                    <h6>{user.result.name}</h6>
                     <div className="header__profile">
-                    {user.data.displayName ?
-                        <Avatar src={user.data.photoUrl} alt={user.data.displayName} onClick={() => logoutHandler(instance)}>{user.data.displayName.charAt(0)}</Avatar>
-                    : null}
+                    {user.result.idTokenClaims?.sub ?
+                        <Avatar src={user.result.photoUrl} alt={user.result.name} onClick={() => logoutHandler(instance)}>{user.result.name.charAt(0)}</Avatar>
+                    : 
+                        <Avatar src={user.result.photoUrl} alt={user.result.name} onClick={() => logoutHandler()}>{user.result.name.charAt(0)}</Avatar>
+                    }
                     </div>
-                    </>
-                ) : [user ? (
-                    <>
-                        <h6>{user.result.name}</h6>
-                        <div className="header__profile">
-                        {user.result.name ?
-                            <Avatar src={user.result.photoUrl} alt={user.result.name} onClick={() => logoutHandler(instance)}>{user.result.name.charAt(0)}</Avatar>
-                        : null}
-                        </div>
                     </>
                 ):  <Link to="/auth">
                         <Button className="microsoft__login ml-auto" fullWidth variant="contained">
                             Sign in
                         </Button>
                     </Link>
-                ]}
+                }
             </div>
         </div>
     )

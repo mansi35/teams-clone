@@ -24,8 +24,8 @@ function Calendar() {
     }, []);
 
     const RequestCalendarData = () => {
-        callMsGraphCalendar(user.tokenId).then(response => {
-            response.value.forEach(event => {
+        callMsGraphCalendar(user.token).then(response => {
+            response?.value?.forEach(event => {
                 setData(prevData => [ ...prevData, {
                     Id: event.id,
                     Subject: event.subject,
@@ -62,11 +62,11 @@ function Calendar() {
                     displayName: args.data[0].Location ? args.data[0].Location: ""
                 },
             };
-            const eventData = callMsGraphCreateEvent(user.tokenId, event).then((t) => console.log(t));
+            const eventData = callMsGraphCreateEvent(user.token, event).then((t) => console.log(t));
             console.log(eventData);
         }
         if (args.requestType === "eventRemove") { 
-            const eventData = callMsGraphDeleteEvent(user.tokenId, args.data[0].Id).then((t) => console.log(t));
+            const eventData = callMsGraphDeleteEvent(user.token, args.data[0].Id).then((t) => console.log(t));
             console.log(eventData);
         }
         if (args.requestType === "eventChange") {
@@ -89,7 +89,7 @@ function Calendar() {
                     displayName: args.data.Location ? args.data.Location: ""
                 },
             };
-            const eventData = callMsGraphUpdateEvent(user.tokenId, event, args.data.Id).then((t) => console.log(t));
+            const eventData = callMsGraphUpdateEvent(user.token, event, args.data.Id).then((t) => console.log(t));
             console.log(eventData);
         }
     }

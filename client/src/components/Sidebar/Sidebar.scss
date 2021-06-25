@@ -29,4 +29,13 @@
     .sidebarItem > p {
         font-size: 10px;
     }
+
+    .active {
+        border-left: 4px solid #6264A7;
+    }
+
+    .auth__button {
+        border: 0;
+        width: 100%;
+    }
 }

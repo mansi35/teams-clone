@@ -8,7 +8,6 @@ import chat from '../../assets/chat.svg';
 import teams from '../../assets/teams.svg';
 import calls from '../../assets/calls.svg';
 import files from '../../assets/files.svg';
-import assignments from '../../assets/assignments.svg';
 import { Link, useLocation } from 'react-router-dom';
 import { getAccessToken } from '../../api/github';
 import LoginGithub from 'react-login-github';
@@ -35,11 +34,13 @@ function Sidebar() {
                 text="Activity"
                 hoverIcon={activity}
             />
-            <SidebarItem 
-                icon="https://img.icons8.com/fluent-systems-regular/48/000000/chat-message.png"
-                text="Chat"
-                hoverIcon={chat}
-            />
+            <Link to="/chat">
+                <SidebarItem 
+                    icon="https://img.icons8.com/fluent-systems-regular/48/000000/chat-message.png"
+                    text="Chat"
+                    hoverIcon={chat}
+                />
+            </Link>
             <SidebarItem 
                 icon="https://img.icons8.com/windows/32/000000/microsoft-teams-2019.png"
                 text="Teams"
@@ -48,9 +49,9 @@ function Sidebar() {
             {auth ?
                 <Link to="/git">
                     <SidebarItem 
-                        icon="https://img.icons8.com/ios/50/000000/backpack.png"
-                        text="Assignments"
-                        hoverIcon={assignments}
+                        icon="https://img.icons8.com/ios/36/000000/github--v1.png"
+                        text="GitHub"
+                        hoverIcon="https://img.icons8.com/ios-filled/36/6264A7/github.png"
                     />
                 </Link>
             :
@@ -58,21 +59,24 @@ function Sidebar() {
                     onSuccess={onSuccess}
                     onFailure={onFailure}
                     scope="admin:org repo user"
+                    className="auth__button"
                 >
                     <Link to="/git">
                         <SidebarItem 
-                            icon="https://img.icons8.com/ios/50/000000/backpack.png"
-                            text="Assignments"
-                            hoverIcon={assignments}
+                            icon="https://img.icons8.com/ios/36/000000/github--v1.png"
+                            text="GitHub"
+                            hoverIcon="https://img.icons8.com/ios-filled/36/6264A7/github.png"
                         />
                     </Link>
                 </LoginGithub>
             }
-            <SidebarItem 
-                icon="https://img.icons8.com/fluent-systems-regular/48/000000/calendar--v1.png"
-                text="Calendar"
-                hoverIcon={calendar}
-            />
+            <Link to="/calendar">
+                <SidebarItem 
+                    icon="https://img.icons8.com/fluent-systems-regular/48/000000/calendar--v1.png"
+                    text="Calendar"
+                    hoverIcon={calendar}
+                />
+            </Link>
             <SidebarItem
                 icon="https://img.icons8.com/fluent-systems-regular/48/000000/phone.png"
                 text="Calls"

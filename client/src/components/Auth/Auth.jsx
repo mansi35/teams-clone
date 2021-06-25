@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux';
 import { signin, signup } from '../../actions/auth';
 import { useIsAuthenticated } from "@azure/msal-react";
 import './Auth.scss';
-import { callMsGraph } from '../../api/graph';
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
@@ -23,18 +22,16 @@ const Auth = () => {
     const isAuthenticated = useIsAuthenticated();
 
     const handleLogin = async (instance) => {
+        dispatch({ type: 'LOGOUT' });
         instance.loginPopup(loginRequest)
         .then((data) => {
             const token = data.accessToken;
-            callMsGraph(token).then((response) => {
-                console.log(response);
-                try {
-                    dispatch({ type: 'AUTH' , data: { data: response, token } });
-                    history.push('/calendar');
-                } catch (error) {
-                    console.log('error')
-                }
-            });
+            try {
+                dispatch({ type: 'AUTH' , data: { result: data.account, token } });
+                history.push('/calendar');
+            } catch (error) {
+                console.log('error')
+            }
         })
         .catch(e => {
             console.error(e);
