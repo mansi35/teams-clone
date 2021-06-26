@@ -1,4 +1,4 @@
-import Message from '../models/eventSchedule.js';
+import Message from '../models/message.js';
 
 export const getMessages = async (req, res) => {
     const { id: roomId } = req.params;

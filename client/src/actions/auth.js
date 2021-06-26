@@ -20,3 +20,14 @@ export const signup = (form, history) => async (dispatch) => {
         console.log(error);
     }
 }
+
+export const microsoftSignup = (form, data, history) => async (dispatch) => {
+    try {
+        // eslint-disable-next-line no-unused-vars
+        const { res } = await api.microsoftSignup(form);
+        dispatch({ type: AUTH, data });
+        history.push('/calendar')
+    } catch (error) {
+        console.log(error);
+    }
+}

@@ -11100,6 +11100,11 @@ react-markdown@^6.0.2:
     unist-util-visit "^2.0.0"
     vfile "^4.0.0"
 
+react-multi-select-component@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-4.0.2.tgz#16c9844f0d222e8ba9a2cdced72f4232a201b6cc"
+  integrity sha512-/GQ9y66+Hy+Y25I2il2qVe2b6ophFDnxVuaSgBUJdJCOLcyVfcDEwJ7mNM4z3kuk6luSgwY9VYPO7ngn5XCzgw==
+
 react-packed-grid@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-packed-grid/-/react-packed-grid-2.0.0.tgz#db7657f0d23b5364d4a38936080dadba9db22425"

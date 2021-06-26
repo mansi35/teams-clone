@@ -5,16 +5,25 @@ import moment from 'moment';
 import './Calendar.scss';
 import { useLocation } from "react-router-dom";
 import { Button } from '@material-ui/core';
+import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
+import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { v1 as uuid } from "uuid";
+import { createEvent } from "../../actions/events";
 import LinkIcon from '@material-ui/icons/Link';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { isNullOrUndefined } from "@syncfusion/ej2-base";
+import { useDispatch, useSelector } from "react-redux";
 
 function Calendar() {
+    const [id, setId] = useState('');
     const [data, setData] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+    const users = useSelector((state) => state.users);
     const location = useLocation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        create();
         setUser(JSON.parse(localStorage.getItem('profile')));
     }, [location]);
 
@@ -22,6 +31,10 @@ function Calendar() {
         RequestCalendarData();
         // eslint-disable-next-line
     }, []);
+
+    const create = () => {
+        setId(uuid());
+    }
 
     const RequestCalendarData = () => {
         callMsGraphCalendar(user.token).then(response => {
@@ -64,6 +77,15 @@ function Calendar() {
             };
             const eventData = callMsGraphCreateEvent(user.token, event).then((t) => console.log(t));
             console.log(eventData);
+            dispatch(createEvent({
+                Subject: args.data[0].Subject,
+                StartTime: args.data[0].StartTime.toISOString(),
+                EndTime: args.data[0].EndTime.toISOString(),
+                Attendees: args.data[0].Attendees,
+                Description: args.data[0].Description,
+                MeetingId: id,
+                Creator: user.result.name,
+            }))
         }
         if (args.requestType === "eventRemove") { 
             const eventData = callMsGraphDeleteEvent(user.token, args.data[0].Id).then((t) => console.log(t));
@@ -133,6 +155,59 @@ function Calendar() {
         );
     }
 
+    const itemTemplate = (data) => {
+        return (
+            <span style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}><span className='name'>{data.name}</span><span className ='email'>{data.email}</span></span>
+        );
+    }
+
+    const editorTemplate = (props) => {
+        const allUsers = [];
+        for (var i = 0; i < users.length; i++) {
+            allUsers.push({ name: users[i].name, email: users[i].email, identity: users[i].name + ',' + users[i]._id })
+        }
+        return (props !== undefined && Object.keys(props).length > 0 ? 
+            <table className="custom-event-editor" style={{ width: '100%', padding: '5' }}>
+                <tbody>
+                    <tr>
+                        <td className="e-textlabel">Title</td><td colSpan={4}>
+                            <input id="Subject" className="e-field e-input" type="text" name="Subject" placeholder="Subject" style={{ width: '100%' }}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="e-textlabel">Attendees</td><td colSpan={4}>
+                            <MultiSelectComponent
+                                className="e-field"
+                                placeholder='Add attendees'
+                                data-name="Attendees"
+                                itemTemplate={itemTemplate}
+                                dataSource={allUsers.filter(singleuser => singleuser.identity.split(',')[1] !== user.result._id)}
+                                fields={{ text: 'name', value: 'identity' }}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="e-textlabel">Start</td>
+                        <td colSpan={4}>
+                            <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="e-textlabel">End</td>
+                        <td colSpan={4}>
+                            <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="EndTime" data-name="EndTime" value={new Date(props.endTime || props.EndTime)} className="e-field" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="e-textlabel">Description</td><td colSpan={4}>
+                            <textarea id="Description" className="e-field e-input" name="Description" rows={3} cols={50} style={{ width: '100%', height: '60px !important', resize: 'vertical' }} />
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
+        : <div></div>);
+    }
+
     return (
         <ScheduleComponent
             width="100%"
@@ -142,6 +217,7 @@ function Calendar() {
             actionBegin={onActionBegin}
             eventSettings={{ dataSource: data }}
             quickInfoTemplates={{ content: content }}
+            editorTemplate={editorTemplate}
         >
             <ViewsDirective>
                 <ViewDirective option="Day" />

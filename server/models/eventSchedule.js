@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Message from './message.js';
 
 const eventSchema = mongoose.Schema({
     Subject: String,
@@ -15,7 +16,8 @@ const eventSchema = mongoose.Schema({
     MeetingId: String,
     Attendees: [String],
     Creator: String,
-    CreatorId: String
+    CreatorId: String,
+    Messages: [Message]
 });
 
 const EventSchedule = mongoose.model('EventSchedule', eventSchema);

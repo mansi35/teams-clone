@@ -6,11 +6,11 @@ import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { signin, signup } from '../../actions/auth';
+import { signin, signup, microsoftSignup } from '../../actions/auth';
 import { useIsAuthenticated } from "@azure/msal-react";
 import './Auth.scss';
 
-const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
+const initialState = { firstName: '', lastName: '', email: '', password: null, confirmPassword: '' };
 
 const Auth = () => {
     const dispatch = useDispatch();
@@ -24,13 +24,17 @@ const Auth = () => {
     const handleLogin = async (instance) => {
         dispatch({ type: 'LOGOUT' });
         instance.loginPopup(loginRequest)
-        .then((data) => {
+        .then(async (data) => {
             const token = data.accessToken;
             try {
                 dispatch({ type: 'AUTH' , data: { result: data.account, token } });
-                history.push('/calendar');
+                try {
+                    dispatch(microsoftSignup({ email: data.account.username, name: data.account.name }, { result: data.account, token }, history))
+                } catch (e) {
+                    history.push('/calendar');
+                }
             } catch (error) {
-                console.log('error')
+                console.log(error);
             }
         })
         .catch(e => {

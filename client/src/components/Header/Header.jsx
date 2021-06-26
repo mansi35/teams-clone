@@ -27,7 +27,7 @@ const Header = () => {
         }
         setUser(JSON.parse(localStorage.getItem('profile')));
     // eslint-disable-next-line
-    }, [location, instance]);
+    }, [location]);
 
     const logoutHandler = (instance) => {
         if (instance) {

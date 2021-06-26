@@ -8,6 +8,7 @@ import camerastop from '../../assets/camera-stop.svg'
 import microphone from '../../assets/microphone.svg'
 import microphonestop from '../../assets/microphone-stop.svg'
 import hangup from '../../assets/hang-up.svg'
+import { useLocation } from "react-router-dom";
 
 const Video = (props) => {
     const ref = useRef();
@@ -31,6 +32,7 @@ const videoConstraints = {
 };
 
 const Room = (props) => {
+    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const [peers, setPeers] = useState([]);
     const [stream, setStream] = useState();
     const [audioMuted, setAudioMuted] = useState(false)
@@ -40,23 +42,31 @@ const Room = (props) => {
     const peersRef = useRef([]);
     const myPeer = useRef();
     const roomID = props.match.params.roomID;
+    const location = useLocation();
 
     useEffect(() => {
-        socketRef.current = io.connect("https://teams-clone-server.herokuapp.com");
+        setCurrentUser(JSON.parse(localStorage.getItem('profile')));
+    // eslint-disable-next-line
+    }, [location]);
+
+    useEffect(() => {
+        socketRef.current = io.connect("http://localhost:5000");
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
             setStream(stream);
             userVideo.current.srcObject = stream;
-            socketRef.current.emit("join room", roomID);
+            socketRef.current.emit("join room", {roomID: roomID, username: currentUser.result.name});
             socketRef.current.on("all users", users => {
                 const peers = [];
-                users.forEach(userID => {
-                    const peer = createPeer(userID, socketRef.current.id, stream);
+                users.forEach(user => {
+                    const peer = createPeer(user.id, socketRef.current.id, currentUser.result.name, stream);
                     peersRef.current.push({
-                        peerID: userID,
+                        peerID: user.id,
+                        peerName: user.name,
                         peer,
                     })
                     peers.push({
-                        peerID: userID,
+                        peerID: user.id,
+                        peerName: user.name,
                         peer,
                     });
                 })
@@ -67,12 +77,14 @@ const Room = (props) => {
                 const peer = addPeer(payload.signal, payload.callerID, stream);
                 peersRef.current.push({
                     peerID: payload.callerID,
+                    peerName: payload.callerName,
                     peer,
                 })
 
                 const peerObj = {
+                    peerID : payload.callerID,
+                    peerName: payload.callerName,
                     peer,
-                    peerID : payload.callerID
                 }
 
                 setPeers(users => [...users, peerObj]);
@@ -96,7 +108,7 @@ const Room = (props) => {
     // eslint-disable-next-line
     }, []);
 
-    function createPeer(userToSignal, callerID, stream) {
+    function createPeer(userToSignal, callerID, callerName, stream) {
         const peer = new Peer({
             initiator: true,
             trickle: false,
@@ -104,7 +116,7 @@ const Room = (props) => {
         });
 
         peer.on("signal", signal => {
-            socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
+            socketRef.current.emit("sending signal", { userToSignal, callerID, callerName, signal })
         })
 
         return peer;
@@ -196,7 +208,10 @@ const Room = (props) => {
                 <video muted ref={userVideo} autoPlay playsInline className="video__card"/>
                 {peers.map((peer) => {
                     return (
-                        <Video key={peer.peerID} peer={peer.peer} />
+                        <div>
+                            <h5>{peer.peerName}</h5>
+                            <Video key={peer.peerID} peer={peer.peer} />
+                        </div>
                     );
                 })}
             </div>

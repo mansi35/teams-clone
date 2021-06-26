@@ -60,7 +60,7 @@ function Calendar() {
                 </div>: null}
                 {props.Attendees.map((attendee) => {
                     return (
-                        <span>{attendee}</span>
+                        <span>{attendee.split(',')[0]}{' '} </span>
                     )
                 })}
                 <div className="quickpopup__description">
@@ -82,7 +82,8 @@ function Calendar() {
                 EndTime: args.data[0].EndTime.toISOString(),
                 Attendees: args.data[0].Attendees,
                 Description: args.data[0].Description,
-                MeetingId: id
+                MeetingId: id,
+                Creator: currentUser.result.name,
             })).then(() => {
                 dispatch(getEvents());
             });
@@ -93,14 +94,23 @@ function Calendar() {
                 EndTime: args.data.EndTime.toISOString(),
                 Attendees: args.data.Attendees,
                 Description: args.data.Description,
-                MeetingId: id
             }));
         } else if (args.requestType === "eventRemove") {
-            dispatch(deleteEvent(args.data[0]._id))
+            dispatch(deleteEvent(args.data[0]._id));
         }
     }
 
+    const itemTemplate = (data) => {
+        return (
+            <span style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}><span className='name'>{data.name}</span><span className ='email'>{data.email}</span></span>
+        );
+    }
+
     const editorTemplate = (props) => {
+        const allUsers = [];
+        for (var i = 0; i < users.length; i++) {
+            allUsers.push({ name: users[i].name, email: users[i].email, identity: users[i].name + ',' + users[i]._id })
+        }
         return (props !== undefined && Object.keys(props).length > 0 ? 
             <table className="custom-event-editor" style={{ width: '100%', padding: '5' }}>
                 <tbody>
@@ -115,8 +125,9 @@ function Calendar() {
                                 className="e-field"
                                 placeholder='Add attendees'
                                 data-name="Attendees"
-                                dataSource={users.filter(user => user._id !== currentUser.result._id)}
-                                fields={{ text: 'name', value: '_id' }}
+                                itemTemplate={itemTemplate}
+                                dataSource={allUsers.filter(user => user.identity.split(',')[1] !== currentUser.result._id)}
+                                fields={{ text: 'name', value: 'identity' }}
                             />
                         </td>
                     </tr>

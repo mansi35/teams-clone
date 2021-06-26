@@ -6,7 +6,7 @@ export const getEvents = async (req, res) => {
         const eventSchedules = await EventSchedule.find({ 
             $or: [ 
                 { CreatorId: req.userId }, 
-                { Attendees: req.userId }
+                { Attendees: req.userName + ',' + req.userId }
             ]     
         });
         res.status(200).json(eventSchedules);

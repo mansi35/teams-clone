@@ -1,11 +1,11 @@
-import { FETCH_USER, FETCH_USERS } from '../constants/actionTypes';
+import { FETCH_USERS_BY_SEARCH, FETCH_USERS } from '../constants/actionTypes';
 
 const userReducer = (users = [], action) => {
     switch (action.type) {
         case FETCH_USERS:
             return action.payload;
 
-        case FETCH_USER:
+        case FETCH_USERS_BY_SEARCH:
             return action.payload;
 
         default:

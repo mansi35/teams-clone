@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { getUsers, getUser } from '../controllers/users.js';
+import { getUsers, getUsersBySearch } from '../controllers/users.js';
 
 const router = express.Router();
 router.get('/', getUsers);
-router.get('/:id', getUser);
+router.get('/search', getUsersBySearch);
 
 export default router;
