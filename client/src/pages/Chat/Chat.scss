@@ -1,0 +1,9 @@
+.chat {
+    display: flex;
+    flex-direction: row;
+
+    .chat__rooms {
+        display: flex;
+        flex-direction: row;
+    }
+}

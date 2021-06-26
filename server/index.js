@@ -38,15 +38,11 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
         io.on('connection', socket => {
             socket.on("join room", ({ roomID, username }) => {
                 if (users[roomID]) {
-                    const length = users[roomID].length;
-                    if (length === 4) {
-                        socket.emit("room full");
-                        return;
-                    }
                     users[roomID].push({ id: socket.id, name: username });
                 } else {
                     users[roomID] = [{ id: socket.id, name: username }];
                 }
+                socket.join(roomID);
                 socketToRoom[socket.id] = roomID;
                 const usersInThisRoom = users[roomID].filter(user => user.id !== socket.id);
 
@@ -59,6 +55,10 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
 
             socket.on("returning signal", payload => {
                 io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+            });
+
+            socket.on('chat message', msg => {
+                io.to(socketToRoom[socket.id]).emit('chat message', msg);
             });
 
             socket.on('disconnect', () => {
