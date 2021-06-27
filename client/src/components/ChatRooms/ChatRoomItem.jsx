@@ -1,17 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar } from '@material-ui/core';
+import moment from 'moment';
+import { useHistory, useLocation } from 'react-router-dom';
 
-const ChatRoomItem = () => {
+const ChatRoomItem = ({ event }) => {
+    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
+    const history = useHistory();
+    const location = useLocation();
+
+    useEffect(() => {
+        setCurrentUser(JSON.parse(localStorage.getItem('profile')));
+    }, [location]);
+
+    const goToRoom = (id) => {
+        history.push(`/chat/${id}`)
+    }
+
     return (
-        <div className="chatroom__item">
+        <div key={event._id} className="chatroom__item" onClick={() => {goToRoom(event._id)}}>
             <Avatar src="" />
             <div className="chatroom__info">
                 <div className="chatRoom__title">
-                    <h6>Diksha and Rishabh</h6>
-                    <h6>25/06</h6>
+                    <h6>{event.Subject}</h6>
+                    <h6>{moment(event.StartTime).format("DD/MM")}</h6>
                 </div>
                 <div className="chatroom__message">
-                    <span>You: Okay I get it now what you meant. Thanks f...</span>
+                    
+                        {event.Messages[event.Messages.length - 1].senderId === currentUser.result._id ?
+                            <span>{'You: '}{event.Messages[event.Messages.length - 1].message.slice(0, 42)}{'...'}</span>
+                        :
+                            <span>{event.Messages[event.Messages.length - 1].sender}{': '}{event.Messages[event.Messages.length - 1].message.slice(0, 42)}{'...'}</span>
+                        }
                 </div>
             </div>
         </div>

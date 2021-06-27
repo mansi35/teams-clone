@@ -22,7 +22,7 @@ const Header = () => {
         if (token) {
             const decodedToken = decode(token);
             if (decodedToken.exp * 1000 < new Date().getTime()) {
-                logoutHandler(instance);
+                logoutHandler();
             }
         }
         setUser(JSON.parse(localStorage.getItem('profile')));

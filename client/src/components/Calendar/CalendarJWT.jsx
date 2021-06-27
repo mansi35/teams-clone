@@ -13,7 +13,7 @@ import './Calendar.scss';
 
 function Calendar() {
     const [id, setId] = useState('');
-    const events = useSelector((state) => state.events);
+    const { events } = useSelector((state) => state.events);
     const users = useSelector((state) => state.users);
     const [currentUser, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const dispatch = useDispatch();
@@ -58,6 +58,7 @@ function Calendar() {
                         <FileCopyOutlinedIcon />
                     </div>
                 </div>: null}
+                <p>{props.Creator}</p>
                 {props.Attendees.map((attendee) => {
                     return (
                         <span>{attendee.split(',')[0]}{' '} </span>

@@ -36,7 +36,6 @@
     .chatroom__item {
         display: flex;
         flex-direction: row;
-        justify-content: space-evenly;
         border-bottom: 1px solid #c9c9c9;
         padding: 10px;
     }
@@ -48,7 +47,8 @@
     .chatroom__info {
         display: flex;
         flex-direction: column;
-        padding: 0 0 0 7px;
+        padding: 0 0 0 20px;
+        width: 100%;
     }
 
     .chatRoom__title {
@@ -69,6 +69,7 @@
 .chatroom {
     display: flex;
     flex-direction: column;
+    background-color: #F3F2F1;
 
     .chatroom__header {
         display: flex;
@@ -84,13 +85,66 @@
     }
 
     .chatroom__body {
-        min-height: 75vh;
+        height: 75vh;
+        overflow: auto;
     }
 
     .chatroom__sendMessage {
         display: flex;
         flex-direction: row;
         align-items: center;
-        margin-left: 20px;
+        margin: 0 6% 0 9%;
+    }
+
+    .mychat {
+        position: relative;
+        margin-left: auto;
+        width: fit-content;
+        margin-right: 9%;
+        background-color: #D7D7E9;
+        padding: 0.1px 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border-radius: 15px;
+    }
+
+    .mychat > span {
+        font-size: 10px !important;
+        font-weight: 500;
+        padding: 7px;
+    }
+
+    .mychat > span {
+        font-size: 12px;
+        padding: 3px;
+    }
+
+    .peerchat {
+        width: fit-content;
+        margin-left: 9%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .peerchat > .peer {
+        margin-left: 10px;
+        background-color: #ffffff;
+        padding: 0.1px 10px;
+        margin-top: 5px;
+        border-radius: 15px;
+    }
+
+    .peerchat > div > span {
+        font-size: 10px !important;
+        font-weight: 500;
+        padding: 7px;
+    }
+
+    .peerchat > div > span {
+        font-size: 12px;
+        padding: 3px;
     }
 }

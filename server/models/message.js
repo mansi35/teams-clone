@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
 const messageSchema = mongoose.Schema({
-    roomId: String,
     senderId: String,
     sender: String,
     message: String,

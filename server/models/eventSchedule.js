@@ -12,6 +12,10 @@ const eventSchema = mongoose.Schema({
         type: Date,
         default: new Date()
     },
+    UpdatedAt: {
+        type: Date,
+        default: new Date()
+    },
     Description: String,
     MeetingId: String,
     Attendees: [String],

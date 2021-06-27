@@ -1,21 +1,24 @@
-import { FETCH_ALL, CREATE, UPDATE, DELETE } from '../constants/actionTypes';
+import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_EVENT } from '../constants/actionTypes';
 
-const eventReducer = (events = [], action) => {
+const eventReducer = (state = { events: [] }, action) => {
     switch (action.type) {
         case FETCH_ALL:
-            return action.payload;
+            return  { ...state, events: action.payload };
+
+        case FETCH_EVENT:
+            return  { ...state, event: action.payload };
 
         case CREATE:
-            return [ ...events, action.payload ];
+            return { ...state, events: [...state.events, action.payload] };
 
         case UPDATE:
-            return events.map((event) => event._id === action.payload._id ? action.payload : event)
+            return { ...state, events: state.events.map((event) => event._id === action.payload._id ? action.payload : event) };
 
         case DELETE:
-            return events.filter((event) => event._id !== action.payload);
+            return { ...state, events: state.events.filter((event) => event._id !== action.payload) };
 
         default:
-            return events;
+            return state;
     }
 };
 

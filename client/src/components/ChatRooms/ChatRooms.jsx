@@ -4,8 +4,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import CreateIcon from '@material-ui/icons/Create';
 import './ChatRooms.scss'
+import { useSelector } from 'react-redux';
 
 const ChatRooms = () => {
+    const { events } = useSelector((state) => state.events);
+    console.log(events);
+
     return (
         <div className="chatrooms">
             <div className="chatrooms__header">
@@ -19,10 +23,11 @@ const ChatRooms = () => {
                 </div>
             </div>
             <div className="chatrooms__rooms">
-                <ChatRoomItem />
-                <ChatRoomItem />
-                <ChatRoomItem />
-                <ChatRoomItem />
+                {events.map((event) => {
+                    return (
+                        <ChatRoomItem key={event._id} event={event} />
+                    )
+                })}
             </div>
         </div>
     )
