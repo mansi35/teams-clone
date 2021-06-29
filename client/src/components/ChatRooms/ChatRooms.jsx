@@ -2,7 +2,6 @@ import React from 'react';
 import ChatRoomItem from './ChatRoomItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import CreateIcon from '@material-ui/icons/Create';
 import './ChatRooms.scss'
 import { useSelector } from 'react-redux';
 
@@ -19,7 +18,6 @@ const ChatRooms = () => {
                 </div>
                 <div className="header__right">
                     <FilterListIcon />
-                    <CreateIcon />
                 </div>
             </div>
             <div className="chatrooms__rooms">

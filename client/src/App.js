@@ -8,6 +8,7 @@ import Room from './pages/VideoRoom/Room';
 import Github from './pages/Github/Github';
 import Chat from './pages/Chat/Chat';
 import CreateRoom from './pages/VideoRoom/CreateRoom';
+import WatchParty from './pages/WatchParty/WatchParty';
 
 function App() {
     return (
@@ -21,6 +22,8 @@ function App() {
                 <PrivateRoute path="/git" exact component={Github} />
                 <PrivateRoute path="/chat/:roomId?" exact component={Chat} />
                 <PrivateRoute path="/" exact component={CreateRoom} />
+                <PrivateRoute path="/watchparty/:roomId?" exact component={WatchParty} />
+
             </Switch>
         </Router>
         </div>

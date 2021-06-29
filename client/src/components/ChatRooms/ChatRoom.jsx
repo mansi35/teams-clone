@@ -5,7 +5,7 @@ import Input from '../Auth/Input';
 import SendIcon from '@material-ui/icons/Send';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEvent, eventMessage, updateEvent } from '../../actions/events';
+import { getEvent, eventMessage, updateEvent, getEvents } from '../../actions/events';
 import io from "socket.io-client";
 import './ChatRooms.scss';
 import moment from 'moment';
@@ -16,6 +16,7 @@ const ChatRoom = () => {
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
     const [newMessage, setNewMessage] = useState({});
+    const messagesEndRef = useRef(null);
     const { roomId } = useParams();
     const socketRef = useRef();
     const location = useLocation();
@@ -50,6 +51,14 @@ const ChatRoom = () => {
         // eslint-disable-next-line
     }, [roomId])
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [event?.Messages]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+
     const handleChange = (e) => {
         setMessage(e.target.value);
     }
@@ -60,7 +69,16 @@ const ChatRoom = () => {
             socketRef.current.emit('chat message', message, currentUser.result.name, currentUser.result._id);
             const finalMessage = { sender: currentUser.result.name, message: message, timestamp: new Date() }
             dispatch(eventMessage(finalMessage, roomId));
-            dispatch(updateEvent(roomId, { ...event, UpdatedAt: new Date() }));
+            dispatch(updateEvent(roomId, {
+                Subject: event.Subject,
+                StartTime: event.StartTime,
+                EndTime: event.EndTime,
+                Attendees: event.Attendees,
+                Description:event.Description,
+                UpdatedAt: new Date(),
+            }));
+            dispatch(getEvents());
+            dispatch(getEvent(roomId));
         }
         setMessage('');
     }
@@ -95,6 +113,7 @@ const ChatRoom = () => {
                             </div>
                         )
                     })}
+                    <div ref={messagesEndRef} />
                 </div>
                 <div>
                     <form className="chatroom__sendMessage">
