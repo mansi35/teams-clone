@@ -27,6 +27,7 @@ const ChatRoom = () => {
 
     useEffect(() => {
         if (roomId) {
+            console.log(roomId);
             dispatch(getEvent(roomId));
         }
     }, [dispatch, roomId]);
@@ -94,7 +95,7 @@ const ChatRoom = () => {
                 <div id="messages" className="chatroom__body">
                     {[...new Set(event.Messages.sort((a, b) => a - b).concat(newMessage))]?.map((message, i) => {
                         return (
-                            <div className="chatroom__message">
+                            <div key={i} className="chatroom__message">
                                 {message.senderId === currentUser.result._id ?
                                     <div className="mychat">
                                         <span>{moment(message.timestamp).format("DD/MM, hh:mm")}</span>

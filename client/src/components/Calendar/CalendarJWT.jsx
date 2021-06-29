@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Resize, DragAndDrop, Inject, ViewsDirective, ViewDirective } from "@syncfusion/ej2-react-schedule";
-import { v1 as uuid } from "uuid";
 import { createEvent, deleteEvent, getEvents, updateEvent } from "../../actions/events";
 import { isNullOrUndefined } from "@syncfusion/ej2-base";
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
@@ -11,24 +10,21 @@ import LinkIcon from '@material-ui/icons/Link';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import './Calendar.scss';
 
-function Calendar() {
-    const [id, setId] = useState('');
+function Calendar({ setSchedule }) {
+    const scheduleObj = useRef();
     const { events } = useSelector((state) => state.events);
     const users = useSelector((state) => state.users);
     const [currentUser, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const dispatch = useDispatch();
 
     useEffect(() => {
-        create();
         setUser(JSON.parse(localStorage.getItem('profile')));
-    }, []);
-
-    const create = () => {
-        setId(uuid());
-    }
+        setSchedule(scheduleObj.current);
+    // eslint-disable-next-line
+    }, [scheduleObj.current]);
 
     const content = (props) => {
-        const meetingLink = `http://localhost:3000/room/${props.MeetingId}`;
+        const meetingLink = `http://localhost:3000/room/${props._id}`;
         return (
         <div>
             {props.elementType === "cell" ? (
@@ -51,10 +47,10 @@ function Calendar() {
                 </div>
                 {props.MeetingId !== "" && !isNullOrUndefined(props.MeetingId) ?
                 <div>
-                    <Button href={props.MeetingId} variant="contained" color="primary" className="quickpopup__join">Join</Button>
+                    <Button href={meetingLink} target="_blank" variant="contained" color="primary" className="quickpopup__join">Join</Button>
                     <div className="quickpopup__meetingId">
                         <LinkIcon />
-                        <p><a href={meetingLink}>{meetingLink.slice(0, 40)}{"..."}</a></p>
+                        <p><a href={meetingLink} target="_blank" rel="noreferrer">{meetingLink.slice(0, 40)}{"..."}</a></p>
                         <FileCopyOutlinedIcon />
                     </div>
                 </div>: null}
@@ -75,15 +71,12 @@ function Calendar() {
 
     const onActionBegin = (args) => {
         if (args.requestType === "eventCreate") {
-            console.log(args);
-            create();
             dispatch(createEvent({
                 Subject: args.data[0].Subject,
                 StartTime: args.data[0].StartTime.toISOString(),
                 EndTime: args.data[0].EndTime.toISOString(),
                 Attendees: args.data[0].Attendees,
                 Description: args.data[0].Description,
-                MeetingId: id,
                 Creator: currentUser.result.name,
             })).then(() => {
                 dispatch(getEvents());
@@ -156,6 +149,7 @@ function Calendar() {
 
     return (
         <ScheduleComponent
+            ref={scheduleObj}
             width="100%"
             height="85.7vh"
             selectedDate={new Date()}
@@ -164,6 +158,7 @@ function Calendar() {
             eventSettings={{ dataSource: events }}
             quickInfoTemplates={{ content: content }}
             editorTemplate={editorTemplate}
+            currentView="WorkWeek"
         >
             <ViewsDirective>
                 <ViewDirective option="Day" />

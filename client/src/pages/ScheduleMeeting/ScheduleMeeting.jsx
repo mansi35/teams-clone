@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from '../../components/Calendar/Calendar';
 import CalendarJWT from '../../components/Calendar/CalendarJWT';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -12,6 +12,7 @@ import { getUsers } from '../../actions/users';
 const ScheduleMeeting = () => {
     const isAuthenticated = useIsAuthenticated();
     const dispatch = useDispatch();
+    const [schedule, setSchedule] = useState();
 
     useEffect(() => {
         dispatch(getEvents());
@@ -23,11 +24,11 @@ const ScheduleMeeting = () => {
             <div className="schedule__content">
                 <Sidebar />
                 <div className="schedule__calendar">
-                    <ScheduleVideoCall />
+                    <ScheduleVideoCall schedule={schedule} />
                     {isAuthenticated ?
                         <Calendar />
                     :
-                        <CalendarJWT />
+                        <CalendarJWT setSchedule={setSchedule} />
                     }
                 </div>
             </div>

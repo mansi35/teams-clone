@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import { PackedGrid } from 'react-packed-grid';
-import '../../components/VideoCall/VideoCall.scss';
+import './VideoCall.scss';
 import ScreenShareIcon from '@material-ui/icons/ScreenShare';
 import camera from '../../assets/camera.svg'
 import camerastop from '../../assets/camera-stop.svg'
@@ -10,14 +10,6 @@ import microphone from '../../assets/microphone.svg'
 import microphonestop from '../../assets/microphone-stop.svg'
 import hangup from '../../assets/hang-up.svg'
 import { useLocation, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import CreateIcon from '@material-ui/icons/Create';
-import { Avatar, IconButton } from '@material-ui/core';
-import Input from '../../components/Auth/Input';
-import SendIcon from '@material-ui/icons/Send';
-import { getEvent, eventMessage, updateEvent, getEvents } from '../../actions/events';
-import '../../components/ChatRooms/ChatRooms.scss';
-import moment from 'moment';
 
 const Video = (props) => {
     const ref = useRef();
@@ -34,7 +26,13 @@ const Video = (props) => {
     );
 }
 
-const Room = () => {
+
+// const videoConstraints = {
+//     height: window.innerHeight / 2,
+//     width: window.innerWidth / 2
+// };
+
+const VideoCall = () => {
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const [peers, setPeers] = useState([]);
     const [stream, setStream] = useState();
@@ -46,69 +44,13 @@ const Room = () => {
     const myPeer = useRef();
     const { roomId } = useParams();
     const location = useLocation();
-    const { event } = useSelector(state => state.events);
-    const dispatch = useDispatch();
-    const [message, setMessage] = useState('');
-    const [newMessage, setNewMessage] = useState({});
-    const messagesEndRef = useRef(null);
 
     useEffect(() => {
         setCurrentUser(JSON.parse(localStorage.getItem('profile')));
     }, [location]);
 
     useEffect(() => {
-        if (roomId) {
-            console.log(roomId);
-            dispatch(getEvent(roomId));
-        }
-    }, [dispatch, roomId]);
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [event?.Messages]);
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }
-
-    const handleChange = (e) => {
-        setMessage(e.target.value);
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (message) {
-            socketRef.current.emit('chat message', message, currentUser.result.name, currentUser.result._id);
-            const finalMessage = { sender: currentUser.result.name, message: message, timestamp: new Date() }
-            dispatch(eventMessage(finalMessage, roomId));
-            dispatch(updateEvent(roomId, {
-                Subject: event.Subject,
-                StartTime: event.StartTime,
-                EndTime: event.EndTime,
-                Attendees: event.Attendees,
-                Description:event.Description,
-                UpdatedAt: new Date(),
-            }));
-            dispatch(getEvents());
-            dispatch(getEvent(roomId));
-        }
-        setMessage('');
-    }
-
-    useEffect(() => {
         socketRef.current = io.connect("http://localhost:5000");
-
-        socketRef.current.on('chat message', (msg, sender, senderId) => {
-            setNewMessage({
-                senderId: senderId,
-                sender: sender,
-                message: msg,
-                timestamp: new Date(),
-            });
-        });
-
-        setNewMessage([]);
-
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
             setStream(stream);
             userVideo.current.srcObject = stream;
@@ -129,7 +71,7 @@ const Room = () => {
                     });
                 })
                 setPeers(peers);
-            });
+            })
 
             socketRef.current.on("user joined", payload => {
                 const peer = addPeer(payload.signal, payload.callerID, stream);
@@ -161,12 +103,8 @@ const Room = () => {
                 const peers = peersRef.current.filter(p => p.peerID !== id);
                 peersRef.current = peers;
                 setPeers(peers);
-            });
-
-            if (performance.navigation.type === 1) {
-                endCall();
-            }
-        });
+            })
+        })
     // eslint-disable-next-line
     }, []);
 
@@ -267,79 +205,34 @@ const Room = () => {
     const updateLayoutRef = useRef();
 
     return (
-        <div className="videoconference">
-            <div className="videoroom">
-                <div className="video">
-                    <div>
-                        <PackedGrid className='fullscreen' updateLayoutRef={updateLayoutRef}>
-                            <div className="video__tile">
-                                <h5>{currentUser.result.name}</h5>
-                                <video muted ref={userVideo} autoPlay playsInline className="video__tile" />
-                            </div>
-                            {peers.map((peer) => {
-                                return (
-                                    <div className="video__tile">
-                                        <h5>{peer.peerName}</h5>
-                                        <Video key={peer.peerID} peer={peer.peer} />
-                                    </div>
-                                );
-                            })}
-                        </PackedGrid>
-                    </div>
-                    <div className="video__controls">
-                        {audioControl}
-                        {videoControl}
-
-                        <div className="options-div">
-                            <ScreenShareIcon fontSize="large" className="video-options" onClick={shareScreen}></ScreenShareIcon>
+        <div className="video">
+            <div>
+            <PackedGrid className='fullscreen' updateLayoutRef={updateLayoutRef}>
+                <div className="video__tile">
+                    <h5>{currentUser.result.name}</h5>
+                    <video muted ref={userVideo} autoPlay playsInline className="video__tile" />
+                </div>
+                {peers.map((peer) => {
+                    return (
+                        <div className="video__tile">
+                            <h5>{peer.peerName}</h5>
+                            <Video key={peer.peerID} peer={peer.peer} />
                         </div>
-                        {hangUp}                    
-                    </div>
-                </div>
+                    );
+                })}
+                </PackedGrid>
             </div>
-            <div className="chat">
-                <div className="chatroom">
-                    <div className="chatroom__header">
-                        <Avatar />
-                        {event ? <h5>{event.Subject}</h5> : <h5>Teams Clone Chat</h5>}
-                        <CreateIcon />
-                    </div>
-                    <div id="messages" className="chatroom__body">
-                        {[...new Set(event?.Messages.sort((a, b) => a - b).concat(newMessage))]?.map((message, i) => {
-                            return (
-                                <div key={i} className="chatroom__message">
-                                    {message.senderId === currentUser.result._id ?
-                                        <div className="mychat">
-                                            <span>{moment(message.timestamp).format("DD/MM, hh:mm")}</span>
-                                            <p key={i}>{message.message}</p>
-                                        </div>
-                                    : 
-                                        <div className="peerchat">
-                                            <Avatar alt={message.sender.charAt(0)}>{message.sender.charAt(0)}</Avatar>
-                                            <div className="peer">
-                                                <span>{message.sender}</span>
-                                                <span>{moment(message.timestamp).format("DD/MM, hh:mm")}</span>
-                                                <p key={i}>{message.message}</p>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            )
-                        })}
-                        <div ref={messagesEndRef} />
-                    </div>
-                    <div>
-                        <form className="chatroom__sendMessage">
-                            <Input name="message" label="Type a new message" value={message} handleChange={handleChange} autoFocus />
-                            <IconButton type="submit" onClick={(e) => {handleSubmit(e)}}>
-                                <SendIcon />
-                            </IconButton>
-                        </form>
-                    </div>
+            <div className="video__controls">
+                {audioControl}
+                {videoControl}
+
+                <div className="options-div">
+                    <ScreenShareIcon fontSize="large" className="video-options" onClick={shareScreen}></ScreenShareIcon>
                 </div>
+                {hangUp}                    
             </div>
         </div>
     );
 };
 
-export default Room;
+export default VideoCall;

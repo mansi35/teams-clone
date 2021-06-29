@@ -6,11 +6,20 @@ import './ScheduleVideoCall.scss'
 import { v1 as uuid } from "uuid";
 import { Link } from 'react-router-dom';
 
-const ScheduleVideoCall = () => {
+const ScheduleVideoCall = ({ schedule }) => {
     const [id, setId] = useState('');
     const create = () => {
         setId(uuid());
     }
+
+    const scheduleMeeting = () => {
+        let cellData = {
+            startTime: new Date(),
+            endTime: new Date(),
+        };
+        schedule.openEditor(cellData, 'Add');
+    }
+
     return (
         <div className="videocall">
             <div className="videocall__logo">
@@ -25,7 +34,7 @@ const ScheduleVideoCall = () => {
                     </button>
                 </Link>
                 <div className="videocall__newMeeting">
-                        <button className="videocall__new">
+                        <button className="videocall__new" onClick={() => {scheduleMeeting()}}>
                             <AddIcon />
                             <b>New Meeting</b>
                         </button>

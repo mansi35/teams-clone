@@ -18,7 +18,7 @@ function App() {
             <Switch>
                 <PrivateRoute path="/calendar" exact component={ScheduleMeeting} />
                 <Route path="/auth" exact component={Auth} />
-                <PrivateRoute path="/room/:roomID" exact component={Room} />
+                <PrivateRoute path="/room/:roomId" exact component={Room} />
                 <PrivateRoute path="/git" exact component={Github} />
                 <PrivateRoute path="/chat/:roomId?" exact component={Chat} />
                 <PrivateRoute path="/" exact component={CreateRoom} />

@@ -48,11 +48,11 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
             });
 
             socket.on("sending signal", payload => {
-                io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID, callerName: payload.callerName });
+                socket.broadcast.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID, callerName: payload.callerName });
             });
 
             socket.on("returning signal", payload => {
-                io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+                socket.broadcast.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
             });
 
             socket.on('playVideo', () => {
@@ -60,15 +60,15 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
             });
 
             socket.on('pauseVideo', () => {
-                io.to(socketToRoom[socket.id]).emit('pauseVideo');
+                socket.broadcast.to(socketToRoom[socket.id]).emit('pauseVideo');
             });
 
             socket.on('stopVideo', () => {
-                io.to(socketToRoom[socket.id]).emit('stopVideo');
+                socket.broadcast.to(socketToRoom[socket.id]).emit('stopVideo');
             });
 
             socket.on('chat message', (msg, user, userId) => {
-                io.to(socketToRoom[socket.id]).emit('chat message', msg, user, userId);
+                socket.broadcast.to(socketToRoom[socket.id]).emit('chat message', msg, user, userId);
             });
 
             socket.on('disconnect', () => {

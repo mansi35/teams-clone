@@ -18,7 +18,9 @@ const Chat = () => {
             <Sidebar />
             <div className="chat__rooms">
                 <ChatRooms />
-                <ChatRoom />
+                <div style={{ width: "70vw" }}>
+                    <ChatRoom />
+                </div>
             </div>
         </div>
     )
