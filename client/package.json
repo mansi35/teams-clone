@@ -5,6 +5,7 @@
   "proxy": "http://localhost:5000",
   "secure": false,
   "dependencies": {
+    "@alan-ai/alan-sdk-web": "^1.8.27",
     "@azure/msal-browser": "^2.14.2",
     "@azure/msal-react": "^1.0.0",
     "@ckeditor/ckeditor5-build-classic": "^28.0.0",
@@ -19,6 +20,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "firebase": "^8.6.5",
+    "ion-sdk-js": "1.7.2",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",

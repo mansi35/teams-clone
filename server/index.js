@@ -47,14 +47,6 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
                 socket.emit("all users", usersInThisRoom);
             });
 
-            socket.on("sending signal", payload => {
-                io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID, callerName: payload.callerName });
-            });
-
-            socket.on("returning signal", payload => {
-                io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
-            });
-
             socket.on('playVideo', () => {
                 socket.broadcast.to(socketToRoom[socket.id]).emit('playVideo');
             });

@@ -5,6 +5,7 @@ import { createEvent, deleteEvent, getEvents, updateEvent } from "../../actions/
 import { isNullOrUndefined } from "@syncfusion/ej2-base";
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { v1 as uuid } from "uuid";
 import { Button } from '@material-ui/core';
 import LinkIcon from '@material-ui/icons/Link';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
@@ -72,7 +73,9 @@ function Calendar({ setSchedule }) {
 
     const onActionBegin = (args) => {
         if (args.requestType === "eventCreate") {
+            const meetingId = uuid();
             dispatch(createEvent({
+                _id: meetingId,
                 Subject: args.data[0].Subject,
                 StartTime: args.data[0].StartTime.toISOString(),
                 EndTime: args.data[0].EndTime.toISOString(),

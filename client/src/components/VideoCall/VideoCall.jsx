@@ -1,162 +1,86 @@
 import React, { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
-import Peer from "simple-peer";
+import { Client, LocalStream } from 'ion-sdk-js';
+import { IonSFUJSONRPCSignal } from 'ion-sdk-js/lib/signal/json-rpc-impl';
 import { PackedGrid } from 'react-packed-grid';
 import './VideoCall.scss';
-import ScreenShareIcon from '@material-ui/icons/ScreenShare';
-import camera from '../../assets/camera.svg'
-import camerastop from '../../assets/camera-stop.svg'
-import microphone from '../../assets/microphone.svg'
-import microphonestop from '../../assets/microphone-stop.svg'
-import hangup from '../../assets/hang-up.svg'
-import { useLocation, useParams } from "react-router-dom";
+// import ScreenShareIcon from '@material-ui/icons/ScreenShare';
+import camera from '../../assets/camera.svg';
+import camerastop from '../../assets/camera-stop.svg';
+import microphone from '../../assets/microphone.svg';
+import microphonestop from '../../assets/microphone-stop.svg';
+import hangup from '../../assets/hang-up.svg';
+import { useParams } from "react-router-dom";
 
-const Video = (props) => {
-    const ref = useRef();
-
-    useEffect(() => {
-        props.peer.on("stream", stream => {
-            ref.current.srcObject = stream;
-        })
-    // eslint-disable-next-line
-    }, []);
-
-    return (
-        <video playsInline autoPlay ref={ref} className="video__tile" />
-    );
-}
-
-
-// const videoConstraints = {
-//     height: window.innerHeight / 2,
-//     width: window.innerWidth / 2
-// };
+let client, signal;
 
 const VideoCall = () => {
-    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
-    const [peers, setPeers] = useState([]);
+    // const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const [stream, setStream] = useState();
     const [audioMuted, setAudioMuted] = useState(false)
     const [videoMuted, setVideoMuted] = useState(false)
-    const socketRef = useRef();
-    const userVideo = useRef();
-    const peersRef = useRef([]);
-    const myPeer = useRef();
+    const [remoteStream, setRemoteStream] = useState([]);
+    const [currentVideo, setCurrentVideo] = useState(null);
+    const localVideoRef = useRef();
+    const remoteVideoRef =useRef([]);
     const { roomId } = useParams();
-    const location = useLocation();
+    // const location = useLocation();
+
+    const config = {
+        iceServers: [
+          {
+            urls: "stun:stun.l.google.com:19302",
+          },
+        ],
+    };
+
+    // useEffect(() => {
+    //     setCurrentUser(JSON.parse(localStorage.getItem('profile')));
+    // }, [location]);
 
     useEffect(() => {
-        setCurrentUser(JSON.parse(localStorage.getItem('profile')));
-    }, [location]);
-
-    useEffect(() => {
-        socketRef.current = io.connect("http://localhost:5000");
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-            setStream(stream);
-            userVideo.current.srcObject = stream;
-            socketRef.current.emit("join room", {roomID: roomId, username: currentUser.result.name});
-            socketRef.current.on("all users", users => {
-                const peers = [];
-                users.forEach(user => {
-                    const peer = createPeer(user.id, socketRef.current.id, currentUser.result.name, stream);
-                    peersRef.current.push({
-                        peerID: user.id,
-                        peerName: user.name,
-                        peer,
-                    })
-                    peers.push({
-                        peerID: user.id,
-                        peerName: user.name,
-                        peer,
-                    });
-                })
-                setPeers(peers);
-            })
-
-            socketRef.current.on("user joined", payload => {
-                const peer = addPeer(payload.signal, payload.callerID, stream);
-                peersRef.current.push({
-                    peerID: payload.callerID,
-                    peerName: payload.callerName,
-                    peer,
-                })
-
-                const peerObj = {
-                    peerID : payload.callerID,
-                    peerName: payload.callerName,
-                    peer,
+        signal = new IonSFUJSONRPCSignal("ws://localhost:7000/ws");
+        client = new Client(signal, config);
+        signal.onopen = () => client.join(roomId);
+        
+        LocalStream.getUserMedia({
+            resolution: 'vga',
+            audio: true,
+            codec: "vp8"
+        }).then((media) => {
+            localVideoRef.current.srcObject = media;
+            localVideoRef.current.autoplay = true;
+            localVideoRef.current.playsInline = true;
+            localVideoRef.current.muted = true;
+            setStream(media);
+            client.publish(media);
+        }).catch(console.error);
+    
+        client.ontrack = (track, stream) => {
+            console.log("got track: ", track.id, "for stream: ", stream.id);
+            if (track.kind === 'video') {
+                track.onunmute = () => {
+                    setRemoteStream(remoteStream => [...remoteStream, {id: track.id, stream: stream}]);
+                    setCurrentVideo(track.id);
+            
+                    stream.onremovetrack = (e) => {
+                        setRemoteStream(remoteStream => remoteStream.filter(item => item.id !== e.track.id));
+                    }
                 }
-
-                setPeers(users => [...users, peerObj]);
-            });
-
-            socketRef.current.on("receiving returned signal", payload => {
-                const item = peersRef.current.find(p => p.peerID === payload.id);
-                item.peer.signal(payload.signal);
-            });
-
-            socketRef.current.on('user left', id => {
-                const peerObj = peersRef.current.find(p => p.peerID === id);
-                if (peerObj) {
-                    peerObj.peer.destroy();
-                }
-                const peers = peersRef.current.filter(p => p.peerID !== id);
-                peersRef.current = peers;
-                setPeers(peers);
-            })
-        })
-    // eslint-disable-next-line
-    }, []);
-
-    function createPeer(userToSignal, callerID, callerName, stream) {
-        const peer = new Peer({
-            initiator: true,
-            trickle: false,
-            stream,
-        });
-
-        peer.on("signal", signal => {
-            socketRef.current.emit("sending signal", { userToSignal, callerID, callerName, signal })
-        })
-
-        return peer;
-    }
-
-    function addPeer(incomingSignal, callerID, stream) {
-        const peer = new Peer({
-            initiator: false,
-            trickle: false,
-            stream,
-        })
-
-        peer.on("signal", signal => {
-            socketRef.current.emit("returning signal", { signal, callerID })
-        })
-
-        peer.signal(incomingSignal);
-
-        return peer;
-    }
-
-    function shareScreen(){
-        navigator.mediaDevices.getDisplayMedia({cursor: true})
-        .then(screenStream => {
-            // eslint-disable-next-line
-            peers.map(peer => {
-                myPeer.current = peer.peer;
-                myPeer.current.replaceTrack(stream.getVideoTracks()[0], screenStream.getVideoTracks()[0], stream);
-                userVideo.current.srcObject = screenStream;
-            })
-            screenStream.getTracks()[0].onended = () => {
-                // eslint-disable-next-line
-                peers.map(peer => {
-                    myPeer.current = peer.peer;
-                    myPeer.current.replaceTrack(screenStream.getVideoTracks()[0], stream.getVideoTracks()[0], stream);
-                    userVideo.current.srcObject = stream;
-                })
             }
-        })
-    }
+        }
+        // eslint-disable-next-line
+      }, []);
+
+      useEffect(() => {
+        const videoEl = remoteVideoRef.current[currentVideo];
+        remoteStream.forEach(ev => {
+          if (ev.id === currentVideo) {
+            videoEl.srcObject = ev.stream;
+          }
+        });
+      // eslint-disable-next-line
+      }, [currentVideo]);
+    
 
     function endCall() {
         window.close();
@@ -208,17 +132,11 @@ const VideoCall = () => {
         <div className="video">
             <div>
             <PackedGrid className='fullscreen' updateLayoutRef={updateLayoutRef}>
-                <div className="video__tile">
-                    <h5>{currentUser.result.name}</h5>
-                    <video muted ref={userVideo} autoPlay playsInline className="video__tile" />
-                </div>
-                {peers.map((peer) => {
+                <video className={`bg-black h-full w-full video__tile`} autoPlay playsInline ref={localVideoRef}></video>
+                {remoteStream.map((val, index) => {
                     return (
-                        <div className="video__tile">
-                            <h5>{peer.peerName}</h5>
-                            <Video key={peer.peerID} peer={peer.peer} />
-                        </div>
-                    );
+                      <video key={index} ref={(el) => remoteVideoRef.current[val.id] =el} className="bg-black w-full h-full video__tile" autoPlay playsInline></video>
+                    )
                 })}
                 </PackedGrid>
             </div>
@@ -226,9 +144,9 @@ const VideoCall = () => {
                 {audioControl}
                 {videoControl}
 
-                <div className="options-div">
+                {/*<div className="options-div">
                     <ScreenShareIcon fontSize="large" className="video-options" onClick={shareScreen}></ScreenShareIcon>
-                </div>
+                </div>*/}
                 {hangUp}                    
             </div>
         </div>

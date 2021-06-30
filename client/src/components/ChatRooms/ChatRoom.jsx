@@ -78,6 +78,7 @@ const ChatRoom = () => {
         }
         setMessage('');
     }
+    console.log(event, roomId);
     if (event && roomId) {
 
         return (

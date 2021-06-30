@@ -25,18 +25,19 @@ const ChatRoomItem = ({ event }) => {
                     <h6>{moment(event.StartTime).format("DD/MM")}</h6>
                 </div>
                 <div className="chatroom__message">
-                    
-                        {event.Messages[event.Messages.length - 1].senderId === currentUser.result._id ? (
-                            event.Messages[event.Messages.length - 1].message.length > 42 ?
+                    {event.Messages.length > 0 ?
+                        [event.Messages[event.Messages.length - 1].senderId === currentUser.result._id ? (
+                            [event.Messages[event.Messages.length - 1].message.length > 42 ?
                                 <span>{'You: '}{event.Messages[event.Messages.length - 1].message.slice(0, 42)}{'...'}</span>
                             :   <span>{'You: '}{event.Messages[event.Messages.length - 1].message}</span>
                             
-                        ) : (
-                            event.Messages[event.Messages.length - 1].message.length > 42 ?
+                            ]) : (
+                            [event.Messages[event.Messages.length - 1].message.length > 42 ?
                                 <span>{event.Messages[event.Messages.length - 1].sender}{': '}{event.Messages[event.Messages.length - 1].message.slice(0, 42)}{'...'}</span>
                             :   <span>{event.Messages[event.Messages.length - 1].sender}{': '}{event.Messages[event.Messages.length - 1].message}</span>
                             
-                        )}
+                            ])]
+                    : null}
                 </div>
             </div>
         </div>
