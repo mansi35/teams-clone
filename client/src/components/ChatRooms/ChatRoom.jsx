@@ -15,7 +15,6 @@ const ChatRoom = () => {
     const { event } = useSelector(state => state.events);
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
-    const [newMessage, setNewMessage] = useState({});
     const messagesEndRef = useRef(null);
     const { roomId } = useParams();
     const socketRef = useRef();
@@ -27,7 +26,6 @@ const ChatRoom = () => {
 
     useEffect(() => {
         if (roomId) {
-            console.log(roomId);
             dispatch(getEvent(roomId));
         }
     }, [dispatch, roomId]);
@@ -40,15 +38,11 @@ const ChatRoom = () => {
         if (roomId) {
             socketRef.current.emit("join room", {roomID: roomId, username: currentUser.result.name });
             socketRef.current.on('chat message', (msg, sender, senderId) => {
-                setNewMessage({
-                    senderId: senderId,
-                    sender: sender,
-                    message: msg,
-                    timestamp: new Date(),
-                });
+                dispatch(getEvent(roomId));
+                dispatch(getEvents());
+                scrollToBottom();
             });
         }
-        setNewMessage([]);
         // eslint-disable-next-line
     }, [roomId])
 
@@ -68,7 +62,7 @@ const ChatRoom = () => {
         e.preventDefault();
         if (message) {
             socketRef.current.emit('chat message', message, currentUser.result.name, currentUser.result._id);
-            const finalMessage = { sender: currentUser.result.name, message: message, timestamp: new Date() }
+            const finalMessage = { sender: currentUser.result.name, senderId: currentUser.result._id, message: message, timestamp: new Date() }
             dispatch(eventMessage(finalMessage, roomId));
             dispatch(updateEvent(roomId, {
                 Subject: event.Subject,
@@ -78,8 +72,9 @@ const ChatRoom = () => {
                 Description:event.Description,
                 UpdatedAt: new Date(),
             }));
+            event.Messages.push(finalMessage);
             dispatch(getEvents());
-            dispatch(getEvent(roomId));
+            scrollToBottom();
         }
         setMessage('');
     }
@@ -93,7 +88,7 @@ const ChatRoom = () => {
                     <CreateIcon />
                 </div>
                 <div id="messages" className="chatroom__body">
-                    {[...new Set(event.Messages.sort((a, b) => a - b).concat(newMessage))]?.map((message, i) => {
+                    {event.Messages.sort((a, b) => a - b)?.map((message, i) => {
                         return (
                             <div key={i} className="chatroom__message">
                                 {message.senderId === currentUser.result._id ?

@@ -27,15 +27,15 @@ const ChatRoomItem = ({ event }) => {
                 <div className="chatroom__message">
                     
                         {event.Messages[event.Messages.length - 1].senderId === currentUser.result._id ? (
-                            [event.Messages[event.Messages.length - 1].message.length > 42 ?
+                            event.Messages[event.Messages.length - 1].message.length > 42 ?
                                 <span>{'You: '}{event.Messages[event.Messages.length - 1].message.slice(0, 42)}{'...'}</span>
                             :   <span>{'You: '}{event.Messages[event.Messages.length - 1].message}</span>
-                            ]
+                            
                         ) : (
-                            [event.Messages[event.Messages.length - 1].message.length > 42 ?
+                            event.Messages[event.Messages.length - 1].message.length > 42 ?
                                 <span>{event.Messages[event.Messages.length - 1].sender}{': '}{event.Messages[event.Messages.length - 1].message.slice(0, 42)}{'...'}</span>
                             :   <span>{event.Messages[event.Messages.length - 1].sender}{': '}{event.Messages[event.Messages.length - 1].message}</span>
-                            ]
+                            
                         )}
                 </div>
             </div>

@@ -48,11 +48,11 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
             });
 
             socket.on("sending signal", payload => {
-                socket.broadcast.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID, callerName: payload.callerName });
+                io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID, callerName: payload.callerName });
             });
 
             socket.on("returning signal", payload => {
-                socket.broadcast.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+                io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
             });
 
             socket.on('playVideo', () => {

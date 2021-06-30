@@ -17,6 +17,7 @@ import Input from '../../components/Auth/Input';
 import SendIcon from '@material-ui/icons/Send';
 import { getEvent, eventMessage, updateEvent, getEvents } from '../../actions/events';
 import '../../components/ChatRooms/ChatRooms.scss';
+import './Room.scss'
 import moment from 'moment';
 
 const Video = (props) => {
@@ -49,7 +50,6 @@ const Room = () => {
     const { event } = useSelector(state => state.events);
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
-    const [newMessage, setNewMessage] = useState({});
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -79,7 +79,7 @@ const Room = () => {
         e.preventDefault();
         if (message) {
             socketRef.current.emit('chat message', message, currentUser.result.name, currentUser.result._id);
-            const finalMessage = { sender: currentUser.result.name, message: message, timestamp: new Date() }
+            const finalMessage = { sender: currentUser.result.name, senderId: currentUser.result._id, message: message, timestamp: new Date() }
             dispatch(eventMessage(finalMessage, roomId));
             dispatch(updateEvent(roomId, {
                 Subject: event.Subject,
@@ -89,8 +89,9 @@ const Room = () => {
                 Description:event.Description,
                 UpdatedAt: new Date(),
             }));
+            event.Messages.push(finalMessage);
             dispatch(getEvents());
-            dispatch(getEvent(roomId));
+            scrollToBottom();
         }
         setMessage('');
     }
@@ -99,21 +100,17 @@ const Room = () => {
         socketRef.current = io.connect("http://localhost:5000");
 
         socketRef.current.on('chat message', (msg, sender, senderId) => {
-            setNewMessage({
-                senderId: senderId,
-                sender: sender,
-                message: msg,
-                timestamp: new Date(),
-            });
+            dispatch(getEvent(roomId));
+            dispatch(getEvents());
+            scrollToBottom();
         });
-
-        setNewMessage([]);
 
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
             setStream(stream);
             userVideo.current.srcObject = stream;
             socketRef.current.emit("join room", {roomID: roomId, username: currentUser.result.name});
             socketRef.current.on("all users", users => {
+                console.log(users.length);
                 const peers = [];
                 users.forEach(user => {
                     const peer = createPeer(user.id, socketRef.current.id, currentUser.result.name, stream);
@@ -162,10 +159,6 @@ const Room = () => {
                 peersRef.current = peers;
                 setPeers(peers);
             });
-
-            if (performance.navigation.type === 1) {
-                endCall();
-            }
         });
     // eslint-disable-next-line
     }, []);
@@ -276,9 +269,9 @@ const Room = () => {
                                 <h5>{currentUser.result.name}</h5>
                                 <video muted ref={userVideo} autoPlay playsInline className="video__tile" />
                             </div>
-                            {peers.map((peer) => {
+                            {peers.map((peer, i) => {
                                 return (
-                                    <div className="video__tile">
+                                    <div key={i} className="video__tile">
                                         <h5>{peer.peerName}</h5>
                                         <Video key={peer.peerID} peer={peer.peer} />
                                     </div>
@@ -305,7 +298,7 @@ const Room = () => {
                         <CreateIcon />
                     </div>
                     <div id="messages" className="chatroom__body">
-                        {[...new Set(event?.Messages.sort((a, b) => a - b).concat(newMessage))]?.map((message, i) => {
+                        {event?.Messages.sort((a, b) => a - b)?.map((message, i) => {
                             return (
                                 <div key={i} className="chatroom__message">
                                     {message.senderId === currentUser.result._id ?

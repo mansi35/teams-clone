@@ -25,6 +25,7 @@ function Calendar({ setSchedule }) {
 
     const content = (props) => {
         const meetingLink = `http://localhost:3000/room/${props._id}`;
+        console.log(meetingLink, props._id);
         return (
         <div>
             {props.elementType === "cell" ? (
@@ -45,7 +46,7 @@ function Calendar({ setSchedule }) {
                     {" - "}
                     {props.EndTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false })}
                 </div>
-                {props.MeetingId !== "" && !isNullOrUndefined(props.MeetingId) ?
+                {props._id !== "" && !isNullOrUndefined(props._id) ?
                 <div>
                     <Button href={meetingLink} target="_blank" variant="contained" color="primary" className="quickpopup__join">Join</Button>
                     <div className="quickpopup__meetingId">

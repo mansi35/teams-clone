@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Message from './message.js';
 
 const eventSchema = mongoose.Schema({
+    _id: String,
     Subject: String,
     IsAllDay: Boolean,
     StartTime: {

@@ -1,15 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {ReactComponent as Calendar} from '../../assets/calendar.svg'
 import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import './ScheduleVideoCall.scss'
 import { v1 as uuid } from "uuid";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { createEvent } from '../../actions/events';
+import moment from 'moment';
 
 const ScheduleVideoCall = ({ schedule }) => {
+    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const [id, setId] = useState('');
+    const dispatch = useDispatch();
+    const location = useLocation();
+
+    useEffect(() => {
+        setCurrentUser(JSON.parse(localStorage.getItem('profile')));
+    }, [location]);
+
     const create = () => {
-        setId(uuid());
+        const meetingId = uuid();
+        setId(meetingId);
+        dispatch(createEvent({
+            Subject: `Meeting on ${moment(new Date()).format("DD/MM/YYYY")}`,
+            StartTime: new Date(),
+            EndTime: new Date(new Date().setHours(new Date().getHours() + 1)),
+            _id: meetingId,
+            Creator: currentUser.result.name,
+            CreatorId: currentUser.result._id,
+        }));
     }
 
     const scheduleMeeting = () => {

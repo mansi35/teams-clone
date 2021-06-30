@@ -1,5 +1,4 @@
 import EventSchedule from '../models/eventSchedule.js';
-import mongoose from 'mongoose';
 
 export const getEvent = async (req, res) => {
     const { id } = req.params;
@@ -39,20 +38,22 @@ export const createEvent  = async (req, res) => {
 export const updateEvent  = async (req, res) => {
     const { id: _id } = req.params;
     const changedEvent = req.body;
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-        return res.status(404).send('No event scheduled with that id.');
+    try {
+        const updatedEvent = await EventSchedule.findByIdAndUpdate(_id, { ...changedEvent, _id }, { new: true });
+        res.json(updatedEvent);
+    } catch (error) {
+        return res.status(404).json({ message: error.message });
     }
-    const updatedEvent = await EventSchedule.findByIdAndUpdate(_id, { ...changedEvent, _id }, { new: true });
-    res.json(updatedEvent);
 }
 
 export const deleteEvent = async (req, res) => {
     const { id: _id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-        return res.status(404).send('No event scheduled with that id.');
+    try {
+        await EventSchedule.findByIdAndRemove(_id);
+        res.json({ message: 'Post deleted successfully.' });
+    } catch (error) {
+        return res.status(404).json({ message: error.message });
     }
-    await EventSchedule.findByIdAndRemove(_id);
-    res.json({ message: 'Post deleted successfully.' });
 }
 
 
