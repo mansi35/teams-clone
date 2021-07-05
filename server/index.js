@@ -59,8 +59,8 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
                 socket.broadcast.to(socketToRoom[socket.id]).emit('stopVideo');
             });
 
-            socket.on('chat message', (msg, user, userId) => {
-                socket.broadcast.to(socketToRoom[socket.id]).emit('chat message', msg, user, userId);
+            socket.on('chat message', (finalMessage) => {
+                socket.broadcast.to(socketToRoom[socket.id]).emit('chat message', finalMessage);
             });
 
             socket.on('disconnect', () => {

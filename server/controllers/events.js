@@ -106,7 +106,7 @@ export const deleteEventByCreatorIdDate = async (req, res) => {
 
 
 export const messageEvent  = async (req, res) => {
-    const { sender, message, timestamp } = req.body;
+    const { sender, message, timestamp, type, fileName, body } = req.body;
     const { id: roomId } = req.params;
     
     const event = await EventSchedule.findById(roomId);
@@ -114,7 +114,10 @@ export const messageEvent  = async (req, res) => {
         senderId: req.userId,
         sender: sender,
         message: message,
-        timestamp: timestamp
+        timestamp: timestamp,
+        type: type,
+        fileName: fileName,
+        body: body
     });
 
     const updatedEvent = await EventSchedule.findByIdAndUpdate(roomId, event, { new: true });

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import CreateIcon from '@material-ui/icons/Create';
 import { Avatar, IconButton } from '@material-ui/core';
+import FileBase from 'react-file-base64';
 import Input from '../Auth/Input';
 import SendIcon from '@material-ui/icons/Send';
 import { useLocation, useParams } from 'react-router-dom';
@@ -15,6 +16,8 @@ const ChatRoom = () => {
     const { event } = useSelector(state => state.events);
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
+    const [file, setFile] = useState();
+    const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
     const { roomId } = useParams();
     const socketRef = useRef();
@@ -37,8 +40,8 @@ const ChatRoom = () => {
     useEffect(() => {
         if (roomId) {
             socketRef.current.emit("join room", {roomID: roomId, username: currentUser.result.name });
-            socketRef.current.on('chat message', (msg, sender, senderId) => {
-                dispatch(getEvent(roomId));
+            socketRef.current.on('chat message', (finalMessage) => {
+                setMessages(oldMsgs => [...oldMsgs, {sender: finalMessage.sender, senderId: finalMessage.senderId, message: finalMessage.message, body: finalMessage.body, type: finalMessage.type, timestamp: new Date()}])
                 dispatch(getEvents());
                 scrollToBottom();
             });
@@ -48,7 +51,8 @@ const ChatRoom = () => {
 
     useEffect(() => {
         scrollToBottom();
-    }, [event?.Messages]);
+        setMessages(event?.Messages);
+    }, [event?.Messages, event]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -61,55 +65,90 @@ const ChatRoom = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (message) {
-            socketRef.current.emit('chat message', message, currentUser.result.name, currentUser.result._id);
-            const finalMessage = { sender: currentUser.result.name, senderId: currentUser.result._id, message: message, timestamp: new Date() }
-            dispatch(eventMessage(finalMessage, roomId));
+            if (file) {
+                console.log('here');
+                const finalMessage = { sender: currentUser.result.name, senderId: currentUser.result._id, message: message, body: file, type: "file", timestamp: new Date() };
+                socketRef.current.emit('chat message', finalMessage);
+                setMessages(oldMsgs => [...oldMsgs, finalMessage]);
+                dispatch(eventMessage(finalMessage, roomId));
+                setFile();
+            } else {
+                const finalMessage = { sender: currentUser.result.name, senderId: currentUser.result._id, message: message, type: "text", timestamp: new Date() };
+                socketRef.current.emit('chat message', finalMessage);
+                setMessages(oldMsgs => [...oldMsgs, finalMessage]);
+                dispatch(eventMessage(finalMessage, roomId));
+            }
             dispatch(updateEvent(roomId, {
-                Subject: event.Subject,
-                StartTime: event.StartTime,
-                EndTime: event.EndTime,
-                Attendees: event.Attendees,
-                Description:event.Description,
                 UpdatedAt: new Date(),
             }));
-            event.Messages.push(finalMessage);
             dispatch(getEvents());
             scrollToBottom();
         }
         setMessage('');
     }
-    console.log(event, roomId);
-    if (event && roomId) {
 
+    const renderMessages = (message, index) => {
+        if (message.type === "file") {
+            if (message.senderId === currentUser.result._id) {
+                return (
+                    <div key={index} className="chatroom__message">
+                        <div className="mychat">
+                            <span>{moment(message.timestamp).format("DD/MM, hh:mm")}</span>
+                            <img src={message.body} alt="" style={{ width: 250, height: "auto" }} />
+                            <p key={index}>{message.message}</p>
+                        </div>
+                    </div>
+                );
+            }
+            return (
+                <div key={index} className="chatroom__message">
+                    <div className="peerchat">
+                        <Avatar alt={message.sender.charAt(0)}>{message.sender.charAt(0)}</Avatar>
+                        <div className="peer">
+                            <span>{message.sender}</span>
+                            <span>{moment(message.timestamp).format("DD/MM, hh:mm")}</span>
+                            <img src={message.body} alt="" style={{ width: 250, height: "auto" }} />
+                            <p key={index}>{message.message}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        } else {
+            if (message.senderId === currentUser.result._id) {
+                return (
+                    <div key={index} className="chatroom__message">
+                        <div className="mychat">
+                            <span>{moment(message.timestamp).format("DD/MM, hh:mm")}</span>
+                            <p key={index}>{message.message}</p>
+                        </div>
+                    </div>
+                );
+            }
+            return (
+                <div key={index} className="chatroom__message">
+                    <div className="peerchat">
+                        <Avatar alt={message.sender.charAt(0)}>{message.sender.charAt(0)}</Avatar>
+                        <div className="peer">
+                            <span>{message.sender}</span>
+                            <span>{moment(message.timestamp).format("DD/MM, hh:mm")}</span>
+                            <p key={index}>{message.message}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    if (event && roomId && messages) {
         return (
             <div className="chatroom">
                 <div className="chatroom__header">
-                    <Avatar />
+                    <Avatar>{event.Subject.charAt(0)}</Avatar>
                     {event ? <h5>{event.Subject}</h5> : <h5>Teams Clone Chat</h5>}
                     <CreateIcon />
                 </div>
                 <div id="messages" className="chatroom__body">
-                    {event.Messages.sort((a, b) => a - b)?.map((message, i) => {
-                        return (
-                            <div key={i} className="chatroom__message">
-                                {message.senderId === currentUser.result._id ?
-                                    <div className="mychat">
-                                        <span>{moment(message.timestamp).format("DD/MM, hh:mm")}</span>
-                                        <p key={i}>{message.message}</p>
-                                    </div>
-                                : 
-                                    <div className="peerchat">
-                                        <Avatar alt={message.sender.charAt(0)}>{message.sender.charAt(0)}</Avatar>
-                                        <div className="peer">
-                                            <span>{message.sender}</span>
-                                            <span>{moment(message.timestamp).format("DD/MM, hh:mm")}</span>
-                                            <p key={i}>{message.message}</p>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        )
-                    })}
+                    {messages.sort((a, b) => a - b)?.map(renderMessages)}
                     <div ref={messagesEndRef} />
                 </div>
                 <div>
@@ -118,6 +157,9 @@ const ChatRoom = () => {
                         <IconButton type="submit" onClick={(e) => {handleSubmit(e)}}>
                             <SendIcon />
                         </IconButton>
+                        <FileBase type="file" multiple={false} onDone={({ base64 }) => {
+                            setFile(base64);
+                        }} />
                     </form>
                 </div>
             </div>

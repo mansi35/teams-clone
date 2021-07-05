@@ -114,7 +114,7 @@ function Calendar({ setSchedule }) {
                 <tbody>
                     <tr>
                         <td className="e-textlabel">Title</td><td colSpan={4}>
-                            <input id="Subject" className="e-field e-input" type="text" name="Subject" placeholder="Subject" style={{ width: '100%' }}/>
+                            <input autoComplete="off" id="Subject" className="e-field e-input" type="text" name="Subject" placeholder="Subject" style={{ width: '100%' }}/>
                         </td>
                     </tr>
                     <tr>
@@ -162,7 +162,6 @@ function Calendar({ setSchedule }) {
             eventSettings={{ dataSource: events }}
             quickInfoTemplates={{ content: content }}
             editorTemplate={editorTemplate}
-            currentView="WorkWeek"
         >
             <ViewsDirective>
                 <ViewDirective option="Day" />
