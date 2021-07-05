@@ -9,6 +9,7 @@ import Github from './pages/Github/Github';
 import Chat from './pages/Chat/Chat';
 import WatchParty from './pages/WatchParty/WatchParty';
 import UseAlan from './hooks/UseAlan';
+import Music from './pages/Music/Music';
 
 const Alan = () => {
     UseAlan();
@@ -25,11 +26,11 @@ const App = () => {
                 <PrivateRoute path="/calendar" exact component={ScheduleMeeting} />
                 <Route path="/auth" exact component={Auth} />
                 <PrivateRoute path="/room/:roomId" exact component={Room} />
-                <PrivateRoute path="/git" exact component={Github} />
+                <PrivateRoute path="/github" exact component={Github} />
                 <PrivateRoute path="/chat/:roomId?" exact component={Chat} />
                 <PrivateRoute path="/" exact component={Auth} />
                 <PrivateRoute path="/watchparty/:roomId?" exact component={WatchParty} />
-
+                <PrivateRoute path="/music" exact component={Music} />
             </Switch>
         </Router>
         </div>

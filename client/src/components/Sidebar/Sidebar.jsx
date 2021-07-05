@@ -47,7 +47,7 @@ function Sidebar() {
                 hoverIcon={teams}
             />
             {auth ?
-                <Link to="/git">
+                <Link to="/github">
                     <SidebarItem 
                         icon="https://img.icons8.com/ios/36/000000/github--v1.png"
                         text="GitHub"

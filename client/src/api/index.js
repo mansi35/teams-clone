@@ -12,11 +12,14 @@ export const signIn = (profile) => API.post('/user/signin', profile);
 export const signUp = (profile) => API.post('/user/signup', profile);
 export const microsoftSignup = (profile) => API.post('/user/microsoftsignup', profile);
 
-export const fetchEvent = (id) => API.get(`/events/${id}`)
+export const fetchEvent = (id) => API.get(`/events/${id}`);
+export const fetchEventByCreatorIdDate = (date) => API.get(`/events/${date}/getEvent`);
 export const fetchEvents = () => API.get('/events');
 export const createEvent = (newEvent) => API.post('/events', newEvent);
 export const updateEvent = (id, event) => API.patch(`/events/${id}`, event);
+export const updateEventByCreatorIdDate = (date, event) => API.patch(`/events/${date}/updateEvent`, event);
 export const deleteEvent = (id) => API.delete(`/events/${id}`);
+export const deleteEventByCreatorIdDate = (date) => API.delete(`/events/${date}/delEvent`);
 
 export const getUsers = () => API.get('/users');
 export const getUsersBySearch = (searchQuery) => API.get(`/users/search?searchQuery=${searchQuery}`);

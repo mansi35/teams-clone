@@ -1,0 +1,275 @@
+$border-radius: 20px;
+
+$primary: #709fdc;
+$base: #071739;
+$shadow-color:  #274684;
+$lighter-shadow: rgba($shadow-color, .7);
+$white: #fff;
+$gray: #8c8c8c;
+$lighter-gray: rgba($gray, .1);
+$time-line-width: 240px;
+$transition: .3s all ease;
+
+.music {
+    font-family: 'Rubik', sans-serif;
+    color: $base;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #000;
+    height: 93.9vh;
+    h1{
+        font-size: 36px;
+        margin-bottom: 0;
+    }
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        max-width: 371px;
+        padding: 0 5px;
+        margin-top: 40px;
+        border-radius: $border-radius;
+        color: $white;
+        font-weight: 100;
+        box-shadow: 0px 0px 70px 0px $shadow-color;
+        background: $base;
+        overflow: hidden;
+        .current-song{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 20px 0px;
+            border-radius: $border-radius;
+            color: $base;
+            background: $white;
+        
+            audio{
+                display: none;
+            }
+            .img-wrap{
+                position: relative;
+                margin: 0 auto;
+                width: 270px;
+                height: 200px;
+                overflow: hidden;
+                border-radius: 20px;
+                box-shadow: 0px 10px 40px 0px $lighter-shadow;
+                img {
+                width: auto;
+                height: 100%;
+                }
+            }
+            .song-name{
+                margin-top: 30px;
+                font-size: 22px;
+            }
+            .song-autor{
+                color: $primary;
+            }
+            .time{
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+                width: $time-line-width;
+            }
+            #timeline{
+                position: relative;
+                margin: 0 auto;
+                width: $time-line-width;
+                height: 5px;
+                background: $primary;
+                border-radius: 5px;
+                cursor: pointer;
+                &:hover{
+                    .hover-playhead{
+                        opacity: 1;
+                        &::before{
+                        opacity: 1;
+                        }
+                        &::after{
+                        opacity: 1;
+                        }
+                    }
+                }
+                #playhead{
+                    position: relative;
+                    z-index: 2;
+                    width: 0;
+                    height: 5px;
+                    border-radius: 5px;
+                    background: $base;
+                }
+                .hover-playhead{
+                    position: absolute;
+                    z-index: 1;
+                    top: 0;
+                    width: 0;
+                    height: 5px;
+                    opacity: 0;
+                    border-radius: 5px;
+                    background: $shadow-color;
+                    transition: opacity .3s;
+                    &::before{
+                        opacity: 0;
+                        content: attr(data-content);
+                        display: block;
+                        position: absolute;
+                        top: -30px;
+                        right: -23px;
+                        width: 40px;
+                        padding: 3px;
+                        text-align: center;
+                        color: white;
+                        background: $shadow-color;
+                        border-radius: calc( #{$border-radius} - 12px);
+                    }
+                    &::after{
+                        opacity: 0;
+                        content:'';
+                        display: block;
+                        position: absolute;
+                        top: -8px;
+                        right: -8px;
+                        border-top: 8px solid $shadow-color;
+                        border-left:8px solid transparent;
+                        border-right:8px solid transparent;
+                    }
+                }
+            }
+            .controls{
+                margin-top: 10px;
+                button{
+                    color: $base;
+                    border-radius: 50%;
+                    margin: 15px;
+                    font-size: 18px;
+                    text-align: center;
+                    transition: 0.2s;
+                    cursor: pointer;
+                    border: none;
+                    background: 0;
+                    &:focus{
+                        outline: none;
+                    }
+                    &.play{
+                        width: 50px;
+                        height: 50px;
+                        border: 1px solid #e2e2e2;
+                        &:hover{
+                        left: 0;
+                        box-shadow: 0px 0px 15px 0px  $lighter-shadow;
+                        }
+                        .fa-play{
+                        transform: translateX(2px);
+                        }
+                    }
+                    &.prev-next{
+                        width: 35px;
+                        height: 35px;
+                        &:hover{
+                        transform: scale(1.2);
+                        }
+                    }
+                }
+            }
+        }
+        .play-list{
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            height: 180px;
+            overflow-y: scroll;
+            .track{
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+                border-radius: calc( #{$border-radius} - 10px);
+                border: 1px solid transparent;
+                transition: 0.3s;
+                cursor: pointer;
+                &:hover{
+                    background: $shadow-color;
+                    border-color: $shadow-color;
+                    position: relative;
+                }
+                &.current-audio{
+                    background: $shadow-color;
+                    box-shadow: 0px 0px 15px 0px $shadow-color;
+                }
+                &.play-now{
+                    background: $shadow-color;
+                    box-shadow: 0px 0px 15px 0px  $shadow-color;
+                    position: relative;
+                    &:after{
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        left:17px;
+                        width: 57px;
+                        height: 57px;
+                        border-radius: calc( #{$border-radius} - 10px);
+                        font-size: 16px;
+                        animation: play 2s linear infinite;
+                        background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='iso-8859-1'%3F%3E%3C!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 56 56' style='enable-background:new 0 0 56 56;' xml:space='preserve'%3E%3Cpath style='fill:%23071739;' d='M47.799,8.201c-10.935-10.935-28.663-10.935-39.598,0c-10.935,10.935-10.935,28.663,0,39.598 c10.935,10.935,28.663,10.935,39.598,0C58.734,36.864,58.734,19.136,47.799,8.201z M32.95,32.95c-2.734,2.734-7.166,2.734-9.899,0 c-2.734-2.734-2.734-7.166,0-9.899s7.166-2.734,9.899,0S35.683,30.216,32.95,32.95z'/%3E%3Cpath style='fill:%23E7ECED;' d='M35.778,20.222c-4.296-4.296-11.261-4.296-15.556,0c-4.296,4.296-4.296,11.261,0,15.556 c4.296,4.296,11.261,4.296,15.556,0C40.074,31.482,40.074,24.518,35.778,20.222z M30.121,30.121c-1.172,1.172-3.071,1.172-4.243,0 s-1.172-3.071,0-4.243s3.071-1.172,4.243,0S31.293,28.95,30.121,30.121z'/%3E%3Cg%3E%3Cpath style='fill:%23709fdc;' d='M35.778,35.778c-0.76,0.76-1.607,1.378-2.504,1.87l8.157,14.92c2.284-1.25,4.434-2.835,6.368-4.769 c1.934-1.934,3.519-4.084,4.769-6.368l-14.92-8.157C37.157,34.172,36.538,35.018,35.778,35.778z'/%3E%3Cpath style='fill:%23709fdc;' d='M20.222,20.222c0.76-0.76,1.607-1.378,2.504-1.87l-8.157-14.92c-2.284,1.25-4.434,2.835-6.368,4.769 s-3.519,4.084-4.769,6.368l14.92,8.157C18.843,21.828,19.462,20.982,20.222,20.222z'/%3E%3C/g%3E%3C/svg%3E");
+                    }
+                    .track-img{
+                        filter: opacity(70%);
+                    }
+                }
+                .track-img{
+                    width: 90px;
+                    border-radius: calc( #{$border-radius} - 10px);
+                }
+        
+                .track-discr{
+                    margin-left: 15px;
+                    display: flex;
+                    flex-direction: column;
+                    min-width: 190px;
+                    .track-name{
+                        font-size: 17px;
+                        margin-top: 8px;
+                    }
+                    .track-author{
+                        margin-top: 8px;
+                        font-weight: 300;
+                        color: $primary;
+                    }
+                }
+
+                .track-duration{
+                    min-width: 40px;
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+}
+
+.play-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.play-list::-webkit-scrollbar-thumb {
+    background: $white; 
+    border-radius: 5px;
+}
+
+.play-list::-webkit-scrollbar-track {
+    background: $base; 
+}
+
+@keyframes play {
+    0%{
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

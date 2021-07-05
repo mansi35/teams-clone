@@ -10,6 +10,21 @@ export const getEvent = async (req, res) => {
     }
 }
 
+export const getEventByCreatorIdDate = async (req, res) => {
+    const { date: date } = req.params;
+    try {
+        const event = await EventSchedule.findOne(
+            {$and: [
+                { StartTime: new Date(date) },
+                { CreatorId: req.userId }
+            ]}
+        );
+        res.status(200).json(event);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
 export const getEvents = async (req, res) => {
     try {
         const eventSchedules = await EventSchedule.find({ 
@@ -46,11 +61,44 @@ export const updateEvent  = async (req, res) => {
     }
 }
 
+export const updateEventByCreatorIdDate  = async (req, res) => {
+    const { date: date } = req.params;
+    const changedEvent = req.body;
+    try {
+        const updatedEvent = await EventSchedule.findOneAndUpdate(
+            {$and: [
+                { StartTime: new Date(date) },
+                { CreatorId: req.userId }
+            ]}, 
+            { ...changedEvent }, 
+            { new: true }
+        );
+        res.json(updatedEvent);
+    } catch (error) {
+        return res.status(404).json({ message: error.message });
+    }
+}
+
 export const deleteEvent = async (req, res) => {
     const { id: _id } = req.params;
     try {
         await EventSchedule.findByIdAndRemove(_id);
-        res.json({ message: 'Post deleted successfully.' });
+        res.json({ message: 'Event deleted successfully.' });
+    } catch (error) {
+        return res.status(404).json({ message: error.message });
+    }
+}
+
+export const deleteEventByCreatorIdDate = async (req, res) => {
+    const { date: date } = req.params;
+    try {
+        await EventSchedule.findOneAndDelete(
+            {$and: [
+                { StartTime: new Date(date) },
+                { CreatorId: req.userId }
+            ]}
+        );
+        res.json({ message: 'Event deleted successfully.' });
     } catch (error) {
         return res.status(404).json({ message: error.message });
     }
