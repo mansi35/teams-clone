@@ -1,0 +1,111 @@
+.video {
+    .agora_video_player {
+        object-fit: contain !important;
+    }
+
+    .content{
+        position: relative;
+        display: grid;
+        grid-template-columns: 100%;
+        justify-items: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    #videos{
+        position: relative;
+        height: 93.74vh;
+        width: 100%;
+        margin: auto;
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+        justify-items: center;
+        align-items: center;
+    }
+
+
+    .vid{
+        position: relative;
+        background-color:black;
+        height: 100%;
+        width: 100%;
+        box-shadow: var(--shadow);
+        padding: 5px;
+    }
+
+    .controls{
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 20px auto;
+        padding: 10px 50px;
+        display: grid;
+        grid-template-columns: repeat(3, 33%);
+        align-items: center;
+        justify-items: center;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+        z-index: 1;
+        width: 300px;
+        max-width: 60vw;
+    }
+
+    .controls p{
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        background: red;
+        color: white;
+    }
+
+    .controls p.on{
+        background: white;
+        color: black;
+    }
+
+    .join{
+        position: absolute;
+        z-index: 1;
+        width: 30vw;
+        height: fit-content;
+        height: -moz-max-content;
+        top: 50vh;
+        left: 50vw;
+        transform: translate(-50%, -50%);
+        background-color: #099dfd;
+        padding: 30px;
+        border-radius: 10px;
+        width: 500px;
+        max-width: 75vw;
+    }
+
+    .join  input{
+        padding: 15px;
+        font-size: 1.1rem;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        width: 80%;
+        display: block;
+        margin:  50px auto;
+    }
+
+    .join  button{
+        display: block;
+        min-width: 200px;
+        padding: 10px 0;
+        text-align: center;
+        border-radius: 10px;
+        background-color: white;
+        outline: none;
+        border: none;
+        font-size: 1.1rem;
+        font-weight: 400;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 20px;
+    }
+}
