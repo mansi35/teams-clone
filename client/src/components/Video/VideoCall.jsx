@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import { VideoProvider, useClient, useUsers } from '../../contexts/VideoContext';
+// import Slider from "react-slick";
 import { useParams } from 'react-router-dom';
+// import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick-theme.css';
 import './VideoCall.scss';
 
 const VideoCall = () => {
@@ -110,6 +113,15 @@ const Content = () => {
 const Videos = () => {
 
   const users = useUsers()[0]
+  // const settings = {
+  //   className: "center",
+  //   infinite: true,
+  //   centerPadding: "60px",
+  //   speed: 500,
+  //   rows: 3,
+  //   slidesPerRow: 3,
+  //   dots: true
+  // };
 
   return (
     <div id='videos'>
@@ -120,8 +132,24 @@ const Videos = () => {
 }
 
 export const Video = ({ user }) => {
+  // const [pin, setPin] = useState(false);
+  const vidDiv = useRef(null);
 
-  const vidDiv = useRef(null)
+  // const togglePinVideo = (id) => {
+  //   const childNode = document.getElementsByClassName(`vid ${id}`)[0];
+  //   if (!pin) {
+  //     document.getElementById(`${id}`).style.display = "none";
+  //     document.getElementById('pinned__video').appendChild(childNode);
+  //     document.getElementById('videos').style.width = "25%";
+  //     document.getElementById('pinned__video').style.width = "75%";
+  //   } else {
+  //     document.getElementById(`${id}`).style.display = "inline-block";
+  //     document.getElementById('videos').style.width = "100%";
+  //     document.getElementById('pinned__video').style.width = "0%";
+  //     document.getElementById('pinned__video').removeChild(childNode);
+  //   }
+  //   setPin(!pin);
+  // }
 
   const playVideo = () => {
     user.videoTrack.play(vidDiv.current)
@@ -150,7 +178,8 @@ export const Video = ({ user }) => {
   }, [])
 
   return (
-    <div className='vid' ref={vidDiv} >
+    <div id={user.uid} className={`vid ${user.uid}`} ref={vidDiv} >
+      <img src="https://img.icons8.com/material-outlined/24/000000/pin.png" className="pin__screen" alt="pin screen" />
       <Controls user={user} startScreen={startScreen} stopScreen={stopScreen} />
     </div>
   )

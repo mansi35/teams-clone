@@ -64,48 +64,4 @@
         background: white;
         color: black;
     }
-
-    .join{
-        position: absolute;
-        z-index: 1;
-        width: 30vw;
-        height: fit-content;
-        height: -moz-max-content;
-        top: 50vh;
-        left: 50vw;
-        transform: translate(-50%, -50%);
-        background-color: #099dfd;
-        padding: 30px;
-        border-radius: 10px;
-        width: 500px;
-        max-width: 75vw;
-    }
-
-    .join  input{
-        padding: 15px;
-        font-size: 1.1rem;
-        outline: none;
-        border: none;
-        border-radius: 5px;
-        width: 80%;
-        display: block;
-        margin:  50px auto;
-    }
-
-    .join  button{
-        display: block;
-        min-width: 200px;
-        padding: 10px 0;
-        text-align: center;
-        border-radius: 10px;
-        background-color: white;
-        outline: none;
-        border: none;
-        font-size: 1.1rem;
-        font-weight: 400;
-        cursor: pointer;
-        display: block;
-        margin: 0 auto;
-        margin-bottom: 20px;
-    }
 }

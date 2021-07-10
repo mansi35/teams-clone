@@ -15,6 +15,7 @@ const ChatRooms = () => {
                 <div className="header__left">
                     <h5>Chat</h5>
                     <ExpandMoreIcon />
+                    <img src="https://img.icons8.com/fluent-systems-regular/48/000000/edit-chat-history.png" alt="new chat"/>
                 </div>
                 <div className="header__right">
                     <FilterListIcon />
@@ -26,6 +27,7 @@ const ChatRooms = () => {
                         <ChatRoomItem key={event._id} event={event} />
                     )
                 })}
+                <div className="chatroom__item"></div>
             </div>
         </div>
     )

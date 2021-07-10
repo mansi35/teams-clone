@@ -25,3 +25,8 @@ export const getUsers = () => API.get('/users');
 export const getUsersBySearch = (searchQuery) => API.get(`/users/search?searchQuery=${searchQuery}`);
 
 export const sendMessage = (message, id) => API.post(`/events/${id}/eventMsg`, message);
+
+export const fetchConversations = () => API.get('/conversations');
+export const fetchConversation = (id) => API.get(`/conversations/${id}`);
+export const updateConversation = (id) => API.get(`/conversations/${id}/message`);
+export const createConversation = (newConversation) => API.post('/conversations', newConversation);
