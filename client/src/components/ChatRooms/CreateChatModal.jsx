@@ -1,7 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import Select from 'react-select'
+import { createConversation } from '../../actions/conversations';
 import './ChatRooms.scss';
 
 const CreateChatModal = (props) => {
+    const dispatch = useDispatch();
+    const [attendees, setAttendees] = useState([]);
+    const [groupName, setGroupName] = useState('');
+    const [currentUser, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+
+    useEffect(() => {
+        setUser(JSON.parse(localStorage.getItem('profile')));
+    }, []);
+
+    const createChat = () => {
+        dispatch(createConversation({
+            Subject: groupName,
+            UpdatedAt: new Date(),
+            Attendees: [...attendees, { label: currentUser.result.name, value: currentUser.result._id }]
+        }));
+    }
+
+    const selectParticipants = (participants) => {
+        setAttendees(participants);
+        var i = 0, name = '';
+        if (participants.length > 1) {
+            for (i = 0; i < participants.length - 1; i++) {
+                name += participants[i].label + ', ';
+            }
+            name += 'and ' + participants[i].label;
+        } else {
+            name = participants[0] + ' and ' + currentUser.result.name;
+        }
+        setGroupName(name);
+    }
+
     return (
         <div className="createChatModal">
             <div className="modal-wrapper"
@@ -14,13 +48,16 @@ const CreateChatModal = (props) => {
                     <span className="close-modal-btn" onClick={props.close}>×</span>
                 </div>
                 <div className="modal-body">
-                    <p>
-                        {props.children}
-                    </p>
+                    <Select 
+                        options={props.options}
+                        isMulti
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        onChange={(e) => {selectParticipants(e)}}
+                    />
                 </div>
                 <div className="modal-footer">
-                    <button className="btn-cancel" onClick={props.close}>CLOSE</button>
-                    <button className="btn-continue">CONTINUE</button>
+                    <button className="btn-continue" onClick={() => {createChat()}}>CONTINUE</button>
                 </div>
             </div>
         </div>

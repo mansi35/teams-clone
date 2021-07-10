@@ -7,7 +7,10 @@ const convSchema = mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    Attendees: [String],
+    Attendees: [{
+        label: String,
+        value: String
+    }],
     Messages: [Message]
 });
 

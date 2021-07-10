@@ -2,7 +2,7 @@ import Conversation from '../models/conversation.js';
 
 export const getConversations = async (req, res) => {
     try {
-        const conversations = await Conversation.find({ Attendees: { AttendeeName: req.userName, AttendeeId: req.userId } }).sort({ UpdatedAt: -1 });
+        const conversations = await Conversation.find({ 'Attendees.label': req.userName, 'Attendees.value': req.userId  }).sort({ UpdatedAt: -1 });
         res.status(200).json(conversations);
     } catch (error) {
         res.status(404).json({ message: error.message });

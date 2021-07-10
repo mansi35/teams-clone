@@ -119,6 +119,7 @@ export const messageEvent  = async (req, res) => {
         fileName: fileName,
         body: body
     });
+    event.UpdatedAt = timestamp;
 
     const updatedEvent = await EventSchedule.findByIdAndUpdate(roomId, event, { new: true });
 

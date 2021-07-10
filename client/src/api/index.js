@@ -28,5 +28,5 @@ export const sendMessage = (message, id) => API.post(`/events/${id}/eventMsg`, m
 
 export const fetchConversations = () => API.get('/conversations');
 export const fetchConversation = (id) => API.get(`/conversations/${id}`);
-export const updateConversation = (id) => API.get(`/conversations/${id}/message`);
-export const createConversation = (newConversation) => API.post('/conversations', newConversation);
+export const updateConversation = (value, id) => API.patch(`/conversations/message/${id}`, value);
+export const createConversation = (newConversation) => API.post('/conversations/conversation', newConversation);

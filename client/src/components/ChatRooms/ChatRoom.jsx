@@ -6,7 +6,8 @@ import Input from '../Auth/Input';
 import SendIcon from '@material-ui/icons/Send';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEvent, eventMessage, updateEvent, getEvents } from '../../actions/events';
+import { getEvent, eventMessage, updateEvent } from '../../actions/events';
+import { getConversation, updateConversation } from '../../actions/conversations';
 import io from "socket.io-client";
 import './ChatRooms.scss';
 import moment from 'moment';
@@ -14,12 +15,13 @@ import moment from 'moment';
 const ChatRoom = () => {
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const { event } = useSelector(state => state.events);
+    const { conversation } = useSelector(state => state.conversations);
     const dispatch = useDispatch();
     const [message, setMessage] = useState('');
     const [file, setFile] = useState();
     const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
-    const { roomId } = useParams();
+    const { roomId, type } = useParams();
     const socketRef = useRef();
     const location = useLocation();
 
@@ -28,10 +30,12 @@ const ChatRoom = () => {
     }, [location]);
 
     useEffect(() => {
-        if (roomId) {
+        if (roomId && type) {
+            dispatch(getConversation(roomId));
+        } else {
             dispatch(getEvent(roomId));
         }
-    }, [dispatch, roomId]);
+    }, [dispatch, roomId, type]);
 
     useEffect(() => {
         socketRef.current = io.connect("http://localhost:5000");
@@ -42,7 +46,6 @@ const ChatRoom = () => {
             socketRef.current.emit("join room", {roomID: roomId, username: currentUser.result.name });
             socketRef.current.on('chat message', (finalMessage) => {
                 setMessages(oldMsgs => [...oldMsgs, {sender: finalMessage.sender, senderId: finalMessage.senderId, message: finalMessage.message, body: finalMessage.body, type: finalMessage.type, timestamp: new Date()}])
-                dispatch(getEvents());
                 scrollToBottom();
             });
         }
@@ -51,8 +54,12 @@ const ChatRoom = () => {
 
     useEffect(() => {
         scrollToBottom();
-        setMessages(event?.Messages);
-    }, [event?.Messages, event]);
+        if (type) {
+            setMessages(conversation?.Messages);
+        } else {
+            setMessages(event?.Messages);
+        }
+    }, [event?.Messages, event, conversation?.Messages, conversation, type]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -70,18 +77,27 @@ const ChatRoom = () => {
                 const finalMessage = { sender: currentUser.result.name, senderId: currentUser.result._id, message: message, body: file, type: "file", timestamp: new Date() };
                 socketRef.current.emit('chat message', finalMessage);
                 setMessages(oldMsgs => [...oldMsgs, finalMessage]);
-                dispatch(eventMessage(finalMessage, roomId));
+                if (type) {
+                    dispatch(updateConversation(finalMessage, roomId));    
+                } else {
+                    dispatch(eventMessage(finalMessage, roomId));
+                }
                 setFile();
             } else {
                 const finalMessage = { sender: currentUser.result.name, senderId: currentUser.result._id, message: message, type: "text", timestamp: new Date() };
                 socketRef.current.emit('chat message', finalMessage);
                 setMessages(oldMsgs => [...oldMsgs, finalMessage]);
-                dispatch(eventMessage(finalMessage, roomId));
+                if (type) {
+                    dispatch(updateConversation(finalMessage, roomId));    
+                } else {
+                    dispatch(eventMessage(finalMessage, roomId));
+                }
             }
-            dispatch(updateEvent(roomId, {
-                UpdatedAt: new Date(),
-            }));
-            dispatch(getEvents());
+            if (!type) {
+                dispatch(updateEvent(roomId, {
+                    UpdatedAt: new Date(),
+                }));
+            }
             scrollToBottom();
         }
         setMessage('');
@@ -139,7 +155,7 @@ const ChatRoom = () => {
         }
     }
 
-    if (event && roomId && messages) {
+    if (event && roomId && messages && !type) {
         return (
             <div className="chatroom">
                 <div className="chatroom__header">
@@ -164,8 +180,33 @@ const ChatRoom = () => {
                 </div>
             </div>
         )
+    } else if (conversation && roomId && messages) {
+        return (
+            <div className="chatroom">
+                <div className="chatroom__header">
+                    <Avatar>{conversation.Subject.charAt(0)}</Avatar>
+                    {conversation ? <h5>{conversation.Subject}</h5> : <h5>Teams Clone Chat</h5>}
+                    <CreateIcon />
+                </div>
+                <div id="messages" className="chatroom__body">
+                    {messages.sort((a, b) => a - b)?.map(renderMessages)}
+                    <div ref={messagesEndRef} />
+                </div>
+                <div>
+                    <form className="chatroom__sendMessage">
+                        <Input name="message" label="Type a new message" value={message} handleChange={handleChange} autoFocus />
+                        <IconButton type="submit" onClick={(e) => {handleSubmit(e)}}>
+                            <SendIcon />
+                        </IconButton>
+                        <FileBase type="file" multiple={false} onDone={({ base64 }) => {
+                            setFile(base64);
+                        }} />
+                    </form>
+                </div>
+            </div>
+        )
     } else {
-        return null;
+        return null
     }
 }
 

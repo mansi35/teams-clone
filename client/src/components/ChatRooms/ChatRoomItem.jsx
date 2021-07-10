@@ -13,7 +13,10 @@ const ChatRoomItem = ({ event }) => {
     }, [location]);
 
     const goToRoom = (id) => {
-        history.push(`/chat/${id}`)
+        if (event.StartTime)
+            history.push(`/chat/${id}`);
+        else
+            history.push(`/chat/${id}/1`)
     }
 
     return (
@@ -22,7 +25,7 @@ const ChatRoomItem = ({ event }) => {
             <div className="chatroom__info">
                 <div className="chatRoom__title">
                     <h6>{event.Subject}</h6>
-                    <h6>{moment(event.StartTime).format("DD/MM")}</h6>
+                    <h6>{moment(event.UpdatedAt).format("DD/MM")}</h6>
                 </div>
                 <div className="chatroom__message">
                     {event.Messages.length > 0 ?
