@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ChatRoomItem from './ChatRoomItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -6,18 +6,27 @@ import './ChatRooms.scss'
 import { useSelector } from 'react-redux';
 import { IconButton } from '@material-ui/core';
 import CreateChatModal from './CreateChatModal';
+import { useLocation } from 'react-router-dom';
 
 const ChatRooms = () => {
+    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const { events } = useSelector((state) => state.events);
     const { conversations } = useSelector((state) => state.conversations);
     const users = useSelector((state) => state.users);
     const [options, setOptions] = useState([]);
     const [isShowing, setIsShowing] = useState(false);
+    const location = useLocation();
+
+    useEffect(() => {
+        setCurrentUser(JSON.parse(localStorage.getItem('profile')));
+    }, [location]);
 
     const openCreateChatModal = () => {
         setIsShowing(true);
         users.forEach(user => {
-            setOptions(prevOptions => [...prevOptions, { value: user._id, label: user.name }]);
+            if (user._id !== currentUser.result._id) {
+                setOptions(prevOptions => [...prevOptions, { value: user._id, label: user.name }]);
+            }
         });
     }
 

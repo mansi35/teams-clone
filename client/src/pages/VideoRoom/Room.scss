@@ -1,17 +1,18 @@
 .videoconference {
-    display: flex;
-    flex-direction: row;
-
-    .videocall__body {
+        max-width: 100vw;
         display: flex;
         flex-direction: row;
-    }
+    .videochat {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
 
-    .videoroom {
-        width: 75%;
-    }
+        .videoroom {
+            width: 75%;
+        }
 
-    .chat {
-        width: 25%;
+        .chat {
+            width: 25%;
+        }
     }
 }

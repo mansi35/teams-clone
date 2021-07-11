@@ -3,7 +3,7 @@
         object-fit: contain !important;
     }
 
-    .content{
+    .content {
         position: relative;
         display: grid;
         grid-template-columns: 100%;
@@ -12,7 +12,7 @@
         height: 100%;
     }
 
-    #videos{
+    #videos {
         position: relative;
         height: 93.74vh;
         width: 100%;
@@ -25,43 +25,87 @@
     }
 
 
-    .vid{
+    .vid {
         position: relative;
         background-color:black;
         height: 100%;
         width: 100%;
         box-shadow: var(--shadow);
         padding: 5px;
+
+        .MuiAvatar-root {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            padding-top: 30%;
+            width: 30%;
+            background-color: #464775;
+
+            p {
+                font-size: 500%;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%);
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        h6 {
+            color: #ffffff;
+            background-color: #464775;
+            width: fit-content;
+            padding: 10px;
+            border-radius: 0 5px 0 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 0;
+            margin: 0;
+        }
     }
 
-    .controls{
+    .controls {
         position: absolute;
         bottom: 0px;
         left: 50%;
         transform: translateX(-50%);
         margin: 20px auto;
         padding: 10px 50px;
-        display: grid;
-        grid-template-columns: repeat(3, 33%);
+        display: flex;
+        flex-direction: row;
         align-items: center;
         justify-items: center;
-        background: rgba(0, 0, 0, 0.6);
         border-radius: 10px;
         z-index: 1;
-        width: 300px;
-        max-width: 60vw;
     }
 
-    .controls p{
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        background: red;
-        color: white;
+    .controls.me {
+        position: fixed;
+        left: 37%;
+        transform: translateX(-37%);
     }
 
-    .controls p.on{
-        background: white;
-        color: black;
+    .video-options {
+        margin-top: 10px;
+        margin-left: 8px;
+    }
+    
+    .options-div > img {
+        height: 30px;
+    }
+    
+    .options-div {
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+        margin: 0 10px;
+        background-color: aliceblue;
+    }
+    
+    .options-div:hover {
+        color: #D8D3FF;
+        background-color: #440a67;
     }
 }

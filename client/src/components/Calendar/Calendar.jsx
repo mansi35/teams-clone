@@ -5,17 +5,16 @@ import moment from 'moment';
 import './Calendar.scss';
 import { useLocation } from "react-router-dom";
 import { Button } from '@material-ui/core';
+import { Query } from '@syncfusion/ej2-data';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
-import { v1 as uuid } from "uuid";
-import { createEvent } from "../../actions/events";
+import { createEvent, deleteEvent, updateEvent } from "../../actions/events";
 import LinkIcon from '@material-ui/icons/Link';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { isNullOrUndefined } from "@syncfusion/ej2-base";
 import { useDispatch, useSelector } from "react-redux";
 
 function Calendar() {
-    const [id, setId] = useState('');
     const [data, setData] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const users = useSelector((state) => state.users);
@@ -23,7 +22,6 @@ function Calendar() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        create();
         setUser(JSON.parse(localStorage.getItem('profile')));
     }, [location]);
 
@@ -31,10 +29,6 @@ function Calendar() {
         RequestCalendarData();
         // eslint-disable-next-line
     }, []);
-
-    const create = () => {
-        setId(uuid());
-    }
 
     const RequestCalendarData = () => {
         callMsGraphCalendar(user.token).then(response => {
@@ -47,7 +41,7 @@ function Calendar() {
                     EndTime: moment.utc(event.end.dateTime).toDate(),
                     RecurrenceRule: event.recurrence,
                     Description: event.body.content,
-                    MeetingId: event.onlineMeeting ? event.onlineMeeting.joinUrl : "" ,
+                    _id: event.onlineMeeting ? event.onlineMeeting.joinUrl : "" ,
                 } ]);
             });
             console.log(response);
@@ -75,20 +69,23 @@ function Calendar() {
                     displayName: args.data[0].Location ? args.data[0].Location: ""
                 },
             };
-            const eventData = callMsGraphCreateEvent(user.token, event).then((t) => console.log(t));
+            const eventData = callMsGraphCreateEvent(user.token, event).then((data) => {
+                dispatch(createEvent({
+                    _id: data.id,
+                    Subject: args.data[0].Subject,
+                    StartTime: args.data[0].StartTime.toISOString(),
+                    EndTime: args.data[0].EndTime.toISOString(),
+                    Attendees: args.data[0].Attendees,
+                    Description: args.data[0].Description,
+                    Creator: user.result.name,
+                }))
+            });
             console.log(eventData);
-            dispatch(createEvent({
-                Subject: args.data[0].Subject,
-                StartTime: args.data[0].StartTime.toISOString(),
-                EndTime: args.data[0].EndTime.toISOString(),
-                Attendees: args.data[0].Attendees,
-                Description: args.data[0].Description,
-                MeetingId: id,
-                Creator: user.result.name,
-            }))
         }
         if (args.requestType === "eventRemove") { 
-            const eventData = callMsGraphDeleteEvent(user.token, args.data[0].Id).then((t) => console.log(t));
+            const eventData = callMsGraphDeleteEvent(user.token, args.data[0].Id).then((data) => {
+                dispatch(deleteEvent(args.data[0].Id));
+            });
             console.log(eventData);
         }
         if (args.requestType === "eventChange") {
@@ -111,7 +108,15 @@ function Calendar() {
                     displayName: args.data.Location ? args.data.Location: ""
                 },
             };
-            const eventData = callMsGraphUpdateEvent(user.token, event, args.data.Id).then((t) => console.log(t));
+            const eventData = callMsGraphUpdateEvent(user.token, event, args.data.Id).then((data) => {
+                dispatch(updateEvent(args.data.Id, {
+                    Subject: args.data.Subject,
+                    StartTime: args.data.StartTime.toISOString(),
+                    EndTime: args.data.EndTime.toISOString(),
+                    Attendees: args.data.Attendees,
+                    Description: args.data.Description,
+                }));
+            });
             console.log(eventData);
         }
     }
@@ -137,12 +142,12 @@ function Calendar() {
                     {" - "}
                     {props.EndTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false })}
                 </div>
-                {props.MeetingId !== "" && !isNullOrUndefined(props.MeetingId) ?
+                {props._id !== "" && !isNullOrUndefined(props._id) ?
                 <div>
-                    <Button href={props.MeetingId} variant="contained" color="primary" className="quickpopup__join">Join</Button>
+                    <Button href={props._id} variant="contained" color="primary" className="quickpopup__join">Join</Button>
                     <div className="quickpopup__meetingId">
                         <LinkIcon />
-                        <p><a href={props.MeetingId}>{props.MeetingId.slice(0, 40)}{"..."}</a></p>
+                        <p><a href={props._id}>{props._id.slice(0, 40)}{"..."}</a></p>
                         <FileCopyOutlinedIcon />
                     </div>
                 </div>: null}
@@ -159,6 +164,12 @@ function Calendar() {
         return (
             <span style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}><span className='name'>{data.name}</span><span className ='email'>{data.email}</span></span>
         );
+    }
+
+    const onFiltering = (args) => {
+        let query = new Query();
+        query = (args.text !== "") ? query.where("name", "startswith", args.text, true) : query;
+        args.updateData(users, query);
     }
 
     const editorTemplate = (props) => {
@@ -183,6 +194,8 @@ function Calendar() {
                                 itemTemplate={itemTemplate}
                                 dataSource={allUsers.filter(singleuser => singleuser.identity.split(',')[1] !== user.result._id)}
                                 fields={{ text: 'name', value: 'identity' }}
+                                allowFiltering={true}
+                                filtering={onFiltering}
                             />
                         </td>
                     </tr>

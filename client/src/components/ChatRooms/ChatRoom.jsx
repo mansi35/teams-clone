@@ -170,12 +170,12 @@ const ChatRoom = () => {
                 <div>
                     <form className="chatroom__sendMessage">
                         <Input name="message" label="Type a new message" value={message} handleChange={handleChange} autoFocus />
-                        <IconButton type="submit" onClick={(e) => {handleSubmit(e)}}>
-                            <SendIcon />
-                        </IconButton>
                         <FileBase type="file" multiple={false} onDone={({ base64 }) => {
                             setFile(base64);
                         }} />
+                        <IconButton type="submit" onClick={(e) => {handleSubmit(e)}}>
+                            <SendIcon />
+                        </IconButton>
                     </form>
                 </div>
             </div>

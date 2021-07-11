@@ -15,11 +15,14 @@ const CreateChatModal = (props) => {
     }, []);
 
     const createChat = () => {
-        dispatch(createConversation({
-            Subject: groupName,
-            UpdatedAt: new Date(),
-            Attendees: [...attendees, { label: currentUser.result.name, value: currentUser.result._id }]
-        }));
+        if (attendees.length > 0) {
+            dispatch(createConversation({
+                Subject: groupName,
+                UpdatedAt: new Date(),
+                Attendees: [...attendees, { label: currentUser.result.name, value: currentUser.result._id }]
+            }));
+        }
+        props.close();
     }
 
     const selectParticipants = (participants) => {
@@ -44,10 +47,11 @@ const CreateChatModal = (props) => {
                     opacity: props.show ? '1' : '0'
                 }}>
                 <div className="modal-header">
-                    <h3>Modal Header</h3>
+                    <h4>New Chat</h4>
                     <span className="close-modal-btn" onClick={props.close}>×</span>
                 </div>
                 <div className="modal-body">
+                    <h6>Select Participants</h6>
                     <Select 
                         options={props.options}
                         isMulti

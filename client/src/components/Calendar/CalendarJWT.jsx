@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Resize, DragAndDrop, Inject, ViewsDirective, ViewDirective } from "@syncfusion/ej2-react-schedule";
 import { createEvent, deleteEvent, getEvents, updateEvent } from "../../actions/events";
 import { isNullOrUndefined } from "@syncfusion/ej2-base";
+import { Query } from '@syncfusion/ej2-data';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { v1 as uuid } from "uuid";
@@ -104,6 +105,12 @@ function Calendar({ setSchedule }) {
         );
     }
 
+    const onFiltering = (args) => {
+        let query = new Query();
+        query = (args.text !== "") ? query.where("name", "startswith", args.text, true) : query;
+        args.updateData(users, query);
+    }
+
     const editorTemplate = (props) => {
         const allUsers = [];
         for (var i = 0; i < users.length; i++) {
@@ -126,6 +133,8 @@ function Calendar({ setSchedule }) {
                                 itemTemplate={itemTemplate}
                                 dataSource={allUsers.filter(user => user.identity.split(',')[1] !== currentUser.result._id)}
                                 fields={{ text: 'name', value: 'identity' }}
+                                allowFiltering={true}
+                                filtering={onFiltering}
                             />
                         </td>
                     </tr>
