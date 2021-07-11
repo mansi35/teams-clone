@@ -32,7 +32,9 @@ export const getEvents = async (req, res) => {
                 { CreatorId: req.userId }, 
                 { Attendees: req.userName + ',' + req.userId }
             ]     
-        }).sort({ UpdatedAt: -1 });
+        })
+        .slice('Messages', -1)
+        .sort({ UpdatedAt: -1 });
         res.status(200).json(eventSchedules);
     } catch (error) {
         res.status(404).json({ message: error.message });

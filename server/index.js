@@ -65,6 +65,14 @@ mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: tr
                 socket.broadcast.to(socketToRoom[socket.id]).emit('chat message', finalMessage);
             });
 
+            socket.on('mouse', (data) => {
+                socket.broadcast.to(socketToRoom[socket.id]).emit('mouse', data);
+            });
+
+            socket.on('erase', () => {
+                socket.broadcast.to(socketToRoom[socket.id]).emit('erase');
+            });
+
             socket.on('disconnect', () => {
                 const roomID = socketToRoom[socket.id];
                 let room = users[roomID];

@@ -1,0 +1,61 @@
+.blackboard__canvas {
+    display: flex;
+    flex-direction: row;
+    height: 93.78vh;
+    width: 100%;
+
+    canvas {
+        width: 100% !important;
+        height: 93.78vh !important;
+    }
+
+    h2 {
+        position: absolute;
+        color: #ffffff;
+        margin: 16px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #ffffff;
+    }
+
+    .options {
+        display: flex;
+        flex-direction: column;
+        background-color: #353535;
+        padding: 12px;
+        width: 70px;
+    }
+
+    .options > div > img {
+        height: 36px;
+        margin: 20px 0;
+        cursor: pointer;
+    }
+
+    .colorbutton {
+        height: 40px;
+        margin: 10px 0;
+        outline: none;
+        border: none;
+    }
+
+    .stroke {
+        padding: 12px 0;
+    }
+
+    .stroke > input {
+        width: 45px;
+    }
+
+    .stroke > label {
+        color: #ffffff;
+    }
+
+    .MuiSvgIcon-root {
+        fill: #ffffff;
+        font-size: 36px;
+    }
+
+    .MuiIconButton-root {
+        padding: 12px 5px;
+    }
+}

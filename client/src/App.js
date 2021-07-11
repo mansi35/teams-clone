@@ -10,6 +10,7 @@ import Chat from './pages/Chat/Chat';
 import WatchParty from './pages/WatchParty/WatchParty';
 import UseAlan from './hooks/UseAlan';
 import Music from './pages/Music/Music';
+import Whiteboard from './pages/Whiteboard/Whiteboard';
 
 const Alan = () => {
     UseAlan();
@@ -31,6 +32,7 @@ const App = () => {
                 <PrivateRoute path="/" exact component={Auth} />
                 <PrivateRoute path="/watchparty/:roomId?" exact component={WatchParty} />
                 <PrivateRoute path="/music" exact component={Music} />
+                <PrivateRoute path="/board/:roomId?" exact component={Whiteboard} />
             </Switch>
         </Router>
         </div>

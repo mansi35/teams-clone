@@ -5,6 +5,11 @@
     height: 93.7vh;
     box-shadow: 1px 0px 5px rgb(131, 131, 131);
 
+    a {
+        text-decoration: none;
+        color: #000000;
+    }
+
     .sidebarItem {
         display: flex;
         flex-direction: column;
@@ -37,5 +42,6 @@
     .auth__button {
         border: 0;
         width: 100%;
+        padding: 0;
     }
 }

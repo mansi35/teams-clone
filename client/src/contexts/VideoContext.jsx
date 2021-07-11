@@ -18,6 +18,7 @@ export const VideoProvider = ({ children }) => {
 
     const [users, setUsers] = useState([]);
     const rtc = useRef({
+        screenClient: null,
         client: null,
         localAudioTrack: null,
         localVideoTrack: null,
