@@ -7,6 +7,8 @@ import camerastop from '../../assets/camera-stop.svg';
 import microphone from '../../assets/microphone.svg';
 import microphonestop from '../../assets/microphone-stop.svg';
 import hangup from '../../assets/hang-up.svg';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import MicOffIcon from '@material-ui/icons/MicOff';
 
 const VideoControls = ({ user, startScreen, stopScreen }) => {
     const [screenStart, setScreenStart] = useState(false);
@@ -70,6 +72,7 @@ const VideoControls = ({ user, startScreen, stopScreen }) => {
 		} else {
 			setScreenStart(false);
 			await rtc.current.client.unpublish(rtc.current.localScreenTrack);
+			rtc.current.localScreenTrack.stop();
 			rtc.current.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
 			setUsers(prevUsers => {
 				return prevUsers.map((user) => {
@@ -86,14 +89,26 @@ const VideoControls = ({ user, startScreen, stopScreen }) => {
 
     return (
 		<div className={user.client ? 'controls me' : 'controls'}>
-			{user.audio?
-				<div className="options-div" onClick={() => user.client && mute('audio', user.uid)}>
-					<img className="video-options" src={microphone} alt="Mute audio"/>
-				</div>
+			{user.client ?
+				[user.audio ? (
+					<div className="options-div" onClick={() => user.client && mute('audio', user.uid)}>
+						<img className="video-options" src={microphone} alt="Mute audio"/>
+					</div>
+				) : (
+					<div className="options-div" onClick={() => user.client && mute('audio', user.uid)}>
+						<img className="video-options" src={microphonestop} alt="Unmute audio"/>
+					</div>
+				)]
 			:
-				<div className="options-div" onClick={() => user.client && mute('audio', user.uid)}>
-					<img className="video-options" src={microphonestop} alt="Unmute audio"/>
-				</div>
+				[user.audio ? (
+					<div className="remoteuser__voiceon" onClick={() => user.client && mute('audio', user.uid)}>
+						<MoreHorizIcon />
+					</div>
+				) : (
+					<div className="remoteuser__voiceoff" onClick={() => user.client && mute('audio', user.uid)}>
+						<MicOffIcon />
+					</div>
+				)]
 			}
 
 			{user.client &&
@@ -109,7 +124,7 @@ const VideoControls = ({ user, startScreen, stopScreen }) => {
 			}
 
 			{user.client &&
-                <div disabled={screenStart} className="options-div" onClick={() => user.client && shareScreen(user.uid, screenStart)}>
+                <div className="options-div" onClick={() => user.client && shareScreen(user.uid, screenStart)}>
                     <ScreenShareIcon fontSize="large" className="video-options" />
                 </div>
 			}

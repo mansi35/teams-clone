@@ -43,6 +43,10 @@
         flex-direction: row;
         border-bottom: 1px solid #c9c9c9;
         padding: 10px;
+
+        .MuiAvatar-root {
+            background-color: #464775;
+        }
     }
 
     .chatroom__item:hover {
@@ -90,18 +94,30 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
         padding: 0 20px;
         border-bottom: 1px solid #c9c9c9;
         width: 100%;
+
+        .chatroom__headerleft {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .chatroom__headerleft > .MuiAvatar-root {
+            background-color: #464775;
+        }
     }
 
-    .chatroom__header > h5 {
+    .chatroom__header > .chatroom__headerleft > h5 {
         margin: 20px;
     }
 
     .chatroom__body {
         height: 75vh;
         overflow: auto;
+        padding: 0 15px;
     }
 
     .chatroom__sendMessage {
@@ -129,7 +145,7 @@
         flex-direction: column;
         margin-left: auto;
         width: fit-content;
-        margin-right: 9%;
+        margin-right: 7%;
         background-color: #D7D7E9;
         padding: 0.1px 10px;
         margin-top: 5px;
@@ -158,6 +174,10 @@
         align-items: center;
         margin-top: 5px;
         margin-bottom: 5px;
+
+        .MuiAvatar-root {
+            background-color: #464775;
+        }
     }
 
     .peerchat > .peer {
@@ -186,6 +206,8 @@
     margin-left: -50px;
     top: 30%;
     margin-top: -50px;
+    z-index: 1;
+    
     .modal-wrapper {
         background: white;
         border: 1px solid #d0cccc;
@@ -240,5 +262,21 @@
         font-weight: bold;
         outline: none;
         padding: 10px;
+    }
+}
+
+.emptychat {
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+        height: 400px;
+        object-fit: contain;
+    }
+
+    h4 {
+        margin-top: 60px;
+        text-align: center;
     }
 }

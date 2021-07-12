@@ -23,6 +23,14 @@
         background-color: #353535;
         padding: 12px;
         width: 70px;
+
+        .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-icon > .MuiSvgIcon-root {
+            font-size: 24px;
+        }
+
+        .MuiSnackbar-root > .MuiPaper-root > .MuiAlert-action > .MuiIconButton-root > .MuiIconButton-label > .MuiSvgIcon-root {
+            font-size: 24px;
+        }
     }
 
     .options > div > img {

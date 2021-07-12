@@ -45,7 +45,7 @@ const Content = () => {
 		rtc.current.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
 		rtc.current.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
 		setUsers((prevUsers) => {
-			return [...prevUsers, { uid: uid, audio: true, video: true, screen: false, client: true, videoTrack: rtc.current.localVideoTrack, screenTrack: rtc.current.localScreenTrack }]
+			return [...prevUsers, { uid: uid, audio: true, video: true, screen: false, client: true, videoTrack: rtc.current.localVideoTrack }]
 		})
 		await rtc.current.client.publish([rtc.current.localAudioTrack, rtc.current.localVideoTrack]);
 	}
@@ -65,10 +65,10 @@ const Content = () => {
 				const remoteVideoTrack = user.videoTrack;
 				console.log('recieving video');
 				setUsers((prevUsers) => {
-					return prevUsers.filter(User => User.uid !== user.uid)
+					return prevUsers.filter(User => User.uid !== user.uid);
 				});
 				setUsers((prevUsers) => {
-					return [...prevUsers, { uid: user.uid, audio: user.hasAudio, video: user.hasVideo, screen: user.screen, client: false, videoTrack: remoteVideoTrack }]
+					return [...prevUsers, { uid: user.uid, audio: user.hasAudio, video: user.hasVideo, client: false, videoTrack: remoteVideoTrack }];
 				});
 			}
 
@@ -80,7 +80,7 @@ const Content = () => {
 						if (User.uid === user.uid) {
 							return { ...User, audio: user.hasAudio }
 						}
-						return User
+						return User;
 					}));
 				});
 			}
@@ -93,7 +93,7 @@ const Content = () => {
 						if (User.uid === user.uid) {
 							return { ...User, audio: !User.audio }
 						}
-						return User
+						return User;
 					}));
 				})
 			}
@@ -101,13 +101,9 @@ const Content = () => {
 				setUsers(prevUsers => {
 					return (prevUsers.map((User) => {
 						if (User.uid === user.uid) {
-							if (!user.video) {
-								return { ...User, video: !User.video }
-							} else {
-								return { ...User, screen: !User.screen }
-							}
+							return { ...User, video: !User.video }
 						}
-						return User
+						return User;
 					}));
 				})
 			}

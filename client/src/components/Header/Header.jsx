@@ -6,6 +6,8 @@ import { ReactComponent as Apps } from '../../assets/apps.svg'
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useMsal } from '@azure/msal-react';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import decode from 'jwt-decode';
 import './Header.scss'
 
@@ -15,6 +17,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
         const token = user?.token;
@@ -30,11 +33,11 @@ const Header = () => {
     }, [location]);
 
     const logoutHandler = (instance) => {
-        if (instance) {
+        if (user.result.idTokenClaims?.sub) {
             instance.logoutPopup()
             .then(() => {
                 dispatch({ type: 'LOGOUT' });
-                history.push('/auth');
+                history.push('/');
                 setUser(null);
             })
             .catch(e => {
@@ -42,10 +45,19 @@ const Header = () => {
             });
         } else {
             dispatch({ type: 'LOGOUT' });
-            history.push('/auth');
+            history.push('/');
             setUser(null);
         }
+        setAnchorEl(null);
     }
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <div className="header">
@@ -65,14 +77,28 @@ const Header = () => {
                     <>
                     <h6>{user.result.name}</h6>
                     <div className="header__profile">
-                    {user.result.idTokenClaims?.sub ?
-                        <Avatar src={user.result.photoUrl} alt={user.result.name} onClick={() => logoutHandler(instance)}>{user.result.name.charAt(0)}</Avatar>
-                    : 
-                        <Avatar src={user.result.photoUrl} alt={user.result.name} onClick={() => logoutHandler()}>{user.result.name.charAt(0)}</Avatar>
-                    }
+                        {user.result.idTokenClaims?.sub ?
+                            <div>
+                                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                                    <Avatar src={user.result.photoUrl} alt={user.result.name}>{user.result.name.charAt(0)}</Avatar>
+                                </Button>
+                                <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={() => {handleClose()}}>
+                                    <MenuItem onClick={() => {logoutHandler(instance)}}>Logout</MenuItem>
+                                </Menu>
+                            </div>
+                        : 
+                            <div>
+                                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                                    <Avatar src={user.result.photoUrl} alt={user.result.name}>{user.result.name.charAt(0)}</Avatar>
+                                </Button>
+                                <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={() => {handleClose()}}>
+                                    <MenuItem onClick={() => {logoutHandler()}}>Logout</MenuItem>
+                                </Menu>
+                            </div>
+                        }
                     </div>
                     </>
-                ):  <Link to="/auth">
+                ):  <Link to="/">
                         <Button className="microsoft__login ml-auto" fullWidth variant="contained">
                             Sign in
                         </Button>

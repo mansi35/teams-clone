@@ -2,13 +2,22 @@ import React, { useEffect, useState } from 'react';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import '../Sidebar/Sidebar.scss';
 import SidebarItem from '../Sidebar/SidebarItem';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { getAccessToken } from '../../api/github';
 import LoginGithub from 'react-login-github';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const VideoSidebar = () => {
     const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('git_oauth')));
     const location = useLocation();
+    const { roomId } = useParams();
+    const [copied, setCopied] = useState(false);
   
     useEffect(() => {
         setAuth(JSON.parse(localStorage.getItem('git_oauth')));
@@ -50,6 +59,18 @@ const VideoSidebar = () => {
         open("board");
     }
 
+    const handleClick = () => {
+        setCopied(true);
+    };
+    
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setCopied(false);
+    };
+
     return (
         <div className="sidebar">
             <div onClick={() => {openVideo()}}>
@@ -89,11 +110,20 @@ const VideoSidebar = () => {
                 />
             </div>
             <div>
-                <SidebarItem 
-                    icon="https://img.icons8.com/ios-glyphs/36/000000/user-group-man-man.png"
-                    text="Copy Invite"
-                    hoverIcon="https://img.icons8.com/ios-glyphs/36/6264A7/user-group-man-man.png"
-                />
+                <CopyToClipboard text={`http://localhost:3000/board/${roomId}`}>
+                    <div onClick={() => {handleClick()}}>
+                        <SidebarItem 
+                            icon="https://img.icons8.com/ios-glyphs/36/000000/user-group-man-man.png"
+                            text="Copy Invite"
+                            hoverIcon="https://img.icons8.com/ios-glyphs/36/6264A7/user-group-man-man.png"
+                        />
+                    </div>
+                </CopyToClipboard>
+                <Snackbar open={copied} autoHideDuration={6000} onClose={() => {handleClose()}}>
+                    <Alert onClose={() => {handleClose()}} severity="success">
+                        Meeting link copied to clipboard!
+                    </Alert>
+                </Snackbar>
             </div>
             <div className="sidebarItem">
                 <MoreHorizIcon />

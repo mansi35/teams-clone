@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import GitUserRepo from '../GitUserRepo/GitUserRepo';
 import { getRepos } from '../../api/github';
+import project from '../../assets/project.svg';
 import './GitUserRepos.scss';
 
 function GitUserRepos({ user }) {
     const [repos, setRepos] = useState([]);
     const [path, setPath] = useState([]);
-    const [allrepos, setAllRepos] = useState(false)
+    const [allrepos, setAllRepos] = useState(false);
     const [pathChanged, setPathChanged] = useState(false);
     const [fileName, setFileName] = useState('');
 
@@ -43,7 +44,6 @@ function GitUserRepos({ user }) {
             <div className="userRepos">
                 <div className="userRepos__options" id="repos__options">
                     <h5 className="active">Repos</h5>
-                    <h5>Activity</h5>
                 </div>
                 {path.length > 0 ? 
                     <div className="userRepoDir__name">
@@ -69,7 +69,10 @@ function GitUserRepos({ user }) {
         )
     } else {
         return (
-            null
+            <div className="emptygit">
+                <h4>Work on your open-source projects without going anywhere else!<br/>Start by searching for a user or an organization.</h4>
+                <img src={project} alt="chat page" />
+            </div>
         )
     }
 }

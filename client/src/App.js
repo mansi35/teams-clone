@@ -25,11 +25,10 @@ const App = () => {
             <Alan />
             <Switch>
                 <PrivateRoute path="/calendar" exact component={ScheduleMeeting} />
-                <Route path="/auth" exact component={Auth} />
-                <PrivateRoute path="/room/:roomId" exact component={Room} />
+                <Route path="/" exact component={Auth} />
+                <PrivateRoute path="/room/:roomId/:type?" exact component={Room} />
                 <PrivateRoute path="/github" exact component={Github} />
                 <PrivateRoute path="/chat/:roomId?/:type?" exact component={Chat} />
-                <PrivateRoute path="/" exact component={Auth} />
                 <PrivateRoute path="/watchparty/:roomId?" exact component={WatchParty} />
                 <PrivateRoute path="/music" exact component={Music} />
                 <PrivateRoute path="/board/:roomId?" exact component={Whiteboard} />

@@ -16,7 +16,7 @@ function SidebarItem({ icon, text, hoverIcon }) {
             <img
                 src={img}
                 alt=""
-                onMouseEnter={() => (setImg(hoverIcon))}
+                onMouseOver={() => (setImg(hoverIcon))}
                 onMouseOut={() => (setImg(icon))}
             />
             <p>{text}</p>

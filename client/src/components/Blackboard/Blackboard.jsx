@@ -5,11 +5,20 @@ import io from "socket.io-client";
 import DeleteIcon from '@material-ui/icons/Delete';
 import './Blackboard.scss';
 import { IconButton } from '@material-ui/core';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import Tooltip from '@material-ui/core/Tooltip';
+
+const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const Blackboard = () => {
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const [weight, setWeight] = useState(3);
     const [color, setColor] = useState('#ffffff');
+    const [copied, setCopied] = useState(false);
     const [p5, setP5] = useState();
     const socketRef = useRef();
     const { roomId } = useParams();
@@ -78,24 +87,62 @@ const Blackboard = () => {
         socketRef.current.emit('erase');
     }
 
+    const saveCanvas = (p5) => {
+        p5.saveCanvas('my-board', 'png');
+    }
+
+    const handleClick = () => {
+        setCopied(true);
+    };
+    
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setCopied(false);
+    };
+
     return (
         <div className="blackboard__canvas">
             <h2>Collaborative Board</h2>
             <Sketch setup={setup} mouseDragged={mouseDragged} resetSketch={resetSketch} className="blackboard__canvas" />
             <div className="options">
-                <button className="colorbutton" onClick={() => {changeToWhite()}} style={{ backgroundColor: "#ffffff" }}></button>
-                <button className="colorbutton" onClick={() => {changeToBlue()}} style={{ backgroundColor: "#008cba" }}></button>
-                <button className="colorbutton" onClick={() => {changeToRed()}} style={{ backgroundColor: "#f44336" }}></button>
+                
+                <div onClick={() => {saveCanvas(p5)}}>
+                    <Tooltip title="Save Board">
+                        <img src="https://img.icons8.com/fluent/48/000000/save-all.png" alt="save canvas" />
+                    </Tooltip>
+                </div>
+                <CopyToClipboard text={`http://localhost:3000/board/${roomId}`}>
+                    <div onClick={() => {handleClick()}}>
+                        <Tooltip title="Copy Board Link">
+                            <img src="https://img.icons8.com/ios-glyphs/36/ffffff/user-group-man-man.png" alt="copy invite" />
+                        </Tooltip>
+                    </div>
+                </CopyToClipboard>
+                <Snackbar open={copied} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="success">
+                        Copied board link to clipboard!
+                    </Alert>
+                </Snackbar>
+                <button className="colorbutton" onClick={() => {changeToWhite()}} style={{ backgroundColor: "#ffffff" }} alt="white"></button>
+                <button className="colorbutton" onClick={() => {changeToBlue()}} style={{ backgroundColor: "#008cba" }} alt="blue"></button>
+                <button className="colorbutton" onClick={() => {changeToRed()}} style={{ backgroundColor: "#f44336" }} alt="red"></button>
                 <div className="stroke">
                     <label for="weight">Stroke:</label>
                     <input type="number" id="weight" min="2" max="200" value={weight} onChange={(e) => {setWeight(e.target.value)}} />
                 </div>
                 <div onClick={() => {erase()}}>
-                    <img src="https://img.icons8.com/android/24/ffffff/eraser.png" alt="erase" />
+                    <Tooltip title="Eraser">
+                        <img src="https://img.icons8.com/color/48/000000/erase.png" alt="erase" />
+                    </Tooltip>
                 </div>
-                <IconButton onClick={() => {resetSketch(p5)}}>
-                    <DeleteIcon />
-                </IconButton>
+                <Tooltip title="Clear Board">
+                    <IconButton onClick={() => {resetSketch(p5)}}>
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
             </div>
         </div>
     )

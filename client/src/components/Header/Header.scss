@@ -62,10 +62,18 @@
         margin: 0 20px;
     }
 
-    .header__options > .header__profile > .MuiAvatar-root.MuiAvatar-circle.MuiAvatar-colorDefault {
+    .header__options > .header__profile > div > .MuiButtonBase-root > .MuiButton-label >.MuiAvatar-root {
         margin: 7.5px 20px;
         height: 30px;
         width: 30px;
+    }
+
+    .header__options > .header__profile > div {
+        height: 100%;
+    }
+
+    .header__options > .header__profile > div > .MuiButtonBase-root {
+        height: 100%;
     }
 
     .header__options > .header__profile {

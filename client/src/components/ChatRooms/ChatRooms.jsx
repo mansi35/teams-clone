@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ChatRoomItem from './ChatRoomItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import './ChatRooms.scss'
 import { useSelector } from 'react-redux';
 import { IconButton } from '@material-ui/core';
 import CreateChatModal from './CreateChatModal';
 import { useLocation } from 'react-router-dom';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const ChatRooms = () => {
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
@@ -44,10 +44,11 @@ const ChatRooms = () => {
                     <ExpandMoreIcon />
                 </div>
                 <div className="header__right">
-                    <FilterListIcon />
-                    <IconButton onClick={() => {openCreateChatModal()}}>
-                        <img src="https://img.icons8.com/fluent-systems-regular/48/000000/edit-chat-history.png" alt="new chat"/>
-                    </IconButton>
+                    <Tooltip title="New Chat">
+                        <IconButton onClick={() => {openCreateChatModal()}}>
+                            <img src="https://img.icons8.com/fluent-systems-regular/48/000000/edit-chat-history.png" alt="new chat" />
+                        </IconButton>
+                    </Tooltip>
                 </div>
             </div>
             <div className="chatrooms__rooms">

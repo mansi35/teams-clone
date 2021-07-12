@@ -1,4 +1,5 @@
-import teams from '../../assets/teams_login.svg'
+import teams from '../../assets/teams_login.svg';
+import teams_register from '../../assets/register.svg';
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import Input from './Input';
@@ -46,7 +47,7 @@ const Auth = () => {
         instance.logoutPopup()
         .then(() => {
             dispatch({ type: 'LOGOUT' });
-            history.push('/auth');
+            history.push('/');
         })
         .catch(e => {
             console.error(e);
@@ -77,8 +78,9 @@ const Auth = () => {
         <div className="auth">
             <h3>Microsoft Teams</h3>
             <div className="auth__form">
-                <img src={teams} alt="" />
-                { !isSignup && <h3>Enter your work, school, or Microsoft account</h3> }
+                { !isSignup && <img src={teams} alt="" style={{ padding: "5px 0" }} /> }
+                { isSignup && <img src={teams_register} alt="" style={{ height: "200px" }} /> }
+                { !isSignup && <h4>Enter your work, school, or Microsoft account</h4> }
                 <form onSubmit={handleSubmit}>
                     { isSignup && (
                     <div className="auth__name">

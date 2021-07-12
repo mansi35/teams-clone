@@ -3,19 +3,26 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import './Sidebar.scss';
 import SidebarItem from './SidebarItem';
 import calendar from '../../assets/calendar.svg';
-import activity from '../../assets/activity.svg';
 import chat from '../../assets/chat.svg';
-import calls from '../../assets/calls.svg';
-import files from '../../assets/files.svg';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { v1 as uuid } from 'uuid';
 import { getAccessToken } from '../../api/github';
 import LoginGithub from 'react-login-github';
+import { useDispatch } from 'react-redux';
+import { createEvent } from '../../actions/events';
+import moment from 'moment';
 
 function Sidebar() {
     const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('git_oauth')));
     const location = useLocation();
     const history = useHistory();
+    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('profile')));
+    const [videoId, setVideoId] = useState('');
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setCurrentUser(JSON.parse(localStorage.getItem('profile')));
+    }, [location]);
   
     useEffect(() => {
         setAuth(JSON.parse(localStorage.getItem('git_oauth')));
@@ -33,13 +40,30 @@ function Sidebar() {
         history.push(`/board/${id}`);
     }
 
+    const createNewEvent = () => {
+        const meetingId = uuid();
+        setVideoId(meetingId);
+        dispatch(createEvent({
+            Subject: `Meeting on ${moment(new Date()).format("DD/MM/YYYY")}`,
+            StartTime: new Date(),
+            EndTime: new Date(new Date().setHours(new Date().getHours() + 1)),
+            _id: meetingId,
+            Creator: currentUser.result.name,
+            CreatorId: currentUser.result._id,
+        }));
+    }
+
     return (
         <div className="sidebar">
-            <SidebarItem
-                icon="https://img.icons8.com/fluent-systems-regular/48/000000/appointment-reminders--v1.png"
-                text="Activity"
-                hoverIcon={activity}
-            />
+            <Link to={`/room/${videoId}`} target="_blank">
+                <div onClick={() => {createNewEvent()}}>
+                    <SidebarItem 
+                        icon="https://img.icons8.com/ios/36/000000/video-conference.png"
+                        text="New Meeting"
+                        hoverIcon="https://img.icons8.com/ios/36/6264A7/video-conference.png"
+                    />
+                </div>
+            </Link>
             <Link to="/chat">
                 <SidebarItem
                     icon="https://img.icons8.com/fluent-systems-regular/48/000000/chat-message.png"
@@ -47,13 +71,6 @@ function Sidebar() {
                     hoverIcon={chat}
                 />
             </Link>
-            <div onClick={() => {createId()}}>
-                <SidebarItem
-                    icon="https://img.icons8.com/ios/36/000000/whiteboard.png"
-                    text="Blackboard"
-                    hoverIcon="https://img.icons8.com/ios-filled/36/6264A7/whiteboard.png"
-                />
-            </div>
             {auth ?
                 <Link to="/github">
                     <SidebarItem
@@ -78,6 +95,13 @@ function Sidebar() {
                     </Link>
                 </LoginGithub>
             }
+            <div onClick={() => {createId()}}>
+                <SidebarItem
+                    icon="https://img.icons8.com/ios/36/000000/whiteboard.png"
+                    text="Blackboard"
+                    hoverIcon="https://img.icons8.com/ios-filled/36/6264A7/whiteboard.png"
+                />
+            </div>
             <Link to="/calendar">
                 <SidebarItem
                     icon="https://img.icons8.com/fluent-systems-regular/48/000000/calendar--v1.png"
@@ -85,16 +109,6 @@ function Sidebar() {
                     hoverIcon={calendar}
                 />
             </Link>
-            <SidebarItem
-                icon="https://img.icons8.com/fluent-systems-regular/48/000000/phone.png"
-                text="Calls"
-                hoverIcon={calls}
-            />
-            <SidebarItem
-                icon="https://img.icons8.com/fluent-systems-regular/48/000000/file.png"
-                text="Files"
-                hoverIcon={files}
-            />
             <div className="sidebarItem">
                 <MoreHorizIcon />
             </div>
