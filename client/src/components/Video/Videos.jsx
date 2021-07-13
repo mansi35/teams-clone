@@ -60,7 +60,7 @@ export const Video = ({ user }) => {
 			document.getElementById(videoId).style.position = "relative";
 			document.getElementById(videoId).style.height = "100%";
 			document.getElementById(videoId).style.width = "100%";
-			document.getElementById(videoId).style.zIndex = "1";
+			document.getElementById(videoId).style.zIndex = "0";
 			document.getElementById(`${videoId}_pin`).style.zIndex = "2";
 		}
 	}

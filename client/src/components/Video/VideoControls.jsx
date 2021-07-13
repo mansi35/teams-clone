@@ -48,7 +48,6 @@ const VideoControls = ({ user, startScreen, stopScreen }) => {
 
 	const shareScreen = async (id, screenStart) => {
 		if (!screenStart) {
-			setScreenStart(true);
 			await rtc.current.client.unpublish(rtc.current.localVideoTrack);
 			await AgoraRTC.createScreenVideoTrack()
 			.then((screenStream) => {
@@ -68,9 +67,8 @@ const VideoControls = ({ user, startScreen, stopScreen }) => {
 			});
 			startScreen(rtc.current.localScreenTrack);
 
-			await rtc.current.client.publish(rtc.current.localScreenTrack);
+			await rtc.current.client.publish(rtc.current.localScreenTrack).then(() => setScreenStart(true))
 		} else {
-			setScreenStart(false);
 			await rtc.current.client.unpublish(rtc.current.localScreenTrack);
 			rtc.current.localScreenTrack.stop();
 			rtc.current.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
@@ -83,7 +81,7 @@ const VideoControls = ({ user, startScreen, stopScreen }) => {
 				});
 			});
 			stopScreen(rtc.current.localVideoTrack);
-			await rtc.current.client.publish(rtc.current.localVideoTrack);
+			await rtc.current.client.publish(rtc.current.localVideoTrack).then(() => setScreenStart(false));
 		}
 	}
 

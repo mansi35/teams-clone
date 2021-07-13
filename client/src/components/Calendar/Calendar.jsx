@@ -10,8 +10,6 @@ import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { createEvent, deleteEvent, updateEvent } from "../../actions/events";
 import LinkIcon from '@material-ui/icons/Link';
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-import { isNullOrUndefined } from "@syncfusion/ej2-base";
 import { useDispatch, useSelector } from "react-redux";
 
 function Calendar() {
@@ -122,6 +120,7 @@ function Calendar() {
     }
 
     const content = (props) => {
+        const meetingLink = props._id ? props._id : `http://localhost:3000/room/${props.Id}`;
         return (
         <div>
             {props.elementType === "cell" ? (
@@ -142,15 +141,13 @@ function Calendar() {
                     {" - "}
                     {props.EndTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false })}
                 </div>
-                {props._id !== "" && !isNullOrUndefined(props._id) ?
                 <div>
-                    <Button href={props._id} variant="contained" color="primary" className="quickpopup__join">Join</Button>
+                    <Button href={meetingLink} variant="contained" color="primary" className="quickpopup__join">Join</Button>
                     <div className="quickpopup__meetingId">
                         <LinkIcon />
-                        <p><a href={props._id}>{props._id.slice(0, 40)}{"..."}</a></p>
-                        <FileCopyOutlinedIcon />
+                        <p><a href={meetingLink}>{meetingLink.slice(0, 42)}{"..."}</a></p>
                     </div>
-                </div>: null}
+                </div>
                 <div className="quickpopup__description">
                     {props.Description ? props.Description.includes('>') ? props.Description.substr(0, props.Description.indexOf('<https')) : props.Description: ""}
                 </div>

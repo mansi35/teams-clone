@@ -17,8 +17,8 @@
         position: relative;
         height: 93.74vh;
         width: 100%;
+        background-color:#000000;
         margin: auto;
-        border-radius: 20px;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
         justify-items: center;
@@ -28,7 +28,7 @@
 
     .vid {
         position: relative;
-        background-color:black;
+        background-color:#000000;
         height: 100%;
         width: 100%;
         box-shadow: var(--shadow);
@@ -103,13 +103,14 @@
         flex-direction: row;
         align-items: center;
         justify-items: center;
-        z-index: 10;
+        z-index: 2;
     }
 
     .controls.me {
         position: fixed;
         left: 37%;
         transform: translateX(-37%);
+        z-index: 10;
 
         div[disabled] {
             pointer-events: none;
@@ -147,10 +148,3 @@
         background-color: #440a67;
     }
 }
-
-//     position: fixed;
-//     background-color: black;
-//     height: 95%;
-//     width: 72%;
-//     box-shadow: var(--shadow);
-//     padding: 5px;

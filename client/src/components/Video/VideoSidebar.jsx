@@ -16,7 +16,7 @@ const Alert = (props) => {
 const VideoSidebar = () => {
     const [auth, setAuth] = useState(JSON.parse(localStorage.getItem('git_oauth')));
     const location = useLocation();
-    const { roomId } = useParams();
+    const { roomId, type } = useParams();
     const [copied, setCopied] = useState(false);
   
     useEffect(() => {
@@ -110,7 +110,7 @@ const VideoSidebar = () => {
                 />
             </div>
             <div>
-                <CopyToClipboard text={`http://localhost:3000/board/${roomId}`}>
+                <CopyToClipboard text={type ? `http://localhost:3000/room/${roomId}/${type}` : `http://localhost:3000/room/${roomId}`}>
                     <div onClick={() => {handleClick()}}>
                         <SidebarItem 
                             icon="https://img.icons8.com/ios-glyphs/36/000000/user-group-man-man.png"

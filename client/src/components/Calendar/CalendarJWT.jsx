@@ -9,7 +9,6 @@ import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { v1 as uuid } from "uuid";
 import { Button } from '@material-ui/core';
 import LinkIcon from '@material-ui/icons/Link';
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import './Calendar.scss';
 
 function Calendar({ setSchedule }) {
@@ -53,11 +52,11 @@ function Calendar({ setSchedule }) {
                     <Button href={meetingLink} target="_blank" variant="contained" color="primary" className="quickpopup__join">Join</Button>
                     <div className="quickpopup__meetingId">
                         <LinkIcon />
-                        <p><a href={meetingLink} target="_blank" rel="noreferrer">{meetingLink.slice(0, 40)}{"..."}</a></p>
-                        <FileCopyOutlinedIcon />
+                        <p><a href={meetingLink} target="_blank" rel="noreferrer">{meetingLink.slice(0, 42)}{"..."}</a></p>
                     </div>
                 </div>: null}
-                <p>{props.Creator}</p>
+                <p>Organizer: {props.Creator}</p>
+                {props.Attendees.length > 0 ? <span>Attendees</span>: null}
                 {props.Attendees.map((attendee) => {
                     return (
                         <span>{attendee.split(',')[0]}{' '} </span>
