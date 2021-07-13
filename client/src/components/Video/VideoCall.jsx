@@ -23,7 +23,7 @@ const Content = () => {
 	const { roomId } = useParams();
 	const options = {
 		appId: process.env.REACT_APP_AGORA_APPID,
-		channel: roomId,
+		channel: roomId.slice(0, 30),
 		token: null,
 	};
 	const location = useLocation();
