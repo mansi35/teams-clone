@@ -69,7 +69,7 @@ ii. Selective Forwarding Unit (SFU)
   -	High download speed required (which is common)
   -	More than 10 people can connect through video call.
 
-### <img src="https://img.icons8.com/color/48/000000/chat--v3.gif" width="30px" />&ensp;Screen Sharing
+### <img src="https://user-images.githubusercontent.com/53896251/125394567-7cfec300-e3c7-11eb-9ae1-c136e2f1c6e0.png" width="30px" />&ensp;Screen Sharing
 - Screen Share functionality is also implemented with Agora Web SDK NG.
 - It is achieved through replacing the video track of the user with ze's screen track.
 - And vice-versa when the user wants to stop screen sharing.
@@ -132,5 +132,4 @@ ii. Selective Forwarding Unit (SFU)
 <p align = "center">
   <img src = "http://ForTheBadge.com/images/badges/built-with-love.svg">
   <img src = "https://forthebadge.com/images/badges/made-with-javascript.svg">
-  <img src = "http://ForTheBadge.com/images/badges/built-by-developers.svg">
 </p>
