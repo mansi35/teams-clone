@@ -1,5 +1,5 @@
 # Microsoft Teams Clone
-This web app is my version of a collaboration app that helps your team stay organized and have conversations—all in one place. The main objective is to provide a feeling of working in-office while working remotely with co-workers and friends.
+This web app is my version of a collaboration app that helps your team stay organized and have conversations—all in one place. The main objective is to provide a feeling of working in-office while working remotely with co-workers and friends. You can visit the website on the following URL: https://teams-clone-client.netlify.app
 
 ## Technology Stack
 <div>
