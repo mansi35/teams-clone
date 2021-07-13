@@ -25,7 +25,7 @@ function Calendar({ setSchedule }) {
     }, [scheduleObj.current]);
 
     const content = (props) => {
-        const meetingLink = `http://localhost:3000/room/${props._id}`;
+        const meetingLink = `https://teams-clone-client.netlify.app/room/${props._id}`;
         console.log(meetingLink, props._id);
         return (
         <div>

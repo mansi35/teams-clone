@@ -22,7 +22,7 @@ const Content = () => {
 	const rtc = useClient();
 	const { roomId } = useParams();
 	const options = {
-		appId: "576de9875e7d4ffa81bb53d7baf96db3",
+		appId: process.env.REACT_AGORA_APPID,
 		channel: roomId,
 		token: null,
 	};

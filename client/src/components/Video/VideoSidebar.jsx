@@ -110,12 +110,12 @@ const VideoSidebar = () => {
                 />
             </div>
             <div>
-                <CopyToClipboard text={type ? `http://localhost:3000/room/${roomId}/${type}` : `http://localhost:3000/room/${roomId}`}>
+                <CopyToClipboard text={type ? `https://teams-clone-client.netlify.app/room/${roomId}/${type}` : `https://teams-clone-client.netlify.app/room/${roomId}`}>
                     <div onClick={() => {handleClick()}}>
                         <SidebarItem 
-                            icon="https://img.icons8.com/ios-glyphs/36/000000/user-group-man-man.png"
+                            icon="https://img.icons8.com/ios-filled/50/000000/share--v1.png"
                             text="Copy Invite"
-                            hoverIcon="https://img.icons8.com/ios-glyphs/36/6264A7/user-group-man-man.png"
+                            hoverIcon="https://img.icons8.com/ios-filled/50/6264A7/share--v1.png"
                         />
                     </div>
                 </CopyToClipboard>

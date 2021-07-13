@@ -120,7 +120,7 @@ function Calendar() {
     }
 
     const content = (props) => {
-        const meetingLink = props._id ? props._id : `http://localhost:3000/room/${props.Id}`;
+        const meetingLink = props._id ? props._id : `https://teams-clone-client.netlify.app/room/${props.Id}`;
         return (
         <div>
             {props.elementType === "cell" ? (

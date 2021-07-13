@@ -34,7 +34,7 @@ const Blackboard = () => {
         const canvas = p5.createCanvas(1920, 1080).parent(canvasParentRef);
         p5.background("rgb(31, 31, 31)");
 
-        socketRef.current = io.connect("http://localhost:5000");
+        socketRef.current = io.connect("https://teams-clone-server.herokuapp.com");
         socketRef.current.emit("join room", {roomID: roomId, username: currentUser.result.name });
 
         socketRef.current.on('mouse', (data) => {
@@ -114,10 +114,10 @@ const Blackboard = () => {
                         <img src="https://img.icons8.com/fluent/48/000000/save-all.png" alt="save canvas" />
                     </Tooltip>
                 </div>
-                <CopyToClipboard text={`http://localhost:3000/board/${roomId}`}>
+                <CopyToClipboard text={`https://teams-clone-client.netlify.app/board/${roomId}`}>
                     <div onClick={() => {handleClick()}}>
                         <Tooltip title="Copy Board Link">
-                            <img src="https://img.icons8.com/ios-glyphs/36/ffffff/user-group-man-man.png" alt="copy invite" />
+                            <img src="https://img.icons8.com/color/48/000000/share--v1.png" alt="copy invite" />
                         </Tooltip>
                     </div>
                 </CopyToClipboard>

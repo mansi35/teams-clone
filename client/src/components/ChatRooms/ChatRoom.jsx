@@ -6,6 +6,7 @@ import Input from '../Auth/Input';
 import SendIcon from '@material-ui/icons/Send';
 import CallIcon from '@material-ui/icons/Call';
 import Tooltip from '@material-ui/core/Tooltip';
+import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEvent, eventMessage, updateEvent } from '../../actions/events';
@@ -23,6 +24,7 @@ const ChatRoom = () => {
     const [message, setMessage] = useState('');
     const [file, setFile] = useState();
     const [messages, setMessages] = useState([]);
+    const [confirm, setImgUploadConfirm] = useState('');
     const messagesEndRef = useRef(null);
     const { roomId, type } = useParams();
     const socketRef = useRef();
@@ -41,7 +43,7 @@ const ChatRoom = () => {
     }, [dispatch, roomId, type]);
 
     useEffect(() => {
-        socketRef.current = io.connect("http://localhost:5000");
+        socketRef.current = io.connect("https://teams-clone-server.herokuapp.com");
     }, [])
 
     useEffect(() => {
@@ -104,6 +106,7 @@ const ChatRoom = () => {
             scrollToBottom();
         }
         setMessage('');
+        setImgUploadConfirm('');
     }
 
     const callNow = () => {
@@ -172,6 +175,10 @@ const ChatRoom = () => {
         }
     }
 
+    const uploadFileWithClick = () => {
+        document.getElementsByClassName('message__imageSelector')[0].childNodes[1].click()
+    }
+
     if (event && roomId && messages && !type) {
         return (
             <div className="chatroom">
@@ -201,15 +208,20 @@ const ChatRoom = () => {
                 </div>
                 <div>
                     <form className="chatroom__sendMessage">
+                        <div className="message__imageSelector" onClick={() => {uploadFileWithClick()}}>
+                            <PhotoLibraryIcon style={{ color: "#464775" }} />
+                            <FileBase className="message__image" type="file" multiple={false} onDone={({ base64 }) => {
+                                setFile(base64);
+                                setImgUploadConfirm('Image is selected and will be displayed after sending the message!')
+                            }} />
+                        </div>
                         <Input name="message" label="Type a new message" value={message} handleChange={handleChange} autoFocus />
-                        <FileBase type="file" multiple={false} onDone={({ base64 }) => {
-                            setFile(base64);
-                        }} />
                         <IconButton type="submit" onClick={(e) => {handleSubmit(e)}}>
                             <SendIcon />
                         </IconButton>
                     </form>
                 </div>
+                <p className="image__text">{confirm}</p>
             </div>
         )
     } else if (conversation && roomId && messages) {
@@ -241,15 +253,20 @@ const ChatRoom = () => {
                 </div>
                 <div>
                     <form className="chatroom__sendMessage">
+                        <div className="message__imageSelector" onClick={() => {uploadFileWithClick()}}>
+                            <PhotoLibraryIcon style={{ color: "#464775" }} />
+                            <FileBase className="message__image" type="file" multiple={false} onDone={({ base64 }) => {
+                                setFile(base64);
+                                setImgUploadConfirm('Image is selected and will be displayed after sending the message!')
+                            }} />
+                        </div>
                         <Input name="message" label="Type a new message" value={message} handleChange={handleChange} autoFocus />
                         <IconButton type="submit" onClick={(e) => {handleSubmit(e)}}>
                             <SendIcon />
                         </IconButton>
-                        <FileBase type="file" multiple={false} onDone={({ base64 }) => {
-                            setFile(base64);
-                        }} />
                     </form>
                 </div>
+                <p className="image__text">{confirm}</p>
             </div>
         )
     } else {

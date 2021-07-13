@@ -9,8 +9,8 @@ API.interceptors.request.use((req) => {
 });
 
 export const getAccessToken = (code) => axios.post('https://boiling-caverns-09167.herokuapp.com/https://github.com/login/oauth/access_token', {
-    client_id: 'f6099a354e555e602bcb',
-    client_secret: '8dd4b232c1c24eff144904deca110b4797ff0ac3',
+    client_id: process.env.REACT_GITHUB_CLIENTID,
+    client_secret: process.env.REACT_GITHUB_CLIENTSECRET,
     code: code,
 }, {
     headers: {

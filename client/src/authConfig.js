@@ -1,6 +1,6 @@
 export const msalConfig = {
     auth: {
-      clientId: "a7c1752f-adb0-437f-a95a-0bb44ae8ef58",
+      clientId: process.env.REACT_MSAL_CLIENTID,
       authority: "https://login.microsoftonline.com/common",
     },
     cache: {

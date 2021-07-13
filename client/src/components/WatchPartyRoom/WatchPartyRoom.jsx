@@ -15,7 +15,7 @@ const WatchPartyRoom = () => {
     }, [location]);
 
     useEffect(() => {
-        socketRef.current = io.connect("http://localhost:5000");
+        socketRef.current = io.connect("https://teams-clone-server.herokuapp.com");
     }, []);
 
     useEffect(() => {
