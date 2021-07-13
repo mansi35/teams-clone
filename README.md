@@ -121,6 +121,15 @@ ii. Selective Forwarding Unit (SFU)
 - Navigation in the web app can be done using voice commands.
 - Events/Meetings on the calendar can be scheduled, updated and deleted using voice commands.
 
+#### Commands that can be used
+- All simple conversations
+- Ask about what this application does
+- Schedule a meeting on specific date and time
+- Schedule a meeting now
+- Postpone/Prepone a meeting
+- Delete a meeting
+- Navigate through the application
+
 ## References
 - Agora Video Calling and Screen Sharing: https://docs.agora.io/en/Video/landing-page?platform=Web
 - GitHub V3 API: https://docs.github.com/en/rest
